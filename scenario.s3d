@@ -10,13 +10,14 @@ class scenario
 	var wallObjArray;
 	var wallMat;
 	var wallTexture;
-	//1 se c'e muro, 0 altrimenti
 	var levelMatrix;
 	
 	//array di giocatori
 	var playerArray;
 	//numero di giocatori presenti
 	var playerNumber;
+	var camera;
+	var isFirstPersonCamera;
 	
 	//functions
 	init(textfile);	
@@ -72,7 +73,7 @@ function scenario :: init(textfile){
 	//walls
 	
 	wallMat = CVmMaterial();
-	wallTexture = CVmTexture("mattoni03.png");
+	wallTexture = CVmTexture("brick_texture.jpg");
 	wallMat.SetTexture(wallTexture);
 	wallMat.ChangeTextureParams(VR_V_TILING,3);
 	
@@ -94,7 +95,9 @@ function scenario :: init(textfile){
 				tempObj.SetPosition(j,0,i);
 				aadd(wallObjArray,tempObj);				
 			}
-		}			
+		}	
+	camera = CameraGetCurrent();		
+	isFirstPersonCamera = true;
 }
 
 //********************************************************************
@@ -134,9 +137,32 @@ function scenario :: addPlayer(col){
 //********************************************************************
 
 function scenario :: update(){
-	//update players
+	
+	if (KeyPressed("C")) {
+		isFirstPersonCamera = false;
+	}
+	if (KeyPressed("X")) {
+		isFirstPersonCamera = true;
+	}
+	if(keyPressed("P")) {
+		//ShowCursor(TRUE);
+	}
+	/*update players */
 	for (var i = 0; i < playerNumber; i++){
 		playerArray[i].update(levelMatrix);
+	}
+	
+	/*update camera*/
+	
+	camera.SetPosition(playerArray[0].position + [0,1.3,0] );
+	camera.SetDirection(playerArray[0].direction);
+	
+	if(!isFirstPersonCamera){
+		var camPos = camera.GetPosition();
+		var camDir = camera.GetDirection();
+		camPos += [0,0.25,0];
+		camPos += VectorRotate(190, Camera.GetYAxis(), camDir) * 2;
+		camera.SetPosition(camPos); 
 	}
 	
 	//do some other stuff

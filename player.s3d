@@ -191,26 +191,26 @@ function player :: readKeyboard(){
 	isWalking = false;
 	speedMultiplier = 1;			
 
-	if (Keypressed("D")) {
+	if (Keypressed("D")) {			//go right
 		isWalking = true;
 		strafeDirection = VectorRotate(-90, [0,1,0], direction.x_z);
 	}
 		
-	if (Keypressed("A")) {
+	if (Keypressed("A")) {			//go left
 		isWalking = true;
 		strafeDirection = VectorRotate(90, [0,1,0], direction.x_z);
 	}
 	
-	//walking
-	if (Keypressed(VK_SHIFT)) {
-		speedMultiplier = 2;		//running
+	if (Keypressed(VK_SHIFT)) {		//running
+		isWalking = true;
+		speedMultiplier = 2;		
 	}
 	
 	if (Keypressed("W")) {			//go forward
 		isWalking = true;
 		walkDirection = direction.x_z;
 	}
-	if (Keypressed("S")) {			//go backwords
+	if (Keypressed("S")) {			//go backwards
 		isWalking = true;
 		walkDirection = - direction.x_z;
 	}

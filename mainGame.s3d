@@ -7,13 +7,10 @@
 
 /* Set global scene parameters */
 SET SCENE_FOV  = 60;
-SET SCENE_NEAR = 0.5;
-SET SCENE_FAR  = 1000;
+SET SCENE_NEAR = 0.25;
+SET SCENE_FAR  = 300;
 SET AUDIO_OPENAL = 1;
 
-
-/* Camera globals */
-var CamPos = [0.0, 2.0, 30.0]; 	// camera position
 
 /* Light globals */
 var Light0;
@@ -22,6 +19,7 @@ var PosL = [0.0, 100.0, 100.0];
 /* Function declarations */
 function CameraMoveMouse();
 function DrawGrid(col, size);
+function showCrosshair();
 
 var mylevel;
 var myplayer1;
@@ -34,10 +32,8 @@ function OnDownload() {
 }
 
 function OnInit(params) {
-	
-	/* initialize camera */
-	CameraGetCurrent().SetPosition(CamPos);
 
+	SetCursorShape(VR_CUR_CROSS);
 	/* initialize light */
 	Light0 = CVmLight();
 	Light0.SetPosition(PosL);
@@ -49,9 +45,18 @@ function OnInit(params) {
 	mylevel.init("level.txt");
 
 	mylevel.AddPlayer([11,5,0]);
+	//
+	
 	//mylevel.AddPlayer([2,1,10]);
 
 	
+}
+
+function showCrosshair()
+{
+	ConsoleColor([1, 1, 1]);
+	ConsoleLines([0.5, 0.47, 0.5, 0.53]);
+	ConsoleLines([0.48, 0.5, 0.52, 0.5]);
 }
 
 function OnFrame() {
@@ -60,12 +65,12 @@ function OnFrame() {
 	
 	mylevel.update();
 
-	
+	showCrosshair();
+	ShowCursor(FALSE);
 	SceneBegin(VR_SHOW_STATS);
 
 	//DrawGrid([0.5, 0.5, 0.5], 100);
-	CameraGetCurrent().SetPosition(mylevel.playerArray[0].position + [0,2,-3] - mylevel.playerArray[0].direction);
-	CameraGetCurrent().SetDirection(mylevel.playerArray[0].direction);
+	
 
 	// TODO: put your drawing code here
 	mylevel.draw();
@@ -74,7 +79,7 @@ function OnFrame() {
 	var player1pos = mylevel.playerArray[0].position;
 	
 	#define HIT_RANGE 0.2
-	if (mylevel.playerArray[0].playerBullet.life > 0
+	/*if (mylevel.playerArray[0].playerBullet.life > 0
 	&&	bullet0pos.x >= player1pos.x - HIT_RANGE 
 	&&  bullet0pos.x <= player1pos.x + HIT_RANGE	
 	&&  bullet0pos.z <= player1pos.z + HIT_RANGE
@@ -86,7 +91,7 @@ function OnFrame() {
 		mylevel.playerArray[0].playerBullet.life = 0;
 		mylevel.playerArray[1].hit = true;
 		mylevel.playerArray[1].sfxHit.Play();
-	}
+	}*/
 	
 	//keep cursor centered
 	SetCursorPos(0.5, 0.5);
