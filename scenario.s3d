@@ -1,0 +1,143 @@
+class scenario 
+{	
+	//variables
+	var floorMesh;
+	var floorObj;
+	var floorMat;
+	var floorTexture;
+	
+	var wallMesh;
+	var wallObjArray;
+	var wallMat;
+	var wallTexture;
+	//1 se c'e muro, 0 altrimenti
+	var levelMatrix;
+	
+	//array di giocatori
+	var playerArray;
+	//numero di giocatori presenti
+	var playerNumber;
+	
+	//functions
+	init(textfile);	
+	addplayer(col);
+	update();
+	draw();
+};
+
+//********************************************************************
+//INIT SCENARIO
+//********************************************************************
+
+function scenario :: init(textfile){
+	playerNumber = 0;
+	playerArray = array(0);
+	
+	//load scenario
+	if (!FileExist(textfile)) {
+		trace(textfile);
+	}
+	var lines = LoadFile(textfile);
+	var rows = len(lines) ;
+	var columns = len(lines[0]);
+	
+	//create level matrix
+	levelMatrix = array(rows);
+	for (var i = 0; i < rows; i++){
+		levelMatrix[i] = array(columns);
+	}
+	
+	for (var i=0; i<rows; i++)
+		for (var j=0; j<columns; j++)
+			levelMatrix[i][j] = 0;
+			
+	//set textures and stuff
+	
+	//floors
+	
+	floorMat = CVmMaterial();
+	floorTexture = CVmTexture("marmostriato2.png");
+	floorMat.SetTexture(floorTexture);
+	floorMat.ChangeTextureParams(VR_U_TILING,4);
+	floorMat.ChangeTextureParams(VR_V_TILING,4);
+	
+	floorMesh = CVmNewMesh(VRP_BOX);
+	floorMesh.Scale(columns,1,rows);
+	floorMesh.ForceMaterial(floorMat);
+	floorMesh.ModulateMaterials(0.0,0.7,0.0);
+	
+	floorObj = CVmObj(floorMesh);
+	floorObj.translate(0,-1,0);
+	
+	//walls
+	
+	wallMat = CVmMaterial();
+	wallTexture = CVmTexture("mattoni03.png");
+	wallMat.SetTexture(wallTexture);
+	wallMat.ChangeTextureParams(VR_V_TILING,3);
+	
+	wallMesh = CVmNewMesh(VRP_BOX);
+	wallMesh.Scale(1,3,1);
+	wallMesh.ForceMaterial(wallMat);
+	
+	wallObjArray = Array(0);
+	
+	var i,j;
+	
+	for (i=0; i<rows; i++)
+		for (j=0; j<columns; j++)
+		{
+			if (lines[i][j] == "*")
+			{
+				levelMatrix[i][j] = 1;
+				var tempobj = CVmObj(wallMesh);
+				tempObj.SetPosition(j,0,i);
+				aadd(wallObjArray,tempObj);				
+			}
+		}			
+}
+
+//********************************************************************
+//DRAW
+//********************************************************************
+
+function scenario :: draw()
+{
+	floorObj.Draw();
+	
+	var i;
+	for (i = 0;i < len(wallObjArray); i++)
+		wallObjArray[i].Draw();
+		
+	for (i = 0;i < playerNumber; i++)
+		playerArray[i].Draw();	
+}
+
+//********************************************************************
+//ADD ONE PLAYER
+//********************************************************************
+
+function scenario :: addPlayer(col){
+	if (col == VOID) {
+		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
+	}
+	
+	var tmpPlayer = player();
+	var pos = [20 + playerNumber,0,10] ;
+	tmpPlayer.init(playerNumber,col,pos);
+	aadd(playerArray, tmpPlayer);
+	playerNumber++;
+}
+
+//********************************************************************
+//UPDATE SCENARIO
+//********************************************************************
+
+function scenario :: update(){
+	//update players
+	for (var i = 0; i < playerNumber; i++){
+		playerArray[i].update(levelMatrix);
+	}
+	
+	//do some other stuff
+}

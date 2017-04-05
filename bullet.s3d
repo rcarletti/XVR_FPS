@@ -1,0 +1,61 @@
+#define MAX_LIFE        100
+
+class bullet
+{
+	var position;
+	var direction;
+	var speed;
+	var mesh;
+	var obj;
+	var life;
+	var flying;
+	var color;
+	
+	init(col);
+	shot(pos,dir);
+	update();
+	draw();
+};
+
+
+
+function bullet::init(col)
+{
+	mesh = CVMNewMesh(VRP_BOX);
+	mesh.Scale(0.1);
+	obj = CVmObj(mesh);
+	speed = 0.1;
+	life = 0;
+	position = [0.0, 0.0, 0.0];
+	direction = [0.0, 0.0, 0.0];
+	color = col;
+	mesh.ModulateMaterials(color);
+}
+
+function bullet::shot(pos, dir)
+{
+	if (life == 0)
+	{
+		position = pos + [0,1,0];
+		direction = dir;
+		life = MAX_LIFE;
+		return 1;
+	}
+	else 
+		return 0;
+}
+
+function bullet::draw()
+{
+	if (life != 0)
+		obj.Draw();
+}
+
+function bullet::update()
+{
+	position += direction*speed;
+	obj.SetPosition(position);
+	if (life != 0)
+		life--;	
+}
+

@@ -1,0 +1,150 @@
+/* Include s3d symbols */
+#include <Script3d.h>
+#include <Camera.s3d.h>
+#include "bullet.s3d"
+#include "player.s3d"
+#include "scenario.s3d"
+
+/* Set global scene parameters */
+SET SCENE_FOV  = 60;
+SET SCENE_NEAR = 0.5;
+SET SCENE_FAR  = 1000;
+SET AUDIO_OPENAL = 1;
+
+
+/* Camera globals */
+var CamPos = [0.0, 2.0, 30.0]; 	// camera position
+
+/* Light globals */
+var Light0;
+var PosL = [0.0, 100.0, 100.0];
+
+/* Function declarations */
+function CameraMoveMouse();
+function DrawGrid(col, size);
+
+var mylevel;
+var myplayer1;
+var myplayer2;
+
+function OnDownload() {
+	// TODO: download your resources here
+	// E.g.: FileDownload("resource.ext");
+	FileDownload("XVRResources.zip");
+}
+
+function OnInit(params) {
+	
+	/* initialize camera */
+	CameraGetCurrent().SetPosition(CamPos);
+
+	/* initialize light */
+	Light0 = CVmLight();
+	Light0.SetPosition(PosL);
+	Light0.SetDiffuse(1, 1, 1);
+	Light0.Enable();	
+
+	// TODO: put your initialization code here
+	mylevel = scenario();
+	mylevel.init("level.txt");
+
+	mylevel.AddPlayer([11,5,0]);
+	//mylevel.AddPlayer([2,1,10]);
+
+	
+}
+
+function OnFrame() {
+	/* manage camera */
+	//CameraMoveMouse();
+	
+	mylevel.update();
+
+	
+	SceneBegin(VR_SHOW_STATS);
+
+	//DrawGrid([0.5, 0.5, 0.5], 100);
+	CameraGetCurrent().SetPosition(mylevel.playerArray[0].position + [0,2,-3] - mylevel.playerArray[0].direction);
+	CameraGetCurrent().SetDirection(mylevel.playerArray[0].direction);
+
+	// TODO: put your drawing code here
+	mylevel.draw();
+	
+	var bullet0pos = mylevel.playerArray[0].playerBullet.position;
+	var player1pos = mylevel.playerArray[0].position;
+	
+	#define HIT_RANGE 0.2
+	if (mylevel.playerArray[0].playerBullet.life > 0
+	&&	bullet0pos.x >= player1pos.x - HIT_RANGE 
+	&&  bullet0pos.x <= player1pos.x + HIT_RANGE	
+	&&  bullet0pos.z <= player1pos.z + HIT_RANGE
+	&&  bullet0pos.z >= player1pos.z - HIT_RANGE
+	)			
+	{
+		outputln("COLPITO");
+		mylevel.playerArray[0].score++;
+		mylevel.playerArray[0].playerBullet.life = 0;
+		mylevel.playerArray[1].hit = true;
+		mylevel.playerArray[1].sfxHit.Play();
+	}
+	
+	//keep cursor centered
+	SetCursorPos(0.5, 0.5);
+
+	SceneEnd();
+}
+
+function DownloadReady(RequestID) {
+	// TODO
+}
+
+
+
+function OnTimer() {
+	// TODO:
+}
+
+
+function OnEvent(eventID, wparam, lparam) {
+	// TODO: put your events handling code here
+}
+
+function OnError() {
+	// TODO: put your errors handling code here
+}
+
+
+function OnExit() {
+	// TODO: put your cleanup code here
+}
+
+
+function DrawGrid(col, size)
+{
+	/* let's not mess up current OpenGL status */
+	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+	
+	glLineWidth(1);
+	glDisable(GL_LIGHTING);
+	glColor(col);
+	var max = size / 2.0;
+	var min = -max;	
+	var step = size / 10.0;
+	
+	glBegin(GL_LINES);
+		for (var i = min; i <= max; i += step)
+		{
+			glVertex(i, 0, max);
+			glVertex(i, 0, min);
+			
+			glVertex(max, 0, i);
+			glVertex(min, 0, i);
+		}
+	glEnd();
+	
+	/* polite restoration of previous OpenGL status */
+	glPopAttrib();
+}
+
+
+

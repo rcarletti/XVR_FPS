@@ -1,0 +1,222 @@
+
+#define SWAT_START_WALK 16
+#define SWAT_END_WALK   48
+
+
+class player
+{
+	/*graphics and sounds*/
+	var lowerMesh;
+	var upperMesh;
+	var railgunMesh;
+	var lowerObj;
+	var upperObj;
+	var railgunObj;
+	var rootObj;
+	var billboardFire;
+	var fireObj;
+	var sfxStep;
+	var sfxShoot;
+	var sfxHit;
+	var sfxJam;
+	var currentFrame;	
+	
+	/*movement*/
+	
+	var position;
+	var direction;
+	var strafeDirection;
+	var angleY;
+	var angleX;
+	var speed;
+	var angSpeed;
+	var toward;
+	var speedMultiplier;
+	
+	/*attributes */
+	var id;
+	var color;
+	var playerBullet;
+	var score;
+	var hit;
+
+	/*functions */
+	
+	init(id,col,pos);
+	update(matrix);
+	draw();
+	readKeyboard();
+};
+
+//********************************************************************
+//INIT PLAYER
+//********************************************************************
+
+function player :: init(id, col, pos){
+	id = id;
+	color = col;
+	position = pos;
+	angleY = 0;
+	angleX = 0;
+	speed = 0.01;
+	angSpeed = 0.1;
+	currentFrame = SWAT_START_WALK;
+	hit = false;
+	score = 0;
+	toward = 0;
+	speedMultiplier = 1;
+
+	//create player image
+	rootObj  = CVmObj();
+	
+	lowerMesh = CVmNewMesh("swat_lower.aam");	
+	upperMesh = CVmNewMesh("swat_upper.aam");
+	railgunMesh = CVmNewMesh("railgun.aam");
+	lowerMesh.Scale(0.036);
+	upperMesh.Scale(0.036);
+	railgunMesh.Scale(0.036);
+	
+	lowerObj  = CVmObj(lowerMesh);
+	upperObj  = CVmObj(upperMesh);
+	railgunObj = CVmObj(railgunMesh);
+	
+	rootObj.AddChild(lowerObj);
+	rootObj.AddChild(upperObj);
+	rootObj.AddChild(railgunObj);
+	
+	//applica il colore a tutte le parti del giocatore
+	rootObj.ModulateMaterials(color);
+	
+	billboardFire = CVmBillboard("flame43.avi");
+	fireObj = CVmObj();
+	fireObj.LinkToBillboard(billboardFire);
+	
+	rootObj.SetPosition(position);
+	fireObj.SetPosition(position);
+	
+	sfxStep = CVmVRAWav("step.wav",true);
+	sfxShoot = CVmVRAWav("shoot.wav",true);
+	sfxHit = CVmVRAWav("hit.wav",true);
+	sfxJam = CVmVrAWav("jam.wav",true);
+	
+	playerBullet = bullet();
+	playerBullet.init(color);
+	
+	hit = false;
+}
+
+//********************************************************************
+//DRAW
+//********************************************************************
+
+function player::draw()
+{
+	rootObj.Draw(VR_FRAMENUMBER, currentFrame);
+	
+	if (hit)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+		fireObj.Draw();
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		glDisable(GL_BLEND);
+	}
+	
+	playerBullet.draw();
+}
+
+//********************************************************************
+//PLAYER UPDATE
+//********************************************************************
+
+function player :: update(levelMatrix){
+	
+	var speedMultiplier = readKeyboard();
+	
+	//mouse coords
+	var mouseDelta = [Mouse.DeltaX, Mouse.DeltaY];
+	angleY -= angSpeed * mouseDelta.x;
+	angleX -= angSpeed * mouseDelta.y;
+	
+	direction = [sin(angleY * GRAD_TO_RAD), 0, cos(angleY * GRAD_TO_RAD)];	
+	
+	playerBullet.update();
+	
+	//update position
+	var oldPosition = position;
+	position = position + direction * toward * speed * speedMultiplier;
+	//check for walls
+	if (levelMatrix[int(position.z)][int(position.x)] == 1)
+		position = oldposition;
+	
+	
+	//set positions
+	rootObj.SetPosition(position);	
+	rootObj.SetRotation(angleY,0,1,0);
+	fireObj.SetPosition(position + [0,1,0]);
+	sfxStep.SetPosition(position);
+	sfxHit.SetPosition(position);
+	sfxShoot.SetPosition(position);
+	sfxJam.SetPosition(position);
+	sfxStep.SetListenerPosition(CameraGetPosition());
+	sfxStep.SetListenerOrientation(-CameraGetDirection());
+	
+	//frame update
+	
+	if (toward != 0) {
+		var deltaFrame = 0.25 * speedMultiplier * toward;
+		currentFrame += deltaFrame;
+		
+		if (currentFrame >= SWAT_END_WALK) {
+			currentFrame = SWAT_START_WALK;
+			sfxStep.Play();
+		}
+		else if (currentFrame <= SWAT_START_WALK) {
+			currentFrame = SWAT_END_WALK;
+			sfxStep.Play();
+		}
+	}					
+}
+
+//********************************************************************
+//READ INPUT FROM KEYBOARD 
+//********************************************************************
+
+function player :: readKeyboard(){
+	
+
+	if (Keypressed("D")) {
+		//angleY -= angSpeed;
+	}
+		
+	if (Keypressed("A")) {
+		//angleY += angSpeed;
+	}
+	
+	speedMultiplier = 1;			//walking
+	if (Keypressed(VK_SHIFT)) {
+		speedMultiplier = 2;		//running
+	}
+	
+	toward = 0;
+	if (Keypressed("W")) {
+		toward = 1;				//go forward
+	}
+	if (Keypressed("S")) {
+		toward = -1;				//go backwards
+	}
+	
+	if (Keypressed(VK_SPACE))		//shoot
+	{
+		var shot = playerBullet.shot(position,direction);
+		if (shot == 1) {
+			sfxShoot.Play();
+		}
+		else {
+			sfxJam.Play();
+		}
+	}
+	
+	return speedMultiplier;
+	
+}
