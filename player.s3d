@@ -25,13 +25,13 @@ class player
 	
 	var position;
 	var direction;
-	var strafeDirection;
 	var angleY;
 	var angleX;
 	var speed;
 	var angSpeed;
 	var toward;
 	var speedMultiplier;
+	var isWalking;
 	
 	/*attributes */
 	var id;
@@ -39,6 +39,8 @@ class player
 	var playerBullet;
 	var score;
 	var hit;
+	
+
 
 	/*functions */
 	
@@ -65,6 +67,7 @@ function player :: init(id, col, pos){
 	score = 0;
 	toward = 0;
 	speedMultiplier = 1;
+	isWalking = false;
 
 	//create player image
 	rootObj  = CVmObj();
@@ -131,7 +134,7 @@ function player::draw()
 
 function player :: update(levelMatrix){
 	
-	var speedMultiplier = readKeyboard();
+	readKeyboard();
 	
 	//mouse coords
 	var mouseDelta = [Mouse.DeltaX, Mouse.DeltaY];
@@ -143,11 +146,10 @@ function player :: update(levelMatrix){
 	playerBullet.update();
 	
 	//update position
-	var oldPosition = position;
-	position = position + direction * toward * speed * speedMultiplier;
+
 	//check for walls
-	if (levelMatrix[int(position.z)][int(position.x)] == 1)
-		position = oldposition;
+	//if (levelMatrix[int(position.z)][int(position.x)] == 1)
+	//	position = oldposition;
 	
 	
 	//set positions
@@ -163,8 +165,8 @@ function player :: update(levelMatrix){
 	
 	//frame update
 	
-	if (toward != 0) {
-		var deltaFrame = 0.25 * speedMultiplier * toward;
+	if (isWalking) {
+		var deltaFrame = 0.25 * speedMultiplier;
 		currentFrame += deltaFrame;
 		
 		if (currentFrame >= SWAT_END_WALK) {
@@ -184,30 +186,36 @@ function player :: update(levelMatrix){
 
 function player :: readKeyboard(){
 	
+	var strafeDirection = [0, 0, 0];
+	var walkDirection = [0, 0, 0];
+	isWalking = false;
+	speedMultiplier = 1;			
 
 	if (Keypressed("D")) {
-		//angleY -= angSpeed;
+		isWalking = true;
+		strafeDirection = VectorRotate(-90, [0,1,0], direction.x_z);
 	}
 		
 	if (Keypressed("A")) {
-		//angleY += angSpeed;
+		isWalking = true;
+		strafeDirection = VectorRotate(90, [0,1,0], direction.x_z);
 	}
 	
-	speedMultiplier = 1;			//walking
+	//walking
 	if (Keypressed(VK_SHIFT)) {
 		speedMultiplier = 2;		//running
 	}
 	
-	toward = 0;
-	if (Keypressed("W")) {
-		toward = 1;				//go forward
+	if (Keypressed("W")) {			//go forward
+		isWalking = true;
+		walkDirection = direction.x_z;
 	}
-	if (Keypressed("S")) {
-		toward = -1;				//go backwards
+	if (Keypressed("S")) {			//go backwords
+		isWalking = true;
+		walkDirection = - direction.x_z;
 	}
 	
-	if (Keypressed(VK_SPACE))		//shoot
-	{
+	if (Keypressed(VK_SPACE)) { 	//shoot
 		var shot = playerBullet.shot(position,direction);
 		if (shot == 1) {
 			sfxShoot.Play();
@@ -217,6 +225,7 @@ function player :: readKeyboard(){
 		}
 	}
 	
-	return speedMultiplier;
-	
+	var oldPosition = position;
+	position += ((strafeDirection + walkDirection) * speed * speedMultiplier);
+
 }
