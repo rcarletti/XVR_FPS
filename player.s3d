@@ -60,7 +60,7 @@ function player :: init(id, col, pos){
 	position = pos;
 	angleY = 0;
 	angleX = 0;
-	speed = 0.01;
+	speed = 0.02;
 	angSpeed = 0.1;
 	currentFrame = SWAT_START_WALK;
 	hit = false;
@@ -173,10 +173,11 @@ function player :: update(levelMatrix){
 			currentFrame = SWAT_START_WALK;
 			sfxStep.Play();
 		}
-		else if (currentFrame <= SWAT_START_WALK) {
-			currentFrame = SWAT_END_WALK;
+		else if (currentFrame == ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK) {
 			sfxStep.Play();
+			trace(currentFrame);
 		}
+		
 	}					
 }
 

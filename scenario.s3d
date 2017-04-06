@@ -11,6 +11,8 @@ class scenario
 	var wallMat;
 	var wallTexture;
 	var levelMatrix;
+	var rows;
+	var columns;
 	
 	//array di giocatori
 	var playerArray;
@@ -39,8 +41,8 @@ function scenario :: init(textfile){
 		trace(textfile);
 	}
 	var lines = LoadFile(textfile);
-	var rows = len(lines) ;
-	var columns = len(lines[0]);
+	rows = len(lines) ;
+	columns = len(lines[0]);
 	
 	//create level matrix
 	levelMatrix = array(rows);
@@ -73,7 +75,7 @@ function scenario :: init(textfile){
 	//walls
 	
 	wallMat = CVmMaterial();
-	wallTexture = CVmTexture("brick_texture.jpg");
+	wallTexture = CVmTexture("brick.jpg");
 	wallMat.SetTexture(wallTexture);
 	wallMat.ChangeTextureParams(VR_V_TILING,3);
 	
@@ -126,7 +128,19 @@ function scenario :: addPlayer(col){
 	}
 	
 	var tmpPlayer = player();
-	var pos = [20 + playerNumber,0,10] ;
+	var pos, posx, posz;
+	trace(columns);
+	trace(rows);
+	
+	do {		
+		posx = rand(columns - 1);
+		trace(posx);
+		posz = rand(rows - 1);
+		trace(posz);
+		pos = [posx, 0, posz];
+	}
+	while(levelMatrix[posz][posx] == 1);
+	
 	tmpPlayer.init(playerNumber,col,pos);
 	aadd(playerArray, tmpPlayer);
 	playerNumber++;
