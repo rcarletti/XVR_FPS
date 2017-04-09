@@ -28,10 +28,13 @@ class player
 	var angleY;
 	var angleX;
 	var speed;
-	var angSpeed;
+	var angSpeedX;
+	var angSpeedY;
 	var toward;
 	var speedMultiplier;
 	var isWalking;
+	var levelMatrix;
+	var upperRotation;
 	
 	/*attributes */
 	var id;
@@ -44,7 +47,7 @@ class player
 
 	/*functions */
 	
-	init(id,col,pos);
+	init(id,col,pos, matrix);
 	update(matrix);
 	draw();
 	readKeyboard();
@@ -54,20 +57,23 @@ class player
 //INIT PLAYER
 //********************************************************************
 
-function player :: init(id, col, pos){
+function player :: init(id, col, pos, matrix){
 	id = id;
 	color = col;
 	position = pos;
 	angleY = 0;
 	angleX = 0;
 	speed = 0.02;
-	angSpeed = 0.1;
+	angSpeedX = 0.1;
+	angSpeedY = 0.1;
 	currentFrame = SWAT_START_WALK;
 	hit = false;
 	score = 0;
 	toward = 0;
 	speedMultiplier = 1;
 	isWalking = false;
+	levelMatrix = matrix;
+	
 
 	//create player image
 	rootObj  = CVmObj();
@@ -75,9 +81,9 @@ function player :: init(id, col, pos){
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
 	railgunMesh = CVmNewMesh("railgun.aam");
-	lowerMesh.Scale(0.036);
-	upperMesh.Scale(0.036);
-	railgunMesh.Scale(0.036);
+	lowerMesh.Scale(0.045);
+	upperMesh.Scale(0.045);
+	railgunMesh.Scale(0.045);
 	
 	lowerObj  = CVmObj(lowerMesh);
 	upperObj  = CVmObj(upperMesh);
@@ -96,6 +102,8 @@ function player :: init(id, col, pos){
 	
 	rootObj.SetPosition(position);
 	fireObj.SetPosition(position);
+	upperObj.SetPivotPoint([0,1.0,0]); 
+	railgunObj.SetPivotPoint([0,1.0,0]);
 	
 	sfxStep = CVmVRAWav("step.wav",true);
 	sfxShoot = CVmVRAWav("shoot.wav",true);
@@ -138,23 +146,26 @@ function player :: update(levelMatrix){
 	
 	//mouse coords
 	var mouseDelta = [Mouse.DeltaX, Mouse.DeltaY];
-	angleY -= angSpeed * mouseDelta.x;
-	angleX -= angSpeed * mouseDelta.y;
+	angleY -= angSpeedY * mouseDelta.x;
+	angleX -= angSpeedX * mouseDelta.y;
 	
-	direction = [sin(angleY * GRAD_TO_RAD), 0, cos(angleY * GRAD_TO_RAD)];	
+	if (angleX >= 50) {
+		angleX = 50;
+	}
+	
+	if (angleX <= -40) {
+		angleX = -40;
+	}
+	
+	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];	
 	
 	playerBullet.update();
-	
-	//update position
-
-	//check for walls
-	//if (levelMatrix[int(position.z)][int(position.x)] == 1)
-	//	position = oldposition;
-	
 	
 	//set positions
 	rootObj.SetPosition(position);	
 	rootObj.SetRotation(angleY,0,1,0);
+	upperObj.SetRotation(-angleX,1,0,0);
+	railgunObj.SetRotation(-angleX, 1,0,0);
 	fireObj.SetPosition(position + [0,1,0]);
 	sfxStep.SetPosition(position);
 	sfxHit.SetPosition(position);
@@ -163,7 +174,7 @@ function player :: update(levelMatrix){
 	sfxStep.SetListenerPosition(CameraGetPosition());
 	sfxStep.SetListenerOrientation(-CameraGetDirection());
 	
-	//frame update
+	/*frame update */
 	
 	if (isWalking) {
 		var deltaFrame = 0.25 * speedMultiplier;
@@ -228,5 +239,10 @@ function player :: readKeyboard(){
 	
 	var oldPosition = position;
 	position += ((strafeDirection + walkDirection) * speed * speedMultiplier);
+	
+	//TODO: fix this shit
+	
+	if (levelMatrix[int(position.z)][int(position.x)] == 1)
+		position = oldposition;
 
 }

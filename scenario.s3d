@@ -1,3 +1,9 @@
+SET CAMERA_FOV  = 60;
+SET CAMERA_NEAR = 0.3;
+SET CAMERA_FAR  = 300;
+SET CAMERA_HEIGHT = 1.5;
+
+
 class scenario 
 {	
 	//variables
@@ -26,6 +32,7 @@ class scenario
 	addplayer(col);
 	update();
 	draw();
+	updateCamera();
 };
 
 //********************************************************************
@@ -59,15 +66,14 @@ function scenario :: init(textfile){
 	//floors
 	
 	floorMat = CVmMaterial();
-	floorTexture = CVmTexture("marmostriato2.png");
+	floorTexture = CVmTexture("ground_texture.jpg");
 	floorMat.SetTexture(floorTexture);
-	floorMat.ChangeTextureParams(VR_U_TILING,4);
-	floorMat.ChangeTextureParams(VR_V_TILING,4);
+	floorMat.ChangeTextureParams(VR_U_TILING,10);
+	floorMat.ChangeTextureParams(VR_V_TILING,10);
 	
 	floorMesh = CVmNewMesh(VRP_BOX);
 	floorMesh.Scale(columns,1,rows);
 	floorMesh.ForceMaterial(floorMat);
-	floorMesh.ModulateMaterials(0.0,0.7,0.0);
 	
 	floorObj = CVmObj(floorMesh);
 	floorObj.translate(0,-1,0);
@@ -97,9 +103,14 @@ function scenario :: init(textfile){
 				tempObj.SetPosition(j,0,i);
 				aadd(wallObjArray,tempObj);				
 			}
-		}	
+		}
+	
+	/*init camera */		
 	camera = CameraGetCurrent();		
 	isFirstPersonCamera = true;
+	camera.SetFovY(CAMERA_FOV);
+	camera.SetZNear(CAMERA_NEAR);
+	camera.SetZFar(CAMERA_FAR);
 }
 
 //********************************************************************
@@ -129,9 +140,7 @@ function scenario :: addPlayer(col){
 	
 	var tmpPlayer = player();
 	var pos, posx, posz;
-	trace(columns);
-	trace(rows);
-	
+	/*spawn outside walls */
 	do {		
 		posx = rand(columns - 1);
 		trace(posx);
@@ -141,7 +150,7 @@ function scenario :: addPlayer(col){
 	}
 	while(levelMatrix[posz][posx] == 1);
 	
-	tmpPlayer.init(playerNumber,col,pos);
+	tmpPlayer.init(playerNumber,col,pos, levelMatrix);
 	aadd(playerArray, tmpPlayer);
 	playerNumber++;
 }
@@ -161,15 +170,30 @@ function scenario :: update(){
 	if(keyPressed("P")) {
 		//ShowCursor(TRUE);
 	}
+	
 	/*update players */
 	for (var i = 0; i < playerNumber; i++){
 		playerArray[i].update(levelMatrix);
 	}
 	
-	/*update camera*/
+	updateCamera();
 	
-	camera.SetPosition(playerArray[0].position + [0,1.3,0] );
+	//do some other stuff
+}
+
+//********************************************************************
+//UPDATE CAMERA
+//********************************************************************
+
+function scenario :: updateCamera(){
+
+	var normal = VectorRotate(-90, [0, 1, 0], playerArray[0].direction.x_z);
+	var camPos = playerArray[0].position + [0, 1, 0] +
+			    VectorRotate(playerArray[0].angleX, normal, [0, 0.5, 0]);
+
+	camera.SetPosition(camPos);
 	camera.SetDirection(playerArray[0].direction);
+	//camera.RotateLocal(-playerArray[0].angleX, [1,0,0]);
 	
 	if(!isFirstPersonCamera){
 		var camPos = camera.GetPosition();
@@ -178,6 +202,4 @@ function scenario :: update(){
 		camPos += VectorRotate(190, Camera.GetYAxis(), camDir) * 2;
 		camera.SetPosition(camPos); 
 	}
-	
-	//do some other stuff
 }

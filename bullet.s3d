@@ -21,7 +21,7 @@ class bullet
 
 function bullet::init(col)
 {
-	mesh = CVMNewMesh(VRP_BOX);
+	mesh = CVMNewMesh(VRP_SPHERE);
 	mesh.Scale(0.1);
 	obj = CVmObj(mesh);
 	speed = 0.1;

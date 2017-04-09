@@ -6,9 +6,6 @@
 #include "scenario.s3d"
 
 /* Set global scene parameters */
-SET SCENE_FOV  = 60;
-SET SCENE_NEAR = 0.25;
-SET SCENE_FAR  = 300;
 SET AUDIO_OPENAL = 1;
 
 
