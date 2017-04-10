@@ -122,6 +122,7 @@ function player :: init(id, col, pos, matrix){
 
 function player::draw()
 {
+	//railgunObj.DrawBoundingBox(VR_WIREFRAME);
 	rootObj.Draw(VR_FRAMENUMBER, currentFrame);
 	
 	if (hit)
@@ -228,7 +229,10 @@ function player :: readKeyboard(){
 	}
 	
 	if (Keypressed(VK_SPACE)) { 	//shoot
-		var shot = playerBullet.shot(position,direction);
+		var bbox = railgunMesh.SubsetGetBoundingBox(0);
+		trace(bbox);
+		var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];
+		var shot = playerBullet.shoot(tmpPos,direction);
 		if (shot == 1) {
 			sfxShoot.Play();
 		}

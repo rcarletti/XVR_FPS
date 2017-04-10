@@ -4,6 +4,7 @@
 #include "bullet.s3d"
 #include "player.s3d"
 #include "scenario.s3d"
+#include "weapon.s3d"
 
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
@@ -11,7 +12,7 @@ SET AUDIO_OPENAL = 1;
 
 /* Light globals */
 var Light0;
-var PosL = [0.0, 100.0, 100.0];
+var PosL = [16.0, 10.0, 16.0];
 
 /* Function declarations */
 function CameraMoveMouse();

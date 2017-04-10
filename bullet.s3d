@@ -5,14 +5,14 @@ class bullet
 	var position;
 	var direction;
 	var speed;
-	var mesh;
-	var obj;
+	var bulletMesh;
+	var bulletObj;
 	var life;
-	var flying;
+	var isFlying;
 	var color;
 	
 	init(col);
-	shot(pos,dir);
+	shoot(pos,dir);
 	update();
 	draw();
 };
@@ -21,22 +21,22 @@ class bullet
 
 function bullet::init(col)
 {
-	mesh = CVMNewMesh(VRP_SPHERE);
-	mesh.Scale(0.1);
-	obj = CVmObj(mesh);
-	speed = 0.1;
+	bulletMesh = CVMNewMesh(VRP_SPHERE);
+	bulletMesh.Scale(0.1);
+	bulletObj = CVmObj(bulletMesh);
+	speed = 0.5;
 	life = 0;
 	position = [0.0, 0.0, 0.0];
 	direction = [0.0, 0.0, 0.0];
 	color = col;
-	mesh.ModulateMaterials(color);
+	bulletMesh.ModulateMaterials(color);
 }
 
-function bullet::shot(pos, dir)
+function bullet::shoot(pos, dir)
 {
 	if (life == 0)
 	{
-		position = pos + [0,1,0];
+		position = pos;
 		direction = dir;
 		life = MAX_LIFE;
 		return 1;
@@ -48,13 +48,13 @@ function bullet::shot(pos, dir)
 function bullet::draw()
 {
 	if (life != 0)
-		obj.Draw();
+		bulletObj.Draw();
 }
 
 function bullet::update()
 {
 	position += direction*speed;
-	obj.SetPosition(position);
+	bulletObj.SetPosition(position);
 	if (life != 0)
 		life--;	
 }

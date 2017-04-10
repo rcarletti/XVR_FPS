@@ -3,6 +3,8 @@ SET CAMERA_NEAR = 0.3;
 SET CAMERA_FAR  = 300;
 SET CAMERA_HEIGHT = 1.5;
 
+#include "weapon.s3d"
+
 
 class scenario 
 {	
@@ -16,10 +18,18 @@ class scenario
 	var wallObjArray;
 	var wallMat;
 	var wallTexture;
+	
+	var skyMesh;
+	var skyObj;
+	var skyMaterial;
+	var skyTexture;
+	
 	var levelMatrix;
 	var rows;
 	var columns;
 	
+	var weaponsPos;
+	var weapons;
 	//array di giocatori
 	var playerArray;
 	//numero di giocatori presenti
@@ -63,33 +73,43 @@ function scenario :: init(textfile){
 			
 	//set textures and stuff
 	
-	//floors
+	/*floors */
 	
 	floorMat = CVmMaterial();
 	floorTexture = CVmTexture("ground_texture.jpg");
 	floorMat.SetTexture(floorTexture);
 	floorMat.ChangeTextureParams(VR_U_TILING,10);
 	floorMat.ChangeTextureParams(VR_V_TILING,10);
-	
 	floorMesh = CVmNewMesh(VRP_BOX);
 	floorMesh.Scale(columns,1,rows);
-	floorMesh.ForceMaterial(floorMat);
-	
+	floorMesh.ForceMaterial(floorMat);	
 	floorObj = CVmObj(floorMesh);
 	floorObj.translate(0,-1,0);
 	
-	//walls
+	/*walls */
 	
 	wallMat = CVmMaterial();
 	wallTexture = CVmTexture("brick.jpg");
 	wallMat.SetTexture(wallTexture);
-	wallMat.ChangeTextureParams(VR_V_TILING,3);
-	
+	wallMat.ChangeTextureParams(VR_V_TILING,3);	
 	wallMesh = CVmNewMesh(VRP_BOX);
 	wallMesh.Scale(1,3,1);
 	wallMesh.ForceMaterial(wallMat);
 	
+	/*sky */
+	skyMaterial = CVmMaterial();
+	skyTexture   = CVmTexture("sky_texture.jpg");
+	skyMaterial.SetTexture(skyTexture);
+	skyMesh = CVmNewMesh(VRP_SPHERE);
+	skyMesh.FlipNormals(true);
+	skyMesh.Scale(200);
+	skyMesh.ForceMaterial(SkyMaterial);
+	skyObj = CVmObj(SkyMesh);
+	SkyMaterial.Diffuse = [1, 1, 1];
+	
 	wallObjArray = Array(0);
+	weaponsPos = Array(0);
+	weapons = Array(0);
 	
 	var i,j;
 	
@@ -102,6 +122,11 @@ function scenario :: init(textfile){
 				var tempobj = CVmObj(wallMesh);
 				tempObj.SetPosition(j,0,i);
 				aadd(wallObjArray,tempObj);				
+			}
+			else if(lines[i][j] == "w"){
+				var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
+				tempW.setSpawnPoint([j, 0.2, i]);
+				aadd(weapons, {tempW, [j, 0, i], tempW.name} );
 			}
 		}
 	
@@ -127,6 +152,12 @@ function scenario :: draw()
 		
 	for (i = 0;i < playerNumber; i++)
 		playerArray[i].Draw();	
+		
+	foreach (var p in weapons){
+		p[0].draw();
+	} 
+		
+	skyObj.Draw();
 }
 
 //********************************************************************
@@ -174,6 +205,10 @@ function scenario :: update(){
 	/*update players */
 	for (var i = 0; i < playerNumber; i++){
 		playerArray[i].update(levelMatrix);
+	}
+	
+	foreach ( var w in weapons){
+		w[0].update();
 	}
 	
 	updateCamera();

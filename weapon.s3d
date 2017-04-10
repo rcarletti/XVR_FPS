@@ -1,0 +1,60 @@
+#ifndef WEAPON_S3D
+#define WEAPON_S3D
+
+class weapon {
+	var weaponMesh;
+	var weaponObj;
+	
+	var damage;
+	var reloadTime;
+	var position;
+	var name;
+	var id;
+	var bulletSpeed;
+	var damageRadius;
+	
+	update();
+	draw();
+	setSpawnPoint(pos);
+};
+
+function weapon :: weapon(name) {
+	this.name = name;
+	position = [0, 0, 0];
+	if (name == "railgun.aam"){
+		id = 0;
+		Damage = 50;
+		bulletSpeed = 1.0;
+		reloadTime = 5; //sec
+		damageRadius = 1;
+	}
+	
+	else if (name == "rocketl.aam") {
+		id = 1;
+		Damage = 100;
+		bulletSpeed = 0.75;
+		reloadTime = 8; //sec
+		damageRadius = 2;
+	}
+	
+	weaponMesh = CVmNewMesh(name);
+	weaponObj  = CVmObj(weaponMesh);
+	
+	weaponMesh.Scale(0.04);
+	
+	
+}
+
+function weapon :: update() {
+	weaponObj.rotate(1, [0, 1, 0]);
+}
+
+function weapon :: draw() {
+	weaponObj.Draw();
+}
+
+function weapon :: setSpawnPoint(pos) {
+	weaponObj.setPosition(pos);
+}
+
+#endif
