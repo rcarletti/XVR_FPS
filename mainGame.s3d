@@ -43,6 +43,7 @@ function OnInit(params) {
 
 	mylevel.AddPlayer([11,5,0]);
 	//
+	setFrameRate(90);
 	
 	ShowCursor(FALSE);
 	ShowCursor(FALSE);

@@ -19,6 +19,22 @@
 		},
 		
 		{
+			"name" : "WEAPON",
+			"variables" : 
+			[
+				"WEAPONMESH",
+				"WEAPONOBJ",
+				"DAMAGE",
+				"RELOADTIME",
+				"POSITION",
+				"NAME",
+				"ID",
+				"BULLETSPEED",
+				"DAMAGERADIUS"
+			]
+		},
+		
+		{
 			"name" : "PLAYER",
 			"variables" : 
 			[
@@ -27,7 +43,7 @@
 				"RAILGUNMESH",
 				"LOWEROBJ",
 				"UPPEROBJ",
-				"RAILGUNOBJ",
+				"WEAPONOBJ",
 				"ROOTOBJ",
 				"BILLBOARDFIRE",
 				"FIREOBJ",
@@ -52,23 +68,10 @@
 				"COLOR",
 				"PLAYERBULLET",
 				"SCORE",
-				"HIT"
-			]
-		},
-		
-		{
-			"name" : "WEAPON",
-			"variables" : 
-			[
-				"WEAPONMESH",
-				"WEAPONOBJ",
-				"DAMAGE",
-				"RELOADTIME",
-				"POSITION",
-				"NAME",
-				"ID",
-				"BULLETSPEED",
-				"DAMAGERADIUS"
+				"HIT",
+				"WEAPONS",
+				"CURRWEAPON",
+				"ISSWITCHED"
 			]
 		},
 		
@@ -109,6 +112,7 @@
 		"C:/Program Files (x86)/VRMedia/XVRStudio2.0/Editor/plugins/org.xvr.xvrengine_1.0.0/VRMedia/Include/Camera.s3d.h",
 		"bullet.s3d",
 		"player.s3d",
+		"weapon.s3d",
 		"scenario.s3d",
 		"weapon.s3d",
 		"weapon.s3d"
@@ -2349,23 +2353,23 @@
 		},
 		
 		{
-			"endLine" : 248,
+			"endLine" : 288,
 			"scopes" : 
 			[
 				
 				{
 					"classname" : "PLAYER",
-					"endLine" : 117,
+					"endLine" : 130,
 					"methodname" : "INIT",
 					"params" : 5,
-					"startLine" : 60,
+					"startLine" : 66,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 60,
+							"line" : 66,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -2374,7 +2378,7 @@
 						
 						{
 							"global" : false,
-							"line" : 60,
+							"line" : 66,
 							"name" : "ID",
 							"offset" : -2,
 							"opt" : true,
@@ -2383,7 +2387,7 @@
 						
 						{
 							"global" : false,
-							"line" : 60,
+							"line" : 66,
 							"name" : "COL",
 							"offset" : -3,
 							"opt" : true,
@@ -2392,7 +2396,7 @@
 						
 						{
 							"global" : false,
-							"line" : 60,
+							"line" : 66,
 							"name" : "POS",
 							"offset" : -4,
 							"opt" : true,
@@ -2401,7 +2405,7 @@
 						
 						{
 							"global" : false,
-							"line" : 60,
+							"line" : 66,
 							"name" : "MATRIX",
 							"offset" : -5,
 							"opt" : true,
@@ -2412,26 +2416,26 @@
 				
 				{
 					"classname" : "PLAYER",
-					"endLine" : 137,
+					"endLine" : 151,
 					"methodname" : "DRAW",
 					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 134,
-							"startLine" : 128,
+							"endLine" : 148,
+							"startLine" : 142,
 							"type" : "block"
 						}
 					],
-					"startLine" : 123,
+					"startLine" : 136,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 123,
+							"line" : 136,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -2442,49 +2446,49 @@
 				
 				{
 					"classname" : "PLAYER",
-					"endLine" : 193,
+					"endLine" : 207,
 					"methodname" : "UPDATE",
 					"params" : 2,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 154,
-							"startLine" : 152,
+							"endLine" : 168,
+							"startLine" : 166,
 							"type" : "block"
 						},
 						
 						{
-							"endLine" : 158,
-							"startLine" : 156,
+							"endLine" : 172,
+							"startLine" : 170,
 							"type" : "block"
 						},
 						
 						{
-							"endLine" : 192,
+							"endLine" : 206,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 186,
-									"startLine" : 183,
+									"endLine" : 200,
+									"startLine" : 197,
 									"type" : "block"
 								},
 								
 								{
-									"endLine" : 190,
-									"startLine" : 187,
+									"endLine" : 204,
+									"startLine" : 201,
 									"type" : "block"
 								}
 							],
-							"startLine" : 179,
+							"startLine" : 193,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 180,
+									"line" : 194,
 									"name" : "DELTAFRAME",
 									"offset" : 1,
 									"opt" : false,
@@ -2493,14 +2497,14 @@
 							]
 						}
 					],
-					"startLine" : 143,
+					"startLine" : 157,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 143,
+							"line" : 157,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -2509,7 +2513,7 @@
 						
 						{
 							"global" : false,
-							"line" : 143,
+							"line" : 157,
 							"name" : "LEVELMATRIX",
 							"offset" : -2,
 							"opt" : true,
@@ -2518,7 +2522,7 @@
 						
 						{
 							"global" : false,
-							"line" : 148,
+							"line" : 162,
 							"name" : "MOUSEDELTA",
 							"offset" : 1,
 							"opt" : true,
@@ -2529,33 +2533,15 @@
 				
 				{
 					"classname" : "PLAYER",
-					"endLine" : 248,
+					"endLine" : 277,
 					"methodname" : "READKEYBOARD",
 					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 209,
-							"startLine" : 206,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 214,
-							"startLine" : 211,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 219,
-							"startLine" : 216,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 224,
-							"startLine" : 221,
+							"endLine" : 223,
+							"startLine" : 220,
 							"type" : "block"
 						},
 						
@@ -2566,46 +2552,88 @@
 						},
 						
 						{
+							"endLine" : 233,
+							"startLine" : 230,
+							"type" : "block"
+						},
+						
+						{
 							"endLine" : 238,
+							"startLine" : 235,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 242,
+							"startLine" : 239,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 255,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 234,
-									"startLine" : 232,
+									"endLine" : 251,
+									"startLine" : 249,
 									"type" : "block"
 								},
 								
 								{
-									"endLine" : 237,
-									"startLine" : 235,
+									"endLine" : 254,
+									"startLine" : 252,
 									"type" : "block"
 								}
 							],
-							"startLine" : 230,
+							"startLine" : 244,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 231,
-									"name" : "SHOT",
+									"line" : 245,
+									"name" : "BBOX",
+									"offset" : 3,
+									"opt" : false,
+									"static" : false
+								},
+								
+								{
+									"global" : false,
+									"line" : 247,
+									"name" : "TMPPOS",
 									"offset" : 4,
+									"opt" : false,
+									"static" : false
+								},
+								
+								{
+									"global" : false,
+									"line" : 248,
+									"name" : "SHOT",
+									"offset" : 5,
 									"opt" : false,
 									"static" : false
 								}
 							]
+						},
+						
+						{
+							"endLine" : 264,
+							"startLine" : 258,
+							"type" : "block"
 						}
 					],
-					"startLine" : 199,
+					"startLine" : 213,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 199,
+							"line" : 213,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -2614,7 +2642,7 @@
 						
 						{
 							"global" : false,
-							"line" : 201,
+							"line" : 215,
 							"name" : "STRAFEDIRECTION",
 							"offset" : 1,
 							"opt" : false,
@@ -2623,7 +2651,7 @@
 						
 						{
 							"global" : false,
-							"line" : 202,
+							"line" : 216,
 							"name" : "WALKDIRECTION",
 							"offset" : 2,
 							"opt" : false,
@@ -2632,10 +2660,166 @@
 						
 						{
 							"global" : false,
-							"line" : 240,
+							"line" : 269,
 							"name" : "OLDPOSITION",
-							"offset" : 3,
+							"offset" : 6,
 							"opt" : false,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "PLAYER",
+					"endLine" : 287,
+					"methodname" : "SWAPWEAPON",
+					"params" : 2,
+					"startLine" : 283,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 283,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 283,
+							"name" : "WEAPONID",
+							"offset" : -2,
+							"opt" : true,
+							"static" : false
+						}
+					]
+				}
+			],
+			"startLine" : 0,
+			"type" : "global"
+		},
+		
+		{
+			"endLine" : 61,
+			"scopes" : 
+			[
+				
+				{
+					"classname" : "WEAPON",
+					"endLine" : 46,
+					"methodname" : "WEAPON",
+					"params" : 2,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 30,
+							"startLine" : 24,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 38,
+							"startLine" : 32,
+							"type" : "block"
+						}
+					],
+					"startLine" : 21,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 21,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 21,
+							"name" : "NAME",
+							"offset" : -2,
+							"opt" : true,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "WEAPON",
+					"endLine" : 50,
+					"methodname" : "UPDATE",
+					"params" : 1,
+					"startLine" : 48,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 48,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "WEAPON",
+					"endLine" : 54,
+					"methodname" : "DRAW",
+					"params" : 1,
+					"startLine" : 52,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 52,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "WEAPON",
+					"endLine" : 58,
+					"methodname" : "SETSPAWNPOINT",
+					"params" : 2,
+					"startLine" : 56,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 56,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 56,
+							"name" : "POS",
+							"offset" : -2,
+							"opt" : true,
 							"static" : false
 						}
 					]
@@ -3145,126 +3329,6 @@
 		
 		{
 			"endLine" : 61,
-			"scopes" : 
-			[
-				
-				{
-					"classname" : "WEAPON",
-					"endLine" : 46,
-					"methodname" : "WEAPON",
-					"params" : 2,
-					"scopes" : 
-					[
-						
-						{
-							"endLine" : 30,
-							"startLine" : 24,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 38,
-							"startLine" : 32,
-							"type" : "block"
-						}
-					],
-					"startLine" : 21,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 21,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 21,
-							"name" : "NAME",
-							"offset" : -2,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "WEAPON",
-					"endLine" : 50,
-					"methodname" : "UPDATE",
-					"params" : 1,
-					"startLine" : 48,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 48,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "WEAPON",
-					"endLine" : 54,
-					"methodname" : "DRAW",
-					"params" : 1,
-					"startLine" : 52,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 52,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "WEAPON",
-					"endLine" : 58,
-					"methodname" : "SETSPAWNPOINT",
-					"params" : 2,
-					"startLine" : 56,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 56,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 56,
-							"name" : "POS",
-							"offset" : -2,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				}
-			],
 			"startLine" : 0,
 			"type" : "global"
 		},
@@ -3299,289 +3363,289 @@
 				
 				{
 					"line" : 26,
-					"offset" : 1991
-				},
-				
-				{
-					"line" : 29,
-					"offset" : 1992
-				},
-				
-				{
-					"line" : 30,
-					"offset" : 1995
-				},
-				
-				{
-					"line" : 32,
-					"offset" : 1996
-				},
-				
-				{
-					"line" : 35,
-					"offset" : 1997
-				},
-				
-				{
-					"line" : 36,
-					"offset" : 1999
-				},
-				
-				{
-					"line" : 37,
-					"offset" : 2002
-				},
-				
-				{
-					"line" : 38,
-					"offset" : 2007
-				},
-				
-				{
-					"line" : 41,
-					"offset" : 2009
-				},
-				
-				{
-					"line" : 42,
-					"offset" : 2011
-				},
-				
-				{
-					"line" : 44,
-					"offset" : 2014
-				},
-				
-				{
-					"line" : 47,
-					"offset" : 2017
-				},
-				
-				{
-					"line" : 48,
-					"offset" : 2020
-				},
-				
-				{
-					"line" : 52,
-					"offset" : 2023
-				},
-				
-				{
-					"line" : 54,
-					"offset" : 2024
-				},
-				
-				{
-					"line" : 56,
-					"offset" : 2025
-				},
-				
-				{
-					"line" : 57,
-					"offset" : 2028
-				},
-				
-				{
-					"line" : 58,
-					"offset" : 2031
-				},
-				
-				{
-					"line" : 59,
-					"offset" : 2034
-				},
-				
-				{
-					"line" : 61,
-					"offset" : 2035
-				},
-				
-				{
-					"line" : 65,
-					"offset" : 2036
-				},
-				
-				{
-					"line" : 66,
-					"offset" : 2038
-				},
-				
-				{
-					"line" : 68,
-					"offset" : 2040
-				},
-				
-				{
-					"line" : 74,
-					"offset" : 2043
-				},
-				
-				{
-					"line" : 95,
-					"offset" : 2045
-				},
-				
-				{
-					"line" : 97,
-					"offset" : 2049
-				},
-				
-				{
-					"line" : 98,
-					"offset" : 2051
-				},
-				
-				{
-					"line" : 100,
-					"offset" : 2052
-				},
-				
-				{
-					"line" : 102,
-					"offset" : 2053
-				},
-				
-				{
-					"line" : 106,
-					"offset" : 2054
-				},
-				
-				{
-					"line" : 108,
-					"offset" : 2055
-				},
-				
-				{
-					"line" : 111,
-					"offset" : 2056
-				},
-				
-				{
-					"line" : 113,
-					"offset" : 2057
-				},
-				
-				{
-					"line" : 115,
-					"offset" : 2058
-				},
-				
-				{
-					"line" : 117,
-					"offset" : 2059
-				},
-				
-				{
-					"line" : 120,
-					"offset" : 2060
-				},
-				
-				{
-					"line" : 122,
-					"offset" : 2061
-				},
-				
-				{
-					"line" : 125,
-					"offset" : 2062
-				},
-				
-				{
-					"line" : 128,
-					"offset" : 2063
-				},
-				
-				{
-					"line" : 130,
-					"offset" : 2066
-				},
-				
-				{
-					"line" : 131,
-					"offset" : 2069
-				},
-				
-				{
-					"line" : 132,
-					"offset" : 2072
-				},
-				
-				{
-					"line" : 133,
-					"offset" : 2075
-				},
-				
-				{
-					"line" : 134,
 					"offset" : 2076
 				},
 				
 				{
-					"line" : 135,
+					"line" : 29,
 					"offset" : 2077
 				},
 				
 				{
-					"line" : 137,
-					"offset" : 2078
+					"line" : 30,
+					"offset" : 2080
 				},
 				
 				{
-					"line" : 138,
+					"line" : 32,
 					"offset" : 2081
 				},
 				
 				{
-					"line" : 140,
-					"offset" : 2083
+					"line" : 35,
+					"offset" : 2082
 				},
 				
 				{
-					"line" : 141,
-					"offset" : 2088
+					"line" : 36,
+					"offset" : 2084
 				},
 				
 				{
-					"line" : 143,
-					"offset" : 2093
+					"line" : 37,
+					"offset" : 2087
 				},
 				
 				{
-					"line" : 144,
-					"offset" : 2098
+					"line" : 38,
+					"offset" : 2092
 				},
 				
 				{
-					"line" : 138,
-					"offset" : 2103
+					"line" : 41,
+					"offset" : 2094
 				},
 				
 				{
-					"line" : 145,
-					"offset" : 2104
+					"line" : 42,
+					"offset" : 2096
 				},
 				
 				{
-					"line" : 146,
+					"line" : 44,
+					"offset" : 2099
+				},
+				
+				{
+					"line" : 47,
+					"offset" : 2102
+				},
+				
+				{
+					"line" : 48,
 					"offset" : 2105
 				},
 				
 				{
+					"line" : 52,
+					"offset" : 2108
+				},
+				
+				{
+					"line" : 54,
+					"offset" : 2109
+				},
+				
+				{
+					"line" : 56,
+					"offset" : 2110
+				},
+				
+				{
+					"line" : 57,
+					"offset" : 2113
+				},
+				
+				{
+					"line" : 58,
+					"offset" : 2116
+				},
+				
+				{
+					"line" : 59,
+					"offset" : 2119
+				},
+				
+				{
+					"line" : 61,
+					"offset" : 2120
+				},
+				
+				{
+					"line" : 65,
+					"offset" : 2121
+				},
+				
+				{
+					"line" : 66,
+					"offset" : 2123
+				},
+				
+				{
+					"line" : 68,
+					"offset" : 2125
+				},
+				
+				{
+					"line" : 74,
+					"offset" : 2128
+				},
+				
+				{
+					"line" : 95,
+					"offset" : 2130
+				},
+				
+				{
+					"line" : 97,
+					"offset" : 2134
+				},
+				
+				{
+					"line" : 98,
+					"offset" : 2136
+				},
+				
+				{
+					"line" : 100,
+					"offset" : 2137
+				},
+				
+				{
+					"line" : 102,
+					"offset" : 2138
+				},
+				
+				{
+					"line" : 106,
+					"offset" : 2139
+				},
+				
+				{
+					"line" : 108,
+					"offset" : 2140
+				},
+				
+				{
+					"line" : 111,
+					"offset" : 2141
+				},
+				
+				{
+					"line" : 113,
+					"offset" : 2142
+				},
+				
+				{
+					"line" : 115,
+					"offset" : 2143
+				},
+				
+				{
+					"line" : 117,
+					"offset" : 2144
+				},
+				
+				{
+					"line" : 120,
+					"offset" : 2145
+				},
+				
+				{
+					"line" : 122,
+					"offset" : 2146
+				},
+				
+				{
+					"line" : 125,
+					"offset" : 2147
+				},
+				
+				{
+					"line" : 128,
+					"offset" : 2148
+				},
+				
+				{
+					"line" : 130,
+					"offset" : 2151
+				},
+				
+				{
+					"line" : 131,
+					"offset" : 2154
+				},
+				
+				{
+					"line" : 132,
+					"offset" : 2157
+				},
+				
+				{
+					"line" : 133,
+					"offset" : 2160
+				},
+				
+				{
+					"line" : 134,
+					"offset" : 2161
+				},
+				
+				{
+					"line" : 135,
+					"offset" : 2162
+				},
+				
+				{
+					"line" : 137,
+					"offset" : 2163
+				},
+				
+				{
+					"line" : 138,
+					"offset" : 2166
+				},
+				
+				{
+					"line" : 140,
+					"offset" : 2168
+				},
+				
+				{
+					"line" : 141,
+					"offset" : 2173
+				},
+				
+				{
+					"line" : 143,
+					"offset" : 2178
+				},
+				
+				{
+					"line" : 144,
+					"offset" : 2183
+				},
+				
+				{
+					"line" : 138,
+					"offset" : 2188
+				},
+				
+				{
+					"line" : 145,
+					"offset" : 2189
+				},
+				
+				{
+					"line" : 146,
+					"offset" : 2190
+				},
+				
+				{
 					"line" : 149,
-					"offset" : 2107
+					"offset" : 2192
 				},
 				
 				{
 					"line" : 150,
-					"offset" : 2109
+					"offset" : 2194
 				}
 			],
 			"offsets" : 
 			[
 				
 				{
-					"endoffset" : 2109,
+					"endoffset" : 2194,
 					"startoffset" : 0
 				}
 			]
@@ -5818,79 +5882,79 @@
 				
 				{
 					"line" : 40,
-					"offset" : 1025
+					"offset" : 1024
 				},
 				
 				{
 					"line" : 41,
-					"offset" : 1026
+					"offset" : 1025
 				},
 				
 				{
 					"line" : 42,
-					"offset" : 1027
+					"offset" : 1026
 				},
 				
 				{
 					"line" : 45,
-					"offset" : 1028
+					"offset" : 1027
 				},
 				
 				{
 					"line" : 48,
-					"offset" : 1029
+					"offset" : 1028
 				},
 				
 				{
 					"line" : 50,
-					"offset" : 1030
+					"offset" : 1029
 				},
 				
 				{
 					"line" : 51,
-					"offset" : 1032
+					"offset" : 1031
 				},
 				
 				{
 					"line" : 52,
-					"offset" : 1035
+					"offset" : 1034
 				},
 				
 				{
 					"line" : 54,
-					"offset" : 1036
+					"offset" : 1035
 				},
 				
 				{
 					"line" : 56,
-					"offset" : 1037
+					"offset" : 1036
 				},
 				
 				{
 					"line" : 57,
-					"offset" : 1043
+					"offset" : 1042
 				},
 				
 				{
 					"line" : 58,
-					"offset" : 1048
+					"offset" : 1047
 				},
 				
 				{
 					"line" : 59,
-					"offset" : 1050
+					"offset" : 1049
 				},
 				
 				{
 					"line" : 60,
-					"offset" : 1053
+					"offset" : 1052
 				}
 			],
 			"offsets" : 
 			[
 				
 				{
-					"endoffset" : 1053,
+					"endoffset" : 1052,
 					"startoffset" : 991
 				}
 			]
@@ -5901,1275 +5965,701 @@
 			[
 				
 				{
-					"line" : 60,
-					"offset" : 1054
-				},
-				
-				{
-					"line" : 62,
-					"offset" : 1055
-				},
-				
-				{
-					"line" : 63,
-					"offset" : 1056
-				},
-				
-				{
-					"line" : 64,
-					"offset" : 1057
-				},
-				
-				{
-					"line" : 65,
-					"offset" : 1058
-				},
-				
-				{
 					"line" : 66,
-					"offset" : 1059
-				},
-				
-				{
-					"line" : 67,
-					"offset" : 1060
+					"offset" : 1104
 				},
 				
 				{
 					"line" : 68,
-					"offset" : 1061
-				},
-				
-				{
-					"line" : 69,
-					"offset" : 1062
-				},
-				
-				{
-					"line" : 70,
-					"offset" : 1063
-				},
-				
-				{
-					"line" : 71,
-					"offset" : 1064
-				},
-				
-				{
-					"line" : 72,
-					"offset" : 1065
-				},
-				
-				{
-					"line" : 73,
-					"offset" : 1066
-				},
-				
-				{
-					"line" : 74,
-					"offset" : 1067
-				},
-				
-				{
-					"line" : 75,
-					"offset" : 1068
-				},
-				
-				{
-					"line" : 79,
-					"offset" : 1069
-				},
-				
-				{
-					"line" : 81,
-					"offset" : 1072
-				},
-				
-				{
-					"line" : 82,
-					"offset" : 1077
-				},
-				
-				{
-					"line" : 83,
-					"offset" : 1082
-				},
-				
-				{
-					"line" : 84,
-					"offset" : 1087
-				},
-				
-				{
-					"line" : 85,
-					"offset" : 1091
-				},
-				
-				{
-					"line" : 86,
-					"offset" : 1095
-				},
-				
-				{
-					"line" : 88,
-					"offset" : 1099
-				},
-				
-				{
-					"line" : 89,
 					"offset" : 1105
 				},
 				
 				{
-					"line" : 90,
+					"line" : 69,
+					"offset" : 1106
+				},
+				
+				{
+					"line" : 70,
+					"offset" : 1107
+				},
+				
+				{
+					"line" : 71,
+					"offset" : 1108
+				},
+				
+				{
+					"line" : 72,
+					"offset" : 1109
+				},
+				
+				{
+					"line" : 73,
+					"offset" : 1110
+				},
+				
+				{
+					"line" : 74,
 					"offset" : 1111
 				},
 				
 				{
-					"line" : 92,
-					"offset" : 1117
+					"line" : 75,
+					"offset" : 1112
 				},
 				
 				{
-					"line" : 93,
-					"offset" : 1122
+					"line" : 76,
+					"offset" : 1113
 				},
 				
 				{
-					"line" : 94,
-					"offset" : 1127
-				},
-				
-				{
-					"line" : 97,
-					"offset" : 1132
-				},
-				
-				{
-					"line" : 99,
-					"offset" : 1137
-				},
-				
-				{
-					"line" : 100,
-					"offset" : 1142
-				},
-				
-				{
-					"line" : 101,
-					"offset" : 1145
-				},
-				
-				{
-					"line" : 103,
-					"offset" : 1150
-				},
-				
-				{
-					"line" : 104,
-					"offset" : 1155
-				},
-				
-				{
-					"line" : 105,
-					"offset" : 1160
-				},
-				
-				{
-					"line" : 106,
-					"offset" : 1164
-				},
-				
-				{
-					"line" : 108,
-					"offset" : 1168
-				},
-				
-				{
-					"line" : 109,
-					"offset" : 1174
-				},
-				
-				{
-					"line" : 110,
-					"offset" : 1180
-				},
-				
-				{
-					"line" : 111,
-					"offset" : 1186
-				},
-				
-				{
-					"line" : 113,
-					"offset" : 1192
-				},
-				
-				{
-					"line" : 114,
-					"offset" : 1195
-				},
-				
-				{
-					"line" : 116,
-					"offset" : 1200
-				},
-				
-				{
-					"line" : 117,
-					"offset" : 1202
-				},
-				
-				{
-					"line" : 123,
-					"offset" : 1203
-				},
-				
-				{
-					"line" : 125,
-					"offset" : 1204
-				},
-				
-				{
-					"line" : 127,
-					"offset" : 1210
-				},
-				
-				{
-					"line" : 129,
-					"offset" : 1212
-				},
-				
-				{
-					"line" : 130,
-					"offset" : 1215
-				},
-				
-				{
-					"line" : 131,
-					"offset" : 1219
-				},
-				
-				{
-					"line" : 132,
-					"offset" : 1222
-				},
-				
-				{
-					"line" : 133,
-					"offset" : 1226
-				},
-				
-				{
-					"line" : 136,
-					"offset" : 1229
-				},
-				
-				{
-					"line" : 137,
-					"offset" : 1232
-				},
-				
-				{
-					"line" : 143,
-					"offset" : 1233
-				},
-				
-				{
-					"line" : 145,
-					"offset" : 1234
-				},
-				
-				{
-					"line" : 148,
-					"offset" : 1236
-				},
-				
-				{
-					"line" : 149,
-					"offset" : 1241
-				},
-				
-				{
-					"line" : 150,
-					"offset" : 1247
-				},
-				
-				{
-					"line" : 152,
-					"offset" : 1253
-				},
-				
-				{
-					"line" : 153,
-					"offset" : 1255
-				},
-				
-				{
-					"line" : 156,
-					"offset" : 1256
-				},
-				
-				{
-					"line" : 157,
-					"offset" : 1258
-				},
-				
-				{
-					"line" : 160,
-					"offset" : 1259
-				},
-				
-				{
-					"line" : 162,
-					"offset" : 1273
-				},
-				
-				{
-					"line" : 165,
-					"offset" : 1276
-				},
-				
-				{
-					"line" : 166,
-					"offset" : 1281
-				},
-				
-				{
-					"line" : 167,
-					"offset" : 1289
-				},
-				
-				{
-					"line" : 168,
-					"offset" : 1298
-				},
-				
-				{
-					"line" : 169,
-					"offset" : 1307
-				},
-				
-				{
-					"line" : 170,
-					"offset" : 1313
-				},
-				
-				{
-					"line" : 171,
-					"offset" : 1318
-				},
-				
-				{
-					"line" : 172,
-					"offset" : 1323
-				},
-				
-				{
-					"line" : 173,
-					"offset" : 1328
-				},
-				
-				{
-					"line" : 174,
-					"offset" : 1333
-				},
-				
-				{
-					"line" : 175,
-					"offset" : 1337
-				},
-				
-				{
-					"line" : 179,
-					"offset" : 1344
-				},
-				
-				{
-					"line" : 180,
-					"offset" : 1346
-				},
-				
-				{
-					"line" : 181,
-					"offset" : 1348
-				},
-				
-				{
-					"line" : 183,
-					"offset" : 1351
-				},
-				
-				{
-					"line" : 184,
-					"offset" : 1353
-				},
-				
-				{
-					"line" : 185,
-					"offset" : 1354
-				},
-				
-				{
-					"line" : 192,
-					"offset" : 1357
-				},
-				
-				{
-					"line" : 187,
-					"offset" : 1358
-				},
-				
-				{
-					"line" : 188,
-					"offset" : 1360
-				},
-				
-				{
-					"line" : 189,
-					"offset" : 1363
-				},
-				
-				{
-					"line" : 193,
-					"offset" : 1368
-				},
-				
-				{
-					"line" : 199,
-					"offset" : 1369
-				},
-				
-				{
-					"line" : 201,
-					"offset" : 1370
-				},
-				
-				{
-					"line" : 202,
-					"offset" : 1371
-				},
-				
-				{
-					"line" : 203,
-					"offset" : 1372
-				},
-				
-				{
-					"line" : 204,
-					"offset" : 1373
-				},
-				
-				{
-					"line" : 206,
-					"offset" : 1374
-				},
-				
-				{
-					"line" : 207,
-					"offset" : 1379
-				},
-				
-				{
-					"line" : 208,
-					"offset" : 1380
-				},
-				
-				{
-					"line" : 211,
-					"offset" : 1388
-				},
-				
-				{
-					"line" : 212,
-					"offset" : 1393
-				},
-				
-				{
-					"line" : 213,
-					"offset" : 1394
-				},
-				
-				{
-					"line" : 216,
-					"offset" : 1402
-				},
-				
-				{
-					"line" : 217,
-					"offset" : 1407
-				},
-				
-				{
-					"line" : 218,
-					"offset" : 1408
-				},
-				
-				{
-					"line" : 221,
-					"offset" : 1409
-				},
-				
-				{
-					"line" : 222,
-					"offset" : 1414
-				},
-				
-				{
-					"line" : 223,
-					"offset" : 1415
-				},
-				
-				{
-					"line" : 225,
-					"offset" : 1417
-				},
-				
-				{
-					"line" : 226,
-					"offset" : 1422
-				},
-				
-				{
-					"line" : 227,
-					"offset" : 1423
-				},
-				
-				{
-					"line" : 230,
-					"offset" : 1426
-				},
-				
-				{
-					"line" : 231,
-					"offset" : 1431
-				},
-				
-				{
-					"line" : 232,
-					"offset" : 1439
-				},
-				
-				{
-					"line" : 233,
-					"offset" : 1440
-				},
-				
-				{
-					"line" : 237,
-					"offset" : 1443
-				},
-				
-				{
-					"line" : 236,
-					"offset" : 1444
-				},
-				
-				{
-					"line" : 240,
-					"offset" : 1447
-				},
-				
-				{
-					"line" : 241,
-					"offset" : 1448
-				},
-				
-				{
-					"line" : 245,
-					"offset" : 1456
-				},
-				
-				{
-					"line" : 246,
-					"offset" : 1466
-				},
-				
-				{
-					"line" : 248,
-					"offset" : 1467
-				}
-			],
-			"offsets" : 
-			[
-				
-				{
-					"endoffset" : 1467,
-					"startoffset" : 1054
-				}
-			]
-		},
-		
-		{
-			"code" : 
-			[
-				
-				{
-					"line" : 52,
-					"offset" : 1519
-				},
-				
-				{
-					"line" : 53,
-					"offset" : 1520
-				},
-				
-				{
-					"line" : 54,
-					"offset" : 1521
-				},
-				
-				{
-					"line" : 57,
-					"offset" : 1523
-				},
-				
-				{
-					"line" : 58,
-					"offset" : 1528
-				},
-				
-				{
-					"line" : 60,
-					"offset" : 1532
-				},
-				
-				{
-					"line" : 61,
-					"offset" : 1536
-				},
-				
-				{
-					"line" : 62,
-					"offset" : 1538
-				},
-				
-				{
-					"line" : 65,
-					"offset" : 1541
-				},
-				
-				{
-					"line" : 66,
-					"offset" : 1544
-				},
-				
-				{
-					"line" : 67,
-					"offset" : 1547
-				},
-				
-				{
-					"line" : 66,
-					"offset" : 1552
-				},
-				
-				{
-					"line" : 68,
-					"offset" : 1553
-				},
-				
-				{
-					"line" : 70,
-					"offset" : 1554
-				},
-				
-				{
-					"line" : 71,
-					"offset" : 1557
-				},
-				
-				{
-					"line" : 72,
-					"offset" : 1560
-				},
-				
-				{
-					"line" : 71,
-					"offset" : 1565
-				},
-				
-				{
-					"line" : 72,
-					"offset" : 1566
-				},
-				
-				{
-					"line" : 70,
-					"offset" : 1567
-				},
-				
-				{
-					"line" : 72,
-					"offset" : 1568
+					"line" : 77,
+					"offset" : 1114
 				},
 				
 				{
 					"line" : 78,
-					"offset" : 1569
+					"offset" : 1115
 				},
 				
 				{
 					"line" : 79,
-					"offset" : 1572
+					"offset" : 1116
 				},
 				
 				{
 					"line" : 80,
-					"offset" : 1577
+					"offset" : 1117
 				},
 				
 				{
 					"line" : 81,
-					"offset" : 1582
+					"offset" : 1118
 				},
 				
 				{
 					"line" : 82,
-					"offset" : 1587
+					"offset" : 1119
 				},
 				
 				{
 					"line" : 83,
-					"offset" : 1592
+					"offset" : 1121
 				},
 				
 				{
-					"line" : 84,
-					"offset" : 1597
+					"line" : 88,
+					"offset" : 1122
 				},
 				
 				{
-					"line" : 85,
-					"offset" : 1605
-				},
-				
-				{
-					"line" : 86,
-					"offset" : 1610
-				},
-				
-				{
-					"line" : 87,
-					"offset" : 1616
+					"line" : 90,
+					"offset" : 1125
 				},
 				
 				{
 					"line" : 91,
-					"offset" : 1622
+					"offset" : 1130
 				},
 				
 				{
 					"line" : 92,
-					"offset" : 1625
+					"offset" : 1135
 				},
 				
 				{
 					"line" : 93,
-					"offset" : 1630
+					"offset" : 1140
 				},
 				
 				{
 					"line" : 94,
-					"offset" : 1635
+					"offset" : 1144
 				},
 				
 				{
 					"line" : 95,
-					"offset" : 1640
-				},
-				
-				{
-					"line" : 96,
-					"offset" : 1645
+					"offset" : 1148
 				},
 				
 				{
 					"line" : 97,
-					"offset" : 1651
+					"offset" : 1152
 				},
 				
 				{
-					"line" : 100,
-					"offset" : 1656
+					"line" : 98,
+					"offset" : 1158
+				},
+				
+				{
+					"line" : 99,
+					"offset" : 1164
 				},
 				
 				{
 					"line" : 101,
-					"offset" : 1659
+					"offset" : 1167
 				},
 				
 				{
 					"line" : 102,
-					"offset" : 1664
+					"offset" : 1172
 				},
 				
 				{
 					"line" : 103,
-					"offset" : 1669
-				},
-				
-				{
-					"line" : 104,
-					"offset" : 1674
-				},
-				
-				{
-					"line" : 105,
-					"offset" : 1678
+					"offset" : 1177
 				},
 				
 				{
 					"line" : 106,
-					"offset" : 1682
-				},
-				
-				{
-					"line" : 107,
-					"offset" : 1687
+					"offset" : 1182
 				},
 				
 				{
 					"line" : 108,
-					"offset" : 1693
+					"offset" : 1187
+				},
+				
+				{
+					"line" : 109,
+					"offset" : 1192
 				},
 				
 				{
 					"line" : 110,
-					"offset" : 1696
-				},
-				
-				{
-					"line" : 111,
-					"offset" : 1698
+					"offset" : 1195
 				},
 				
 				{
 					"line" : 112,
-					"offset" : 1700
+					"offset" : 1200
 				},
 				
 				{
-					"line" : 116,
-					"offset" : 1702
+					"line" : 113,
+					"offset" : 1205
+				},
+				
+				{
+					"line" : 114,
+					"offset" : 1210
+				},
+				
+				{
+					"line" : 115,
+					"offset" : 1214
 				},
 				
 				{
 					"line" : 117,
-					"offset" : 1705
+					"offset" : 1218
+				},
+				
+				{
+					"line" : 118,
+					"offset" : 1224
 				},
 				
 				{
 					"line" : 119,
-					"offset" : 1708
+					"offset" : 1230
 				},
 				
 				{
-					"line" : 121,
-					"offset" : 1711
+					"line" : 120,
+					"offset" : 1236
 				},
 				
 				{
 					"line" : 122,
-					"offset" : 1716
+					"offset" : 1242
 				},
 				
 				{
 					"line" : 123,
-					"offset" : 1721
+					"offset" : 1245
 				},
 				
 				{
-					"line" : 124,
-					"offset" : 1726
-				},
-				
-				{
-					"line" : 131,
-					"offset" : 1728
+					"line" : 125,
+					"offset" : 1249
 				},
 				
 				{
 					"line" : 126,
-					"offset" : 1729
-				},
-				
-				{
-					"line" : 127,
-					"offset" : 1732
+					"offset" : 1256
 				},
 				
 				{
 					"line" : 128,
-					"offset" : 1750
+					"offset" : 1263
 				},
 				
 				{
 					"line" : 129,
-					"offset" : 1756
+					"offset" : 1265
 				},
 				
 				{
-					"line" : 117,
-					"offset" : 1766
-				},
-				
-				{
-					"line" : 131,
-					"offset" : 1767
-				},
-				
-				{
-					"line" : 116,
-					"offset" : 1768
-				},
-				
-				{
-					"line" : 131,
-					"offset" : 1769
-				},
-				
-				{
-					"line" : 134,
-					"offset" : 1770
-				},
-				
-				{
-					"line" : 135,
-					"offset" : 1773
+					"line" : 130,
+					"offset" : 1268
 				},
 				
 				{
 					"line" : 136,
-					"offset" : 1774
-				},
-				
-				{
-					"line" : 137,
-					"offset" : 1778
-				},
-				
-				{
-					"line" : 138,
-					"offset" : 1782
+					"offset" : 1269
 				},
 				
 				{
 					"line" : 139,
-					"offset" : 1786
+					"offset" : 1270
+				},
+				
+				{
+					"line" : 141,
+					"offset" : 1276
+				},
+				
+				{
+					"line" : 143,
+					"offset" : 1278
+				},
+				
+				{
+					"line" : 144,
+					"offset" : 1281
 				},
 				
 				{
 					"line" : 145,
-					"offset" : 1787
+					"offset" : 1285
+				},
+				
+				{
+					"line" : 146,
+					"offset" : 1288
 				},
 				
 				{
 					"line" : 147,
-					"offset" : 1788
+					"offset" : 1292
 				},
 				
 				{
 					"line" : 150,
-					"offset" : 1791
+					"offset" : 1295
 				},
 				
 				{
 					"line" : 151,
-					"offset" : 1795
-				},
-				
-				{
-					"line" : 150,
-					"offset" : 1799
-				},
-				
-				{
-					"line" : 151,
-					"offset" : 1800
-				},
-				
-				{
-					"line" : 153,
-					"offset" : 1801
-				},
-				
-				{
-					"line" : 154,
-					"offset" : 1804
-				},
-				
-				{
-					"line" : 153,
-					"offset" : 1808
-				},
-				
-				{
-					"line" : 154,
-					"offset" : 1809
-				},
-				
-				{
-					"line" : 158,
-					"offset" : 1810
-				},
-				
-				{
-					"line" : 156,
-					"offset" : 1811
-				},
-				
-				{
-					"line" : 158,
-					"offset" : 1812
+					"offset" : 1298
 				},
 				
 				{
 					"line" : 157,
-					"offset" : 1815
+					"offset" : 1299
 				},
 				
 				{
-					"line" : 158,
-					"offset" : 1818
+					"line" : 159,
+					"offset" : 1300
 				},
 				
 				{
-					"line" : 160,
-					"offset" : 1820
+					"line" : 162,
+					"offset" : 1302
 				},
 				
 				{
-					"line" : 161,
-					"offset" : 1823
+					"line" : 163,
+					"offset" : 1307
+				},
+				
+				{
+					"line" : 164,
+					"offset" : 1313
+				},
+				
+				{
+					"line" : 166,
+					"offset" : 1319
 				},
 				
 				{
 					"line" : 167,
-					"offset" : 1824
+					"offset" : 1321
 				},
 				
 				{
-					"line" : 168,
-					"offset" : 1825
+					"line" : 170,
+					"offset" : 1322
 				},
 				
 				{
-					"line" : 169,
-					"offset" : 1826
+					"line" : 171,
+					"offset" : 1324
 				},
 				
 				{
-					"line" : 172,
-					"offset" : 1846
+					"line" : 174,
+					"offset" : 1325
 				},
 				
 				{
 					"line" : 176,
-					"offset" : 1848
-				},
-				
-				{
-					"line" : 177,
-					"offset" : 1854
-				},
-				
-				{
-					"line" : 178,
-					"offset" : 1858
+					"offset" : 1339
 				},
 				
 				{
 					"line" : 179,
-					"offset" : 1864
+					"offset" : 1342
 				},
 				
 				{
 					"line" : 180,
-					"offset" : 1868
+					"offset" : 1347
+				},
+				
+				{
+					"line" : 181,
+					"offset" : 1355
 				},
 				
 				{
 					"line" : 182,
-					"offset" : 1872
+					"offset" : 1364
+				},
+				
+				{
+					"line" : 183,
+					"offset" : 1373
 				},
 				
 				{
 					"line" : 184,
-					"offset" : 1876
+					"offset" : 1379
 				},
 				
 				{
 					"line" : 185,
-					"offset" : 1884
+					"offset" : 1384
 				},
 				
 				{
 					"line" : 186,
-					"offset" : 1886
+					"offset" : 1389
 				},
 				
 				{
 					"line" : 187,
-					"offset" : 1889
+					"offset" : 1394
+				},
+				
+				{
+					"line" : 188,
+					"offset" : 1399
+				},
+				
+				{
+					"line" : 189,
+					"offset" : 1403
 				},
 				
 				{
 					"line" : 193,
-					"offset" : 1890
+					"offset" : 1410
+				},
+				
+				{
+					"line" : 194,
+					"offset" : 1412
 				},
 				
 				{
 					"line" : 195,
-					"offset" : 1891
+					"offset" : 1414
 				},
 				
 				{
-					"line" : 196,
-					"offset" : 1896
+					"line" : 197,
+					"offset" : 1417
 				},
 				
 				{
 					"line" : 198,
-					"offset" : 1897
+					"offset" : 1419
 				},
 				
 				{
 					"line" : 199,
-					"offset" : 1902
+					"offset" : 1420
+				},
+				
+				{
+					"line" : 206,
+					"offset" : 1423
 				},
 				
 				{
 					"line" : 201,
-					"offset" : 1903
+					"offset" : 1424
 				},
 				
 				{
-					"line" : 206,
-					"offset" : 1906
+					"line" : 202,
+					"offset" : 1426
+				},
+				
+				{
+					"line" : 203,
+					"offset" : 1429
 				},
 				
 				{
 					"line" : 207,
-					"offset" : 1909
+					"offset" : 1434
 				},
 				
 				{
-					"line" : 206,
-					"offset" : 1915
+					"line" : 213,
+					"offset" : 1435
 				},
 				
 				{
-					"line" : 208,
-					"offset" : 1916
+					"line" : 215,
+					"offset" : 1436
 				},
 				
 				{
-					"line" : 212,
-					"offset" : 1917
-				},
-				
-				{
-					"line" : 210,
-					"offset" : 1918
-				},
-				
-				{
-					"line" : 212,
-					"offset" : 1919
-				},
-				
-				{
-					"line" : 211,
-					"offset" : 1922
-				},
-				
-				{
-					"line" : 212,
-					"offset" : 1925
-				},
-				
-				{
-					"line" : 214,
-					"offset" : 1927
+					"line" : 216,
+					"offset" : 1437
 				},
 				
 				{
 					"line" : 217,
-					"offset" : 1929
+					"offset" : 1438
 				},
 				
 				{
-					"line" : 223,
-					"offset" : 1930
+					"line" : 218,
+					"offset" : 1439
+				},
+				
+				{
+					"line" : 220,
+					"offset" : 1440
+				},
+				
+				{
+					"line" : 221,
+					"offset" : 1445
+				},
+				
+				{
+					"line" : 222,
+					"offset" : 1446
 				},
 				
 				{
 					"line" : 225,
-					"offset" : 1931
+					"offset" : 1454
 				},
 				
 				{
 					"line" : 226,
-					"offset" : 1941
+					"offset" : 1459
 				},
 				
 				{
 					"line" : 227,
-					"offset" : 1945
-				},
-				
-				{
-					"line" : 229,
-					"offset" : 1955
+					"offset" : 1460
 				},
 				
 				{
 					"line" : 230,
-					"offset" : 1959
+					"offset" : 1468
 				},
 				
 				{
-					"line" : 233,
-					"offset" : 1966
+					"line" : 231,
+					"offset" : 1473
 				},
 				
 				{
-					"line" : 234,
-					"offset" : 1968
+					"line" : 232,
+					"offset" : 1474
 				},
 				
 				{
 					"line" : 235,
-					"offset" : 1971
+					"offset" : 1475
 				},
 				
 				{
 					"line" : 236,
-					"offset" : 1974
+					"offset" : 1480
 				},
 				
 				{
 					"line" : 237,
-					"offset" : 1975
+					"offset" : 1481
 				},
 				
 				{
-					"line" : 238,
-					"offset" : 1986
+					"line" : 239,
+					"offset" : 1483
 				},
 				
 				{
 					"line" : 240,
-					"offset" : 1990
+					"offset" : 1488
+				},
+				
+				{
+					"line" : 241,
+					"offset" : 1489
+				},
+				
+				{
+					"line" : 244,
+					"offset" : 1492
+				},
+				
+				{
+					"line" : 245,
+					"offset" : 1497
+				},
+				
+				{
+					"line" : 246,
+					"offset" : 1502
+				},
+				
+				{
+					"line" : 247,
+					"offset" : 1506
+				},
+				
+				{
+					"line" : 248,
+					"offset" : 1529
+				},
+				
+				{
+					"line" : 249,
+					"offset" : 1536
+				},
+				
+				{
+					"line" : 250,
+					"offset" : 1537
+				},
+				
+				{
+					"line" : 254,
+					"offset" : 1540
+				},
+				
+				{
+					"line" : 253,
+					"offset" : 1541
+				},
+				
+				{
+					"line" : 257,
+					"offset" : 1544
+				},
+				
+				{
+					"line" : 258,
+					"offset" : 1545
+				},
+				
+				{
+					"line" : 259,
+					"offset" : 1552
+				},
+				
+				{
+					"line" : 260,
+					"offset" : 1554
+				},
+				
+				{
+					"line" : 262,
+					"offset" : 1557
+				},
+				
+				{
+					"line" : 263,
+					"offset" : 1561
+				},
+				
+				{
+					"line" : 267,
+					"offset" : 1562
+				},
+				
+				{
+					"line" : 269,
+					"offset" : 1564
+				},
+				
+				{
+					"line" : 270,
+					"offset" : 1565
+				},
+				
+				{
+					"line" : 274,
+					"offset" : 1573
+				},
+				
+				{
+					"line" : 275,
+					"offset" : 1583
+				},
+				
+				{
+					"line" : 277,
+					"offset" : 1584
+				},
+				
+				{
+					"line" : 283,
+					"offset" : 1585
+				},
+				
+				{
+					"line" : 284,
+					"offset" : 1586
+				},
+				
+				{
+					"line" : 285,
+					"offset" : 1594
+				},
+				
+				{
+					"line" : 286,
+					"offset" : 1595
+				},
+				
+				{
+					"line" : 287,
+					"offset" : 1603
 				}
 			],
 			"offsets" : 
 			[
 				
 				{
-					"endoffset" : 1990,
-					"startoffset" : 1519
+					"endoffset" : 1603,
+					"startoffset" : 1104
 				}
 			]
 		},
@@ -7180,158 +6670,833 @@
 				
 				{
 					"line" : 21,
-					"offset" : 1468
+					"offset" : 1053
 				},
 				
 				{
 					"line" : 22,
-					"offset" : 1469
+					"offset" : 1054
 				},
 				
 				{
 					"line" : 23,
-					"offset" : 1470
+					"offset" : 1055
 				},
 				
 				{
 					"line" : 24,
-					"offset" : 1472
+					"offset" : 1057
 				},
 				
 				{
 					"line" : 25,
-					"offset" : 1473
+					"offset" : 1058
 				},
 				
 				{
 					"line" : 26,
-					"offset" : 1474
+					"offset" : 1059
 				},
 				
 				{
 					"line" : 27,
-					"offset" : 1475
+					"offset" : 1060
 				},
 				
 				{
 					"line" : 28,
-					"offset" : 1476
+					"offset" : 1061
 				},
 				
 				{
 					"line" : 29,
-					"offset" : 1477
+					"offset" : 1062
 				},
 				
 				{
 					"line" : 40,
-					"offset" : 1478
+					"offset" : 1063
 				},
 				
 				{
 					"line" : 32,
-					"offset" : 1479
+					"offset" : 1064
 				},
 				
 				{
 					"line" : 33,
-					"offset" : 1480
+					"offset" : 1065
 				},
 				
 				{
 					"line" : 34,
-					"offset" : 1481
+					"offset" : 1066
 				},
 				
 				{
 					"line" : 35,
-					"offset" : 1482
+					"offset" : 1067
 				},
 				
 				{
 					"line" : 36,
-					"offset" : 1483
+					"offset" : 1068
 				},
 				
 				{
 					"line" : 37,
-					"offset" : 1484
+					"offset" : 1069
 				},
 				
 				{
 					"line" : 40,
-					"offset" : 1485
+					"offset" : 1070
 				},
 				
 				{
 					"line" : 41,
-					"offset" : 1490
+					"offset" : 1075
 				},
 				
 				{
 					"line" : 43,
-					"offset" : 1496
+					"offset" : 1081
 				},
 				
 				{
 					"line" : 46,
-					"offset" : 1500
+					"offset" : 1085
 				},
 				
 				{
 					"line" : 48,
-					"offset" : 1501
+					"offset" : 1086
 				},
 				
 				{
 					"line" : 49,
-					"offset" : 1502
+					"offset" : 1087
 				},
 				
 				{
 					"line" : 50,
-					"offset" : 1507
+					"offset" : 1092
 				},
 				
 				{
 					"line" : 52,
-					"offset" : 1508
+					"offset" : 1093
 				},
 				
 				{
 					"line" : 53,
-					"offset" : 1509
+					"offset" : 1094
 				},
 				
 				{
 					"line" : 54,
-					"offset" : 1512
+					"offset" : 1097
 				},
 				
 				{
 					"line" : 56,
-					"offset" : 1513
+					"offset" : 1098
 				},
 				
 				{
 					"line" : 57,
-					"offset" : 1514
+					"offset" : 1099
 				},
 				
 				{
 					"line" : 58,
-					"offset" : 1518
+					"offset" : 1103
 				}
 			],
 			"offsets" : 
 			[
 				
 				{
-					"endoffset" : 1518,
-					"startoffset" : 1468
+					"endoffset" : 1103,
+					"startoffset" : 1053
 				}
 			]
 		},
+		
+		{
+			"code" : 
+			[
+				
+				{
+					"line" : 52,
+					"offset" : 1604
+				},
+				
+				{
+					"line" : 53,
+					"offset" : 1605
+				},
+				
+				{
+					"line" : 54,
+					"offset" : 1606
+				},
+				
+				{
+					"line" : 57,
+					"offset" : 1608
+				},
+				
+				{
+					"line" : 58,
+					"offset" : 1613
+				},
+				
+				{
+					"line" : 60,
+					"offset" : 1617
+				},
+				
+				{
+					"line" : 61,
+					"offset" : 1621
+				},
+				
+				{
+					"line" : 62,
+					"offset" : 1623
+				},
+				
+				{
+					"line" : 65,
+					"offset" : 1626
+				},
+				
+				{
+					"line" : 66,
+					"offset" : 1629
+				},
+				
+				{
+					"line" : 67,
+					"offset" : 1632
+				},
+				
+				{
+					"line" : 66,
+					"offset" : 1637
+				},
+				
+				{
+					"line" : 68,
+					"offset" : 1638
+				},
+				
+				{
+					"line" : 70,
+					"offset" : 1639
+				},
+				
+				{
+					"line" : 71,
+					"offset" : 1642
+				},
+				
+				{
+					"line" : 72,
+					"offset" : 1645
+				},
+				
+				{
+					"line" : 71,
+					"offset" : 1650
+				},
+				
+				{
+					"line" : 72,
+					"offset" : 1651
+				},
+				
+				{
+					"line" : 70,
+					"offset" : 1652
+				},
+				
+				{
+					"line" : 72,
+					"offset" : 1653
+				},
+				
+				{
+					"line" : 78,
+					"offset" : 1654
+				},
+				
+				{
+					"line" : 79,
+					"offset" : 1657
+				},
+				
+				{
+					"line" : 80,
+					"offset" : 1662
+				},
+				
+				{
+					"line" : 81,
+					"offset" : 1667
+				},
+				
+				{
+					"line" : 82,
+					"offset" : 1672
+				},
+				
+				{
+					"line" : 83,
+					"offset" : 1677
+				},
+				
+				{
+					"line" : 84,
+					"offset" : 1682
+				},
+				
+				{
+					"line" : 85,
+					"offset" : 1690
+				},
+				
+				{
+					"line" : 86,
+					"offset" : 1695
+				},
+				
+				{
+					"line" : 87,
+					"offset" : 1701
+				},
+				
+				{
+					"line" : 91,
+					"offset" : 1707
+				},
+				
+				{
+					"line" : 92,
+					"offset" : 1710
+				},
+				
+				{
+					"line" : 93,
+					"offset" : 1715
+				},
+				
+				{
+					"line" : 94,
+					"offset" : 1720
+				},
+				
+				{
+					"line" : 95,
+					"offset" : 1725
+				},
+				
+				{
+					"line" : 96,
+					"offset" : 1730
+				},
+				
+				{
+					"line" : 97,
+					"offset" : 1736
+				},
+				
+				{
+					"line" : 100,
+					"offset" : 1741
+				},
+				
+				{
+					"line" : 101,
+					"offset" : 1744
+				},
+				
+				{
+					"line" : 102,
+					"offset" : 1749
+				},
+				
+				{
+					"line" : 103,
+					"offset" : 1754
+				},
+				
+				{
+					"line" : 104,
+					"offset" : 1759
+				},
+				
+				{
+					"line" : 105,
+					"offset" : 1763
+				},
+				
+				{
+					"line" : 106,
+					"offset" : 1767
+				},
+				
+				{
+					"line" : 107,
+					"offset" : 1772
+				},
+				
+				{
+					"line" : 108,
+					"offset" : 1778
+				},
+				
+				{
+					"line" : 110,
+					"offset" : 1781
+				},
+				
+				{
+					"line" : 111,
+					"offset" : 1783
+				},
+				
+				{
+					"line" : 112,
+					"offset" : 1785
+				},
+				
+				{
+					"line" : 116,
+					"offset" : 1787
+				},
+				
+				{
+					"line" : 117,
+					"offset" : 1790
+				},
+				
+				{
+					"line" : 119,
+					"offset" : 1793
+				},
+				
+				{
+					"line" : 121,
+					"offset" : 1796
+				},
+				
+				{
+					"line" : 122,
+					"offset" : 1801
+				},
+				
+				{
+					"line" : 123,
+					"offset" : 1806
+				},
+				
+				{
+					"line" : 124,
+					"offset" : 1811
+				},
+				
+				{
+					"line" : 131,
+					"offset" : 1813
+				},
+				
+				{
+					"line" : 126,
+					"offset" : 1814
+				},
+				
+				{
+					"line" : 127,
+					"offset" : 1817
+				},
+				
+				{
+					"line" : 128,
+					"offset" : 1835
+				},
+				
+				{
+					"line" : 129,
+					"offset" : 1841
+				},
+				
+				{
+					"line" : 117,
+					"offset" : 1851
+				},
+				
+				{
+					"line" : 131,
+					"offset" : 1852
+				},
+				
+				{
+					"line" : 116,
+					"offset" : 1853
+				},
+				
+				{
+					"line" : 131,
+					"offset" : 1854
+				},
+				
+				{
+					"line" : 134,
+					"offset" : 1855
+				},
+				
+				{
+					"line" : 135,
+					"offset" : 1858
+				},
+				
+				{
+					"line" : 136,
+					"offset" : 1859
+				},
+				
+				{
+					"line" : 137,
+					"offset" : 1863
+				},
+				
+				{
+					"line" : 138,
+					"offset" : 1867
+				},
+				
+				{
+					"line" : 139,
+					"offset" : 1871
+				},
+				
+				{
+					"line" : 145,
+					"offset" : 1872
+				},
+				
+				{
+					"line" : 147,
+					"offset" : 1873
+				},
+				
+				{
+					"line" : 150,
+					"offset" : 1876
+				},
+				
+				{
+					"line" : 151,
+					"offset" : 1880
+				},
+				
+				{
+					"line" : 150,
+					"offset" : 1884
+				},
+				
+				{
+					"line" : 151,
+					"offset" : 1885
+				},
+				
+				{
+					"line" : 153,
+					"offset" : 1886
+				},
+				
+				{
+					"line" : 154,
+					"offset" : 1889
+				},
+				
+				{
+					"line" : 153,
+					"offset" : 1893
+				},
+				
+				{
+					"line" : 154,
+					"offset" : 1894
+				},
+				
+				{
+					"line" : 158,
+					"offset" : 1895
+				},
+				
+				{
+					"line" : 156,
+					"offset" : 1896
+				},
+				
+				{
+					"line" : 158,
+					"offset" : 1897
+				},
+				
+				{
+					"line" : 157,
+					"offset" : 1900
+				},
+				
+				{
+					"line" : 158,
+					"offset" : 1903
+				},
+				
+				{
+					"line" : 160,
+					"offset" : 1905
+				},
+				
+				{
+					"line" : 161,
+					"offset" : 1908
+				},
+				
+				{
+					"line" : 167,
+					"offset" : 1909
+				},
+				
+				{
+					"line" : 168,
+					"offset" : 1910
+				},
+				
+				{
+					"line" : 169,
+					"offset" : 1911
+				},
+				
+				{
+					"line" : 172,
+					"offset" : 1931
+				},
+				
+				{
+					"line" : 176,
+					"offset" : 1933
+				},
+				
+				{
+					"line" : 177,
+					"offset" : 1939
+				},
+				
+				{
+					"line" : 178,
+					"offset" : 1943
+				},
+				
+				{
+					"line" : 179,
+					"offset" : 1949
+				},
+				
+				{
+					"line" : 180,
+					"offset" : 1953
+				},
+				
+				{
+					"line" : 182,
+					"offset" : 1957
+				},
+				
+				{
+					"line" : 184,
+					"offset" : 1961
+				},
+				
+				{
+					"line" : 185,
+					"offset" : 1969
+				},
+				
+				{
+					"line" : 186,
+					"offset" : 1971
+				},
+				
+				{
+					"line" : 187,
+					"offset" : 1974
+				},
+				
+				{
+					"line" : 193,
+					"offset" : 1975
+				},
+				
+				{
+					"line" : 195,
+					"offset" : 1976
+				},
+				
+				{
+					"line" : 196,
+					"offset" : 1981
+				},
+				
+				{
+					"line" : 198,
+					"offset" : 1982
+				},
+				
+				{
+					"line" : 199,
+					"offset" : 1987
+				},
+				
+				{
+					"line" : 201,
+					"offset" : 1988
+				},
+				
+				{
+					"line" : 206,
+					"offset" : 1991
+				},
+				
+				{
+					"line" : 207,
+					"offset" : 1994
+				},
+				
+				{
+					"line" : 206,
+					"offset" : 2000
+				},
+				
+				{
+					"line" : 208,
+					"offset" : 2001
+				},
+				
+				{
+					"line" : 212,
+					"offset" : 2002
+				},
+				
+				{
+					"line" : 210,
+					"offset" : 2003
+				},
+				
+				{
+					"line" : 212,
+					"offset" : 2004
+				},
+				
+				{
+					"line" : 211,
+					"offset" : 2007
+				},
+				
+				{
+					"line" : 212,
+					"offset" : 2010
+				},
+				
+				{
+					"line" : 214,
+					"offset" : 2012
+				},
+				
+				{
+					"line" : 217,
+					"offset" : 2014
+				},
+				
+				{
+					"line" : 223,
+					"offset" : 2015
+				},
+				
+				{
+					"line" : 225,
+					"offset" : 2016
+				},
+				
+				{
+					"line" : 226,
+					"offset" : 2026
+				},
+				
+				{
+					"line" : 227,
+					"offset" : 2030
+				},
+				
+				{
+					"line" : 229,
+					"offset" : 2040
+				},
+				
+				{
+					"line" : 230,
+					"offset" : 2044
+				},
+				
+				{
+					"line" : 233,
+					"offset" : 2051
+				},
+				
+				{
+					"line" : 234,
+					"offset" : 2053
+				},
+				
+				{
+					"line" : 235,
+					"offset" : 2056
+				},
+				
+				{
+					"line" : 236,
+					"offset" : 2059
+				},
+				
+				{
+					"line" : 237,
+					"offset" : 2060
+				},
+				
+				{
+					"line" : 238,
+					"offset" : 2071
+				},
+				
+				{
+					"line" : 240,
+					"offset" : 2075
+				}
+			],
+			"offsets" : 
+			[
+				
+				{
+					"endoffset" : 2075,
+					"startoffset" : 1604
+				}
+			]
+		},
+		null,
 		null
 	]
 }

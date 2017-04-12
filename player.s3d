@@ -2,6 +2,8 @@
 #define SWAT_START_WALK 16
 #define SWAT_END_WALK   48
 
+#include <weapon.s3d>
+
 
 class player
 {
@@ -11,7 +13,7 @@ class player
 	var railgunMesh;
 	var lowerObj;
 	var upperObj;
-	var railgunObj;
+	var weaponObj;
 	var rootObj;
 	var billboardFire;
 	var fireObj;
@@ -42,7 +44,9 @@ class player
 	var playerBullet;
 	var score;
 	var hit;
-	
+	var weapons;
+	var currWeapon;
+
 
 
 	/*functions */
@@ -51,6 +55,7 @@ class player
 	update(matrix);
 	draw();
 	readKeyboard();
+	swapWeapon(id);
 };
 
 //********************************************************************
@@ -63,7 +68,7 @@ function player :: init(id, col, pos, matrix){
 	position = pos;
 	angleY = 0;
 	angleX = 0;
-	speed = 0.02;
+	speed = 0.01;
 	angSpeedX = 0.1;
 	angSpeedY = 0.1;
 	currentFrame = SWAT_START_WALK;
@@ -73,6 +78,9 @@ function player :: init(id, col, pos, matrix){
 	speedMultiplier = 1;
 	isWalking = false;
 	levelMatrix = matrix;
+	weapons = Array(2);
+	currWeapon = 0;
+	
 	
 
 	//create player image
@@ -87,11 +95,11 @@ function player :: init(id, col, pos, matrix){
 	
 	lowerObj  = CVmObj(lowerMesh);
 	upperObj  = CVmObj(upperMesh);
-	railgunObj = CVmObj(railgunMesh);
+	weaponObj = CVmObj();
 	
 	rootObj.AddChild(lowerObj);
 	rootObj.AddChild(upperObj);
-	rootObj.AddChild(railgunObj);
+	rootObj.AddChild(weaponObj);
 	
 	//applica il colore a tutte le parti del giocatore
 	rootObj.ModulateMaterials(color);
@@ -103,7 +111,7 @@ function player :: init(id, col, pos, matrix){
 	rootObj.SetPosition(position);
 	fireObj.SetPosition(position);
 	upperObj.SetPivotPoint([0,1.0,0]); 
-	railgunObj.SetPivotPoint([0,1.0,0]);
+	weaponObj.SetPivotPoint([0,1.0,0]);
 	
 	sfxStep = CVmVRAWav("step.wav",true);
 	sfxShoot = CVmVRAWav("shoot.wav",true);
@@ -111,9 +119,13 @@ function player :: init(id, col, pos, matrix){
 	sfxJam = CVmVrAWav("jam.wav",true);
 	
 	playerBullet = bullet();
-	playerBullet.init(color);
+	playerBullet.init(col);
+	
+	weapons[0] = weapon("railgun.aam");
+	weapons[1] = weapon("rocketl.aam");
 	
 	hit = false;
+	swapWeapon(0);
 }
 
 //********************************************************************
@@ -166,7 +178,7 @@ function player :: update(levelMatrix){
 	rootObj.SetPosition(position);	
 	rootObj.SetRotation(angleY,0,1,0);
 	upperObj.SetRotation(-angleX,1,0,0);
-	railgunObj.SetRotation(-angleX, 1,0,0);
+	weaponObj.SetRotation(-angleX, 1,0,0);
 	fireObj.SetPosition(position + [0,1,0]);
 	sfxStep.SetPosition(position);
 	sfxHit.SetPosition(position);
@@ -204,31 +216,38 @@ function player :: readKeyboard(){
 	isWalking = false;
 	speedMultiplier = 1;			
 
-	if (Keypressed("D")) {			//go right
+	/*go right */
+	if (Keypressed("D")) {			
 		isWalking = true;
 		strafeDirection = VectorRotate(-90, [0,1,0], direction.x_z);
 	}
-		
-	if (Keypressed("A")) {			//go left
+	
+	/*go left */
+	if (Keypressed("A")) {			
 		isWalking = true;
 		strafeDirection = VectorRotate(90, [0,1,0], direction.x_z);
 	}
 	
-	if (Keypressed(VK_SHIFT)) {		//running
+	/*run */
+	if (Keypressed(VK_SHIFT)) {	
 		isWalking = true;
 		speedMultiplier = 2;		
 	}
 	
-	if (Keypressed("W")) {			//go forward
+	/* go forward */
+	if (Keypressed("W")) {			
 		isWalking = true;
 		walkDirection = direction.x_z;
 	}
-	if (Keypressed("S")) {			//go backwards
+	
+	/*go backwards */
+	if (Keypressed("S")) {			
 		isWalking = true;
 		walkDirection = - direction.x_z;
 	}
 	
-	if (Keypressed(VK_SPACE)) { 	//shoot
+	/*shoot */
+	if (Keypressed(VK_SPACE)) { 	
 		var bbox = railgunMesh.SubsetGetBoundingBox(0);
 		trace(bbox);
 		var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];
@@ -241,6 +260,24 @@ function player :: readKeyboard(){
 		}
 	}
 	
+	/*swap weapons */
+	static var isSwitched = false;
+	if(Keypressed("E") && !isSwitched){
+		if(currWeapon == 1){
+			isSwitched = true;
+			swapWeapon(0);
+		}
+		else{
+			swapWeapon(1);
+			isSwitched = true;
+		}
+		
+	}
+	else if(!Keypressed("R")){
+		isSwitched = false;
+	}
+		
+	
 	var oldPosition = position;
 	position += ((strafeDirection + walkDirection) * speed * speedMultiplier);
 	
@@ -249,4 +286,14 @@ function player :: readKeyboard(){
 	if (levelMatrix[int(position.z)][int(position.x)] == 1)
 		position = oldposition;
 
+}
+
+//********************************************************************
+//SWAP WEAPONS
+//********************************************************************
+
+function player :: swapWeapon(weaponID) {
+	weaponObj.RemoveChild(weapons[currWeapon].weaponObj);
+	currWeapon = weaponID;
+	weaponObj.AddChild(weapons[currWeapon].weaponObj);
 }
