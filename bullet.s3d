@@ -34,20 +34,14 @@ function bullet::init(col)
 
 function bullet::shoot(pos, dir)
 {
-	if (life == 0)
-	{
-		position = pos;
-		direction = dir;
-		life = MAX_LIFE;
-		return 1;
-	}
-	else 
-		return 0;
+	position = pos;
+	direction = dir;
+	life = MAX_LIFE;
+	return 1;
 }
 
 function bullet::draw()
 {
-	if (life != 0)
 		bulletObj.Draw();
 }
 
@@ -55,7 +49,7 @@ function bullet::update()
 {
 	position += direction*speed;
 	bulletObj.SetPosition(position);
-	if (life != 0)
-		life--;	
+
+	life--;	
 }
 

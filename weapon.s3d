@@ -12,6 +12,8 @@ class weapon {
 	var id;
 	var bulletSpeed;
 	var damageRadius;
+	var bullets;
+	var magazineSize;
 	
 	update();
 	draw();
@@ -27,6 +29,8 @@ function weapon :: weapon(name) {
 		bulletSpeed = 1.0;
 		reloadTime = 5; //sec
 		damageRadius = 1;
+		bullets = 10;
+		magazineSize = 10;
 	}
 	
 	else if (name == "rocketl.aam") {
@@ -35,6 +39,8 @@ function weapon :: weapon(name) {
 		bulletSpeed = 0.75;
 		reloadTime = 8; //sec
 		damageRadius = 2;
+		bullets = 3;
+		magazineSize = 3;
 	}
 	
 	weaponMesh = CVmNewMesh(name);

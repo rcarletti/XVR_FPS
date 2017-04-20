@@ -41,11 +41,13 @@ class player
 	/*attributes */
 	var id;
 	var color;
-	var playerBullet;
 	var score;
 	var hit;
 	var weapons;
 	var currWeapon;
+	var bullets;
+	var bulletNum;
+	var magazines;
 
 
 
@@ -80,6 +82,9 @@ function player :: init(id, col, pos, matrix){
 	levelMatrix = matrix;
 	weapons = Array(2);
 	currWeapon = 0;
+	bullets = array(0);
+	bulletNum = 0;
+	magazines = array(2);
 	
 	
 
@@ -118,14 +123,13 @@ function player :: init(id, col, pos, matrix){
 	sfxHit = CVmVRAWav("hit.wav",true);
 	sfxJam = CVmVrAWav("jam.wav",true);
 	
-	playerBullet = bullet();
-	playerBullet.init(col);
 	
 	weapons[0] = weapon("railgun.aam");
 	weapons[1] = weapon("rocketl.aam");
-	
 	hit = false;
 	swapWeapon(0);
+	magazines[0] = 2;
+	magazines[1] = 2;
 }
 
 //********************************************************************
@@ -137,6 +141,12 @@ function player::draw()
 	//railgunObj.DrawBoundingBox(VR_WIREFRAME);
 	rootObj.Draw(VR_FRAMENUMBER, currentFrame);
 	
+	trace(bullets);
+	
+	foreach (var b in bullets) {
+		b.draw();
+	}
+	
 	if (hit)
 	{
 		glEnable(GL_BLEND);
@@ -146,7 +156,7 @@ function player::draw()
 		glDisable(GL_BLEND);
 	}
 	
-	playerBullet.draw();
+
 }
 
 //********************************************************************
@@ -172,7 +182,6 @@ function player :: update(levelMatrix){
 	
 	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];	
 	
-	playerBullet.update();
 	
 	//set positions
 	rootObj.SetPosition(position);	
@@ -202,7 +211,18 @@ function player :: update(levelMatrix){
 			trace(currentFrame);
 		}
 		
-	}					
+	}
+	
+	/*bullets update */
+	
+	for (var i = 0; i < bulletNum; i++) {
+		bullets[i].update();
+		if (bullets[i].life == 0) {
+			adel(bullets, i);
+			bulletNum--;
+			i--;
+		}
+	}
 }
 
 //********************************************************************
@@ -247,11 +267,17 @@ function player :: readKeyboard(){
 	}
 	
 	/*shoot */
-	if (Keypressed(VK_SPACE)) { 	
+	static var hasShot = false;
+	if (Keypressed(VK_SPACE) && weapons[currWeapon].bullets > 0 && !hasShot) { 
+		hasShot = true;
+		bulletNum++;
+		weapons[currWeapon].bullets--;
+		var tmpBullet = bullet();
+		tmpBullet.init([0, 0, 0]);
+		aadd(bullets, tmpBullet);
 		var bbox = railgunMesh.SubsetGetBoundingBox(0);
-		trace(bbox);
 		var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];
-		var shot = playerBullet.shoot(tmpPos,direction);
+		var shot = tmpBullet.shoot(tmpPos,direction);
 		if (shot == 1) {
 			sfxShoot.Play();
 		}
@@ -259,10 +285,12 @@ function player :: readKeyboard(){
 			sfxJam.Play();
 		}
 	}
+	else if(!Keypressed(VK_SPACE))
+		hasShot = false;
 	
 	/*swap weapons */
 	static var isSwitched = false;
-	if(Keypressed("E") && !isSwitched){
+	if(Keypressed("1") && !isSwitched){
 		if(currWeapon == 1){
 			isSwitched = true;
 			swapWeapon(0);
@@ -273,8 +301,21 @@ function player :: readKeyboard(){
 		}
 		
 	}
-	else if(!Keypressed("R")){
+	else if(!Keypressed("1")){
 		isSwitched = false;
+	}
+	
+	static var hasReloaded = false;
+	if (Keypressed("R") && !hasReloaded) {
+		if (magazines[currWeapon] > 0) {
+			weapons[currWeapon].bullets += weapons[currWeapon].magazineSize;
+			magazines[currWeapon]--;
+			hasReloaded = true;
+		}	
+	}
+	
+	else if(!Keypressed("R")) {
+		hasReloaded = false;
 	}
 		
 	
