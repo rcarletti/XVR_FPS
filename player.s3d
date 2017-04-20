@@ -48,6 +48,8 @@ class player
 	var bullets;
 	var bulletNum;
 	var magazines;
+	var reloadTimer;
+	var isReloading;
 
 
 
@@ -85,7 +87,8 @@ function player :: init(id, col, pos, matrix){
 	bullets = array(0);
 	bulletNum = 0;
 	magazines = array(2);
-	
+	reloadTimer = 0;
+	isReloading = false;
 	
 
 	//create player image
@@ -140,8 +143,6 @@ function player::draw()
 {
 	//railgunObj.DrawBoundingBox(VR_WIREFRAME);
 	rootObj.Draw(VR_FRAMENUMBER, currentFrame);
-	
-	trace(bullets);
 	
 	foreach (var b in bullets) {
 		b.draw();
@@ -223,6 +224,10 @@ function player :: update(levelMatrix){
 			i--;
 		}
 	}
+	
+	if(GetTime() - reloadTimer  > weapons[currWeapon].reloadTime) {
+		isReloading = false;
+	}
 }
 
 //********************************************************************
@@ -268,12 +273,12 @@ function player :: readKeyboard(){
 	
 	/*shoot */
 	static var hasShot = false;
-	if (Keypressed(VK_SPACE) && weapons[currWeapon].bullets > 0 && !hasShot) { 
+	if (Keypressed(VK_SPACE) && weapons[currWeapon].bullets > 0 && !hasShot && !isReloading) { 
 		hasShot = true;
 		bulletNum++;
 		weapons[currWeapon].bullets--;
 		var tmpBullet = bullet();
-		tmpBullet.init([0, 0, 0]);
+		tmpBullet.init([0, 0, 0], weapons[currWeapon].bulletSpeed);
 		aadd(bullets, tmpBullet);
 		var bbox = railgunMesh.SubsetGetBoundingBox(0);
 		var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];
@@ -305,19 +310,15 @@ function player :: readKeyboard(){
 		isSwitched = false;
 	}
 	
-	static var hasReloaded = false;
-	if (Keypressed("R") && !hasReloaded) {
+
+	if (Keypressed("R") && !isReloading) {	
 		if (magazines[currWeapon] > 0) {
-			weapons[currWeapon].bullets += weapons[currWeapon].magazineSize;
+			weapons[currWeapon].bullets = weapons[currWeapon].magazineSize;
 			magazines[currWeapon]--;
-			hasReloaded = true;
+			reloadTimer = getTime();
+			isReloading = true;
 		}	
 	}
-	
-	else if(!Keypressed("R")) {
-		hasReloaded = false;
-	}
-		
 	
 	var oldPosition = position;
 	position += ((strafeDirection + walkDirection) * speed * speedMultiplier);

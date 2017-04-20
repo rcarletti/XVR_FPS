@@ -23,11 +23,11 @@ class weapon {
 function weapon :: weapon(name) {
 	this.name = name;
 	position = [0, 0, 0];
-	if (name == "railgun.aam"){
+	if (name == "railgun.aam") {
 		id = 0;
 		Damage = 50;
-		bulletSpeed = 1.0;
-		reloadTime = 5; //sec
+		bulletSpeed = 0.5;
+		reloadTime = 3000; //ms
 		damageRadius = 1;
 		bullets = 10;
 		magazineSize = 10;
@@ -36,8 +36,8 @@ function weapon :: weapon(name) {
 	else if (name == "rocketl.aam") {
 		id = 1;
 		Damage = 100;
-		bulletSpeed = 0.75;
-		reloadTime = 8; //sec
+		bulletSpeed = 0.2;
+		reloadTime = 5000; //ms
 		damageRadius = 2;
 		bullets = 3;
 		magazineSize = 3;
