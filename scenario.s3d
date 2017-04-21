@@ -16,7 +16,7 @@ class scenario
 	
 	var wallMesh;
 	var wallObjArray;
-	var wallMat;
+	var wallMaterial;
 	var wallTexture;
 	
 	var skyMesh;
@@ -88,13 +88,8 @@ function scenario :: init(textfile){
 	
 	/*walls */
 	
-	wallMat = CVmMaterial();
+	
 	wallTexture = CVmTexture("brick.jpg");
-	wallMat.SetTexture(wallTexture);
-	wallMat.ChangeTextureParams(VR_V_TILING,3);	
-	wallMesh = CVmNewMesh(VRP_BOX);
-	wallMesh.Scale(1,3,1);
-	wallMesh.ForceMaterial(wallMat);
 	
 	/*sky */
 	skyMaterial = CVmMaterial();
@@ -116,16 +111,25 @@ function scenario :: init(textfile){
 	for (i=0; i<rows; i++)
 		for (j=0; j<columns; j++)
 		{
-			if (lines[i][j] == "*")
+			var height = val(lines[i][j]);
+			if (height < 10 && height > 0)
 			{
-				levelMatrix[i][j] = 1;
-				var tempobj = CVmObj(wallMesh);
-				tempObj.SetPosition(j,0,i);
-				aadd(wallObjArray,tempObj);				
+				levelMatrix[i][j] = height;
+				wallMesh = CVmNewMesh(VRP_BOX);
+				var tmpWall = CVmObj(wallMesh);
+				wallMaterial = CVmMaterial();
+				wallMaterial.Diffuse = [1, 1, 1];
+				wallMaterial.SetTexture(wallTexture);
+				wallMaterial.ChangeTextureParams(VR_V_TILING, height);
+				wallMesh.Scale(1, height, 1);
+				wallMesh.ForceMaterial(wallMaterial);
+				tmpWall.SetPosition(j,0,i);
+				aadd(wallObjArray,tmpWall);				
 			}
 			else if(lines[i][j] == "w"){
 				var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
 				tempW.setSpawnPoint([j, 0.2, i]);
+				levelMatrix[i][j] = (tempW.name == "railgun.aam") ? "r" : "rl";
 				aadd(weapons, {tempW, [j, 0, i], tempW.name} );
 			}
 		}
@@ -179,7 +183,7 @@ function scenario :: addPlayer(col){
 		trace(posz);
 		pos = [posx, 0, posz];
 	}
-	while(levelMatrix[posz][posx] == 1);
+	while(levelMatrix[posz][posx] > 1);
 	
 	tmpPlayer.init(playerNumber,col,pos, levelMatrix);
 	aadd(playerArray, tmpPlayer);
@@ -207,7 +211,7 @@ function scenario :: update(){
 		playerArray[i].update(levelMatrix);
 	}
 	
-	foreach ( var w in weapons){
+	foreach (var w in weapons){
 		w[0].update();
 	}
 	
