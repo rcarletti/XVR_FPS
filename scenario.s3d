@@ -250,6 +250,11 @@ function scenario :: updateCamera(){
 	}
 }
 
+//********************************************************************
+//CHECK COLLISION
+//********************************************************************
+
+
 function scenario :: isColliding(pos, radius){
 	var tempWalls = array(0);
 	foreach (var w in wallObjarray){

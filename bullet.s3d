@@ -13,7 +13,7 @@ class bullet
 	
 	init(col, vel);
 	shoot(pos,dir);
-	update();
+	update(level);
 	draw();
 };
 
@@ -42,14 +42,19 @@ function bullet::shoot(pos, dir)
 
 function bullet::draw()
 {
-		bulletObj.Draw();
+	bulletObj.Draw();
 }
 
-function bullet::update()
+function bullet::update(level)
 {
 	position += direction*speed;
-	bulletObj.SetPosition(position);
+	if(level.isColliding(position, 0.8)){
+		life = 0;
+	}
+	else{
+		bulletObj.SetPosition(position);
+		life--;	
+	}
 
-	life--;	
 }
 

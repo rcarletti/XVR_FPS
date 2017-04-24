@@ -217,14 +217,13 @@ function player :: update(){
 	/*bullets update */
 	
 	for (var i = 0; i < bulletNum; i++) {
-		bullets[i].update();
+		bullets[i].update(level);
 		if (bullets[i].life == 0) {
 			adel(bullets, i);
 			bulletNum--;
 			i--;
 		}
 	}
-	
 	/*reload update */
 	
 	if(GetTime() - reloadTimer  > weapons[currWeapon].reloadTime) {
