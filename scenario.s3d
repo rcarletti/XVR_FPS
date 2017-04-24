@@ -5,6 +5,12 @@ SET CAMERA_HEIGHT = 1.5;
 
 #include "weapon.s3d"
 
+function distance(x1, x2, y1, y2){
+	var dx = x1 - x2;
+	var dy = y1 - y2;
+	var dist = sqrt(dx * dx + dy * dy);
+	return dist;
+}
 
 class scenario 
 {	
@@ -43,6 +49,7 @@ class scenario
 	update();
 	draw();
 	updateCamera();
+	isColliding(pos, radius);
 };
 
 //********************************************************************
@@ -185,7 +192,7 @@ function scenario :: addPlayer(col){
 	}
 	while(levelMatrix[posz][posx] > 1);
 	
-	tmpPlayer.init(playerNumber,col,pos, levelMatrix);
+	tmpPlayer.init(playerNumber,col,pos, this);
 	aadd(playerArray, tmpPlayer);
 	playerNumber++;
 }
@@ -208,7 +215,7 @@ function scenario :: update(){
 	
 	/*update players */
 	for (var i = 0; i < playerNumber; i++){
-		playerArray[i].update(levelMatrix);
+		playerArray[i].update();
 	}
 	
 	foreach (var w in weapons){
@@ -241,4 +248,18 @@ function scenario :: updateCamera(){
 		camPos += VectorRotate(190, Camera.GetYAxis(), camDir) * 2;
 		camera.SetPosition(camPos); 
 	}
+}
+
+function scenario :: isColliding(pos, radius){
+	var tempWalls = array(0);
+	foreach (var w in wallObjarray){
+		var wPos = w.GetPosition();
+		if(distance((wPos.x + 0.5),pos.x, (wPos.z + 0.5), pos.z) < radius){
+			aadd(tempWalls, w);
+		}
+	}
+	if (len(tempWalls) > 0)
+		return true;
+	else 
+		return false;
 }
