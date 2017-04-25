@@ -197,7 +197,7 @@ function scenario :: addPlayer(col){
 		posz = rand(rows - 1);
 		pos = [posx, 0, posz];
 	}
-	while(isColliding(pos, 0.6));
+	while(isColliding(pos, 0.8));
 	
 	tmpPlayer.init(playerNumber,col,pos, this);
 	aadd(playerArray, tmpPlayer);
@@ -277,7 +277,6 @@ function scenario :: updateCamera(){
 //********************************************************************
 //CHECK COLLISION
 //********************************************************************
-
 
 function scenario :: isColliding(pos, radius){
 	var tempWalls = array(0);
