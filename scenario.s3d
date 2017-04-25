@@ -121,14 +121,14 @@ function scenario :: init(textfile){
 			var height = val(lines[i][j]);
 			if (height < 10 && height > 0)
 			{
-				levelMatrix[i][j] = height;
+				levelMatrix[i][j] = height / 2;
 				wallMesh = CVmNewMesh(VRP_BOX);
 				var tmpWall = CVmObj(wallMesh);
 				wallMaterial = CVmMaterial();
 				wallMaterial.Diffuse = [1, 1, 1];
 				wallMaterial.SetTexture(wallTexture);
-				wallMaterial.ChangeTextureParams(VR_V_TILING, height);
-				wallMesh.Scale(1, height, 1);
+				wallMaterial.ChangeTextureParams(VR_V_TILING, height / 2);
+				wallMesh.Scale(1, height / 2 , 1);
 				wallMesh.ForceMaterial(wallMaterial);
 				tmpWall.SetPosition(j,0,i);
 				aadd(wallObjArray,tmpWall);				
@@ -259,7 +259,7 @@ function scenario :: isColliding(pos, radius){
 	var tempWalls = array(0);
 	foreach (var w in wallObjarray){
 		var wPos = w.GetPosition();
-		if(distance((wPos.x + 0.5),pos.x, (wPos.z + 0.5), pos.z) < radius){
+		if(distance((wPos.x + 0.5),pos.x, (wPos.z + 0.5), pos.z) < radius && levelMatrix[wPos.z][wPos.x] > (pos.y + 0.5)){
 			aadd(tempWalls, w);
 		}
 	}
