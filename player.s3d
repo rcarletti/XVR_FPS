@@ -337,7 +337,7 @@ function player :: readKeyboard(){
 	
 	/*check collision */
 	var h = level.LevelMatrix[int(position.z)][int(position.x)];
-	if(level.isColliding(position, 0.6)){
+	if(level.isColliding(position, 0.8)){
 		position = oldposition;
 		
 	}	
@@ -346,6 +346,25 @@ function player :: readKeyboard(){
 	}	
 	else if ( position.y > h){
 		isFalling = true;
+	}
+	
+	/*get ammos */
+	static var isPickingAmmos = false;
+	var name = level.isWeaponPresent(position.x, position.z);
+	if (name != "" && !isPickingAmmos) {
+		isPickingAmmos = true;
+		level.pickUpAmmos(position.x, position.z);
+		if(name == "railgun.aam") {
+			magazines[0]++;
+			trace(magazines);
+		}
+		else {
+			magazines[1]++;
+			trace(magazines);
+		}
+	}
+	else if(name == "") {
+		isPickingAmmos = false;
 	}
 	
 }

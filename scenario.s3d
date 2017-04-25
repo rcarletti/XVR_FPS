@@ -2,6 +2,7 @@ SET CAMERA_FOV  = 60;
 SET CAMERA_NEAR = 0.3;
 SET CAMERA_FAR  = 300;
 SET CAMERA_HEIGHT = 1.5;
+SET AMMOS_INTERVAL = 30000;
 
 #include "weapon.s3d"
 
@@ -34,11 +35,10 @@ class scenario
 	var rows;
 	var columns;
 	
-	var weaponsPos;
-	var weapons;
-	//array di giocatori
+	var ammos;
+	var ammosNum;
+	var ammosTimer;
 	var playerArray;
-	//numero di giocatori presenti
 	var playerNumber;
 	var camera;
 	var isFirstPersonCamera;
@@ -50,6 +50,10 @@ class scenario
 	draw();
 	updateCamera();
 	isColliding(pos, radius);
+	isWeaponPresent(x, z);
+	getWeaponType(x, z);
+	pickUpAmmos(x, z);
+	updateAmmos();
 };
 
 //********************************************************************
@@ -59,6 +63,7 @@ class scenario
 function scenario :: init(textfile){
 	playerNumber = 0;
 	playerArray = array(0);
+	ammosNum = 0;
 	
 	//load scenario
 	if (!FileExist(textfile)) {
@@ -94,8 +99,6 @@ function scenario :: init(textfile){
 	floorObj.translate(0,-1,0);
 	
 	/*walls */
-	
-	
 	wallTexture = CVmTexture("brick.jpg");
 	
 	/*sky */
@@ -110,8 +113,7 @@ function scenario :: init(textfile){
 	SkyMaterial.Diffuse = [1, 1, 1];
 	
 	wallObjArray = Array(0);
-	weaponsPos = Array(0);
-	weapons = Array(0);
+	ammos = Array(0);
 	
 	var i,j;
 	
@@ -136,10 +138,15 @@ function scenario :: init(textfile){
 			else if(lines[i][j] == "w"){
 				var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
 				tempW.setSpawnPoint([j, 0.2, i]);
-				levelMatrix[i][j] = (tempW.name == "railgun.aam") ? "r" : "rl";
-				aadd(weapons, {tempW, [j, 0, i], tempW.name} );
+				aadd(ammos, {tempW, [j, 0, i], tempW.name, true} );
+				ammosNum++;
 			}
 		}
+		
+	ammosTimer = array(ammosNum);
+	for (var i = 0; i < ammosNum; i++) {
+		ammosTimer[i] = -1;
+	}
 	
 	/*init camera */		
 	camera = CameraGetCurrent();		
@@ -164,8 +171,10 @@ function scenario :: draw()
 	for (i = 0;i < playerNumber; i++)
 		playerArray[i].Draw();	
 		
-	foreach (var p in weapons){
-		p[0].draw();
+	foreach (var a in ammos){
+		if(a[3]) {
+			a[0].draw();
+		}
 	} 
 		
 	skyObj.Draw();
@@ -185,12 +194,10 @@ function scenario :: addPlayer(col){
 	/*spawn outside walls */
 	do {		
 		posx = rand(columns - 1);
-		trace(posx);
 		posz = rand(rows - 1);
-		trace(posz);
 		pos = [posx, 0, posz];
 	}
-	while(levelMatrix[posz][posx] > 1);
+	while(isColliding(pos, 0.6));
 	
 	tmpPlayer.init(playerNumber,col,pos, this);
 	aadd(playerArray, tmpPlayer);
@@ -218,13 +225,30 @@ function scenario :: update(){
 		playerArray[i].update();
 	}
 	
-	foreach (var w in weapons){
+	foreach (var w in ammos){
 		w[0].update();
 	}
 	
 	updateCamera();
 	
+	updateAmmos();
+	
 	//do some other stuff
+}
+
+//********************************************************************
+//UPDATE AMMOS
+//********************************************************************
+
+function scenario :: updateAmmos() {
+	for (var i = 0; i < ammosNum; i++) {
+		if(ammosTimer[i] != -1){
+			if(getTime() - ammosTimer[i] > AMMOS_INTERVAL){
+				ammosTimer[i] = -1;
+				ammos[i][3] = true;
+			}
+		}
+	}
 }
 
 //********************************************************************
@@ -268,3 +292,34 @@ function scenario :: isColliding(pos, radius){
 	else 
 		return false;
 }
+
+//********************************************************************
+//CHECK IF THERE'S A WEAPON IN X,Z
+//********************************************************************
+
+function scenario :: isWeaponPresent(posx, posz){
+	foreach (var a in ammos) {
+		var ax = a[1].x;
+		var az = a[1].z;
+		if(distance(posx, ax, posz, az) < 0.5 && a[3]) {
+			return a[2];
+		}
+	}
+	return "";
+}
+
+//********************************************************************
+//PICK UP AMMOS
+//********************************************************************
+
+function scenario :: pickUpAmmos(posx, posz) {
+	for(var i = 0; i < ammosNum; i++) {
+		var ax = ammos[i][1].x;
+		var az = ammos[i][1].z;
+		if(distance(posx, ax, posz, az) < 0.5) {
+			ammos[i][3] = false;
+			ammosTimer[i] = getTime();
+		}
+	}
+}
+
