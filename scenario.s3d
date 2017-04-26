@@ -42,6 +42,7 @@ class scenario
 	var playerNumber;
 	var camera;
 	var isFirstPersonCamera;
+	var myPlayer;
 	
 	//functions
 	init(textfile);	
@@ -168,8 +169,8 @@ function scenario :: draw()
 	for (i = 0;i < len(wallObjArray); i++)
 		wallObjArray[i].Draw();
 		
-	for (i = 0;i < playerNumber; i++)
-		playerArray[i].Draw();	
+
+		myPlayer.Draw();	
 		
 	foreach (var a in ammos){
 		if(a[3]) {
@@ -189,7 +190,7 @@ function scenario :: addPlayer(col){
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
 	
-	var tmpPlayer = player();
+	this.myPlayer = player();
 	var pos, posx, posz;
 	/*spawn outside walls */
 	do {		
@@ -199,9 +200,10 @@ function scenario :: addPlayer(col){
 	}
 	while(isColliding(pos, 0.8));
 	
-	tmpPlayer.init(playerNumber,col,pos, this);
-	aadd(playerArray, tmpPlayer);
-	playerNumber++;
+	myPlayer.init(playerNumber,col,pos, this);
+
+	
+	return myPlayer;
 }
 
 //********************************************************************
@@ -221,9 +223,8 @@ function scenario :: update(){
 	}
 	
 	/*update players */
-	for (var i = 0; i < playerNumber; i++){
-		playerArray[i].update();
-	}
+
+	myPlayer.update();
 	
 	foreach (var w in ammos){
 		w[0].update();
@@ -257,12 +258,12 @@ function scenario :: updateAmmos() {
 
 function scenario :: updateCamera(){
 
-	var normal = VectorRotate(-90, [0, 1, 0], playerArray[0].direction.x_z);
-	var camPos = playerArray[0].position + [0, 1, 0] +
-			    VectorRotate(playerArray[0].angleX, normal, [0, 0.5, 0]);
+	var normal = VectorRotate(-90, [0, 1, 0], myPlayer.direction.x_z);
+	var camPos = myPlayer.position + [0, 1, 0] +
+			    VectorRotate(myPlayer.angleX, normal, [0, 0.5, 0]);
 
 	camera.SetPosition(camPos);
-	camera.SetDirection(playerArray[0].direction);
+	camera.SetDirection(myPlayer.direction);
 	//camera.RotateLocal(-playerArray[0].angleX, [1,0,0]);
 	
 	if(!isFirstPersonCamera){

@@ -9,7 +9,6 @@
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
 
-
 /* Light globals */
 var Light0;
 var PosL = [16.0, 10.0, 16.0];
@@ -18,10 +17,10 @@ var PosL = [16.0, 10.0, 16.0];
 function CameraMoveMouse();
 function DrawGrid(col, size);
 function showCrosshair();
+function showStats();
 
-var mylevel;
-var myplayer1;
-var myplayer2;
+var level;
+var myPlayer;
 
 function OnDownload() {
 	// TODO: download your resources here
@@ -38,18 +37,14 @@ function OnInit(params) {
 	Light0.Enable();	
 
 	// TODO: put your initialization code here
-	mylevel = scenario();
-	mylevel.init("level.txt");
+	level = scenario();
+	level.init("level.txt");
 
-	mylevel.AddPlayer([11,5,0]);
-	//
+	myPlayer = level.addPlayer([11,5,0]);
 	setFrameRate(90);
 	
 	ShowCursor(FALSE);
 	ShowCursor(FALSE);
-	//mylevel.AddPlayer([2,1,10]);
-
-	
 }
 
 function showCrosshair()
@@ -59,26 +54,34 @@ function showCrosshair()
 	ConsoleLines([0.48, 0.5, 0.52, 0.5]);
 }
 
+function showStats(){
+	var remainingHealth = myPlayer.health;
+	var x = 0.035;
+	var y = 0.95;
+	var width = 0.4;
+	var height = 0.05;
+	ConsoleFont("Arial", 20);
+	ConsoleColor([1,1,1]);
+	ConsoleText(0.08, 0.93, str(remainingHealth) + "/"+ str(MAX_HEALTH) );
+	ConsoleFilledRect (x, y, 0.03, 0.01);
+	ConsoleFilledRect (x + 0.01, y + 0.012, 0.01, 0.035);
+	ConsoleText(0.08, y - 0.07, str(myPlayer.weapons[myPlayer.currWeapon].bullets) + " / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
+}
+
 function OnFrame() {
 	/* manage camera */
 	//CameraMoveMouse();
 	
-	mylevel.update();
+	level.update();
 	showCrosshair();
+	showStats();
 
-	SceneBegin(VR_SHOW_STATS);
-
-	//DrawGrid([0.5, 0.5, 0.5], 100);
-	
-
+	SceneBegin();
 	// TODO: put your drawing code here
-	mylevel.draw();
-	
-	var bullet0pos = mylevel.playerArray[0].playerBullet.position;
-	var player1pos = mylevel.playerArray[0].position;
+	level.draw();
 	
 	#define HIT_RANGE 0.2
-	/*if (mylevel.playerArray[0].playerBullet.life > 0
+	/*if (level.playerArray[0].playerBullet.life > 0
 	&&	bullet0pos.x >= player1pos.x - HIT_RANGE 
 	&&  bullet0pos.x <= player1pos.x + HIT_RANGE	
 	&&  bullet0pos.z <= player1pos.z + HIT_RANGE
@@ -86,10 +89,10 @@ function OnFrame() {
 	)			
 	{
 		outputln("COLPITO");
-		mylevel.playerArray[0].score++;
-		mylevel.playerArray[0].playerBullet.life = 0;
-		mylevel.playerArray[1].hit = true;
-		mylevel.playerArray[1].sfxHit.Play();
+		level.playerArray[0].score++;
+		level.playerArray[0].playerBullet.life = 0;
+		level.playerArray[1].hit = true;
+		level.playerArray[1].sfxHit.Play();
 	}*/
 	
 	//keep cursor centered

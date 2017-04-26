@@ -4,6 +4,7 @@
 
 #include <weapon.s3d>
 
+SET MAX_HEALTH = 100.0;
 
 class player
 {
@@ -52,7 +53,7 @@ class player
 	var isReloading;
 	var level;
 	var isFalling;
-
+	var health;
 
 
 	/*functions */
@@ -62,6 +63,7 @@ class player
 	draw();
 	readKeyboard();
 	swapWeapon(id);
+	spawn();
 };
 
 //********************************************************************
@@ -93,6 +95,8 @@ function player :: init(id, col, pos, level){
 	reloadTimer = 0;
 	isReloading = false;
 	isFalling = false;
+	direction = [0,0,0];
+	health = 100.0;
 
 	//create player image
 	rootObj  = CVmObj();
@@ -361,10 +365,10 @@ function player :: readKeyboard(){
 	if (name != "" && !isPickingAmmos) {
 		isPickingAmmos = true;
 		level.pickUpAmmos(position.x, position.z);
-		if(name == "railgun.aam") {
+		if(name == "railgun.aam" && magazines[0] < 5) {
 			magazines[0]++;
 		}
-		else {
+		else if ( magazines[1] < 5 && name == "rocketl.aam"){
 			magazines[1]++;
 		}
 	}
@@ -382,4 +386,21 @@ function player :: swapWeapon(weaponID) {
 	weaponObj.RemoveChild(weapons[currWeapon].weaponObj);
 	currWeapon = weaponID;
 	weaponObj.AddChild(weapons[currWeapon].weaponObj);
+}
+
+//********************************************************************
+//SPAWN PLAYER
+//********************************************************************
+
+function player :: spawn() {
+	var pos, posx, posz;
+	/*spawn outside walls */
+	do {		
+		posx = rand(level.columns);
+		posz = rand(level.rows);
+		pos = [posx, 0, posz];
+	}
+	while(level.isColliding(pos, 0.8));
+	health = MAX_HEALTH;
+
 }
