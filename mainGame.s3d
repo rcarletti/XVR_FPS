@@ -21,6 +21,7 @@ function showStats();
 
 var level;
 var myPlayer;
+var enemy1;
 
 function OnDownload() {
 	// TODO: download your resources here
@@ -41,7 +42,12 @@ function OnInit(params) {
 	level.init("level.txt");
 
 	myPlayer = level.addPlayer([11,5,0]);
+	myPlayer.level = level;
 	setFrameRate(90);
+	enemy1 = level.addPlayer();
+	level.addEnemy(enemy1);
+	enemy1.level = level;
+	
 	
 	ShowCursor(FALSE);
 	ShowCursor(FALSE);
@@ -80,12 +86,11 @@ function OnFrame() {
 	level.update();
 	showCrosshair();
 	showStats();
-
 	SceneBegin();
 	// TODO: put your drawing code here
 	level.draw();
 	
-	#define HIT_RANGE 0.2
+	//#define HIT_RANGE 0.2
 	/*if (level.playerArray[0].playerBullet.life > 0
 	&&	bullet0pos.x >= player1pos.x - HIT_RANGE 
 	&&  bullet0pos.x <= player1pos.x + HIT_RANGE	

@@ -60,7 +60,7 @@ class player
 
 	/*functions */
 	
-	init(id,col,pos, matrix);
+	init(id,col,pos);
 	update();
 	draw();
 	readKeyboard();
@@ -72,7 +72,7 @@ class player
 //INIT PLAYER
 //********************************************************************
 
-function player :: init(id, col, pos, level){
+function player :: init(id, col, pos){
 	id = id;
 	color = col;
 	position = pos;
@@ -411,5 +411,4 @@ function player :: spawn() {
 	}
 	while(level.isColliding(pos, 0.8));
 	health = MAX_HEALTH;
-
 }

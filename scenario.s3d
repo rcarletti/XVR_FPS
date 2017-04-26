@@ -43,6 +43,7 @@ class scenario
 	var camera;
 	var isFirstPersonCamera;
 	var myPlayer;
+	var enemies;
 	
 	//functions
 	init(textfile);	
@@ -55,6 +56,7 @@ class scenario
 	getWeaponType(x, z);
 	pickUpAmmos(x, z);
 	updateAmmos();
+	addEnemy(e);
 };
 
 //********************************************************************
@@ -115,6 +117,7 @@ function scenario :: init(textfile){
 	
 	wallObjArray = Array(0);
 	ammos = Array(0);
+	enemies = Array(0);
 	
 	var i,j;
 	
@@ -169,8 +172,10 @@ function scenario :: draw()
 	for (i = 0;i < len(wallObjArray); i++)
 		wallObjArray[i].Draw();
 		
-
-		myPlayer.Draw();	
+	foreach (var e in enemies) {
+		e.draw();
+	}
+	myPlayer.Draw();	
 		
 	foreach (var a in ammos){
 		if(a[3]) {
@@ -200,10 +205,17 @@ function scenario :: addPlayer(col){
 	}
 	while(isColliding(pos, 0.8));
 	
-	myPlayer.init(playerNumber,col,pos, this);
+	myPlayer.init(playerNumber,col,pos);
 
 	
 	return myPlayer;
+}
+
+//********************************************************************
+//ADD ONE ENEMY
+//********************************************************************
+function scenario :: addEnemy(e) {
+	aadd(enemies, e);
 }
 
 //********************************************************************
@@ -231,7 +243,9 @@ function scenario :: update(){
 	}
 	
 	updateCamera();
-	
+	foreach (var e in enemies) {
+		e.update();
+	}
 	updateAmmos();
 	
 	//do some other stuff
