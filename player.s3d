@@ -22,7 +22,10 @@ class player
 	var sfxShoot;
 	var sfxHit;
 	var sfxJam;
+	var sfxReload;
 	var currentFrame;	
+	var sfxRailShoot;
+	var sfxShotgun;
 	
 	/*movement*/
 	
@@ -132,6 +135,9 @@ function player :: init(id, col, pos, level){
 	sfxShoot = CVmVRAWav("shoot.wav",true);
 	sfxHit = CVmVRAWav("hit.wav",true);
 	sfxJam = CVmVrAWav("jam.wav",true);
+	sfxReload = CVmVrAWav("shotgun_reload.wav",true);
+	sfxRailShoot = CVmVrAWav("railg.wav",true);
+	sfxShotgun = CVmVrAWav("shotgun.wav",true);
 	
 	
 	weapons[0] = weapon("railgun.aam");
@@ -201,6 +207,9 @@ function player :: update(){
 	sfxHit.SetPosition(position);
 	sfxShoot.SetPosition(position);
 	sfxJam.SetPosition(position);
+	sfxShotgun.SetPosition(position);
+	sfxReload.SetPosition(position);
+	sfxRailShoot.SetPosition(position);
 	sfxStep.SetListenerPosition(CameraGetPosition());
 	sfxStep.SetListenerOrientation(-CameraGetDirection());
 	
@@ -299,8 +308,11 @@ function player :: readKeyboard(){
 		var bbox = railgunMesh.SubsetGetBoundingBox(0);
 		var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];
 		var shot = tmpBullet.shoot(tmpPos,direction);
-		if (shot == 1) {
-			sfxShoot.Play();
+		if (shot == 1 && currWeapon == 1) {
+			sfxRailShoot.Play();
+		}
+		else if (shot == 1 && currWeapon == 0) {
+			sfxShotgun.Play();
 		}
 		else {
 			sfxJam.Play();
@@ -333,6 +345,7 @@ function player :: readKeyboard(){
 			magazines[currWeapon]--;
 			reloadTimer = getTime();
 			isReloading = true;
+			sfxReload.Play();
 		}	
 	}
 	

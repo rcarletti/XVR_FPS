@@ -65,7 +65,12 @@ function showStats(){
 	ConsoleText(0.08, 0.93, str(remainingHealth) + "/"+ str(MAX_HEALTH) );
 	ConsoleFilledRect (x, y, 0.03, 0.01);
 	ConsoleFilledRect (x + 0.01, y + 0.012, 0.01, 0.035);
-	ConsoleText(0.08, y - 0.07, str(myPlayer.weapons[myPlayer.currWeapon].bullets) + " / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
+	if (!myPlayer.isReloading){
+		ConsoleText(0.08, y - 0.07, str(myPlayer.weapons[myPlayer.currWeapon].bullets) + " / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
+	}
+	else {
+		ConsoleText(0.08, y - 0.07, "-- / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
+	}
 }
 
 function OnFrame() {
