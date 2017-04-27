@@ -88,7 +88,6 @@ function player :: init(id, col, pos){
 	toward = 0;
 	speedMultiplier = 1;
 	isWalking = false;
-	this.level = level;
 	weapons = Array(2);
 	currWeapon = 0;
 	bullets = array(0);
