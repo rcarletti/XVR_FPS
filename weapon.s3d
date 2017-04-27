@@ -25,7 +25,7 @@ function weapon :: weapon(name) {
 	position = [0, 0, 0];
 	if (name == "railgun.aam") {
 		id = 0;
-		Damage = 50;
+		Damage = 0.5;
 		bulletSpeed = 0.5;
 		reloadTime = 1500; //ms
 		damageRadius = 1;
@@ -35,10 +35,10 @@ function weapon :: weapon(name) {
 	
 	else if (name == "rocketl.aam") {
 		id = 1;
-		Damage = 100;
+		Damage = 5;
 		bulletSpeed = 0.2;
 		reloadTime = 3000; //ms
-		damageRadius = 2;
+		damageRadius = 1;
 		bullets = 3;
 		magazineSize = 3;
 	}

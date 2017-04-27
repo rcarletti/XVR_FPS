@@ -57,6 +57,8 @@ class scenario
 	pickUpAmmos(x, z);
 	updateAmmos();
 	addEnemy(e);
+	checkPlayerCollision();
+	isBulletColliding(b, e, radius);
 };
 
 //********************************************************************
@@ -242,10 +244,40 @@ function scenario :: update(){
 	}
 	
 	updateCamera();
-
+	checkPlayerCollision();
 	updateAmmos();
 	
 	//do some other stuff
+}
+
+//********************************************************************
+//CHECK FOR BULLET-ENEMIES COLLISION
+//********************************************************************
+
+function scenario :: checkPlayerCollision() {
+	foreach (var b in myPlayer.bullets) {
+		foreach (var e in enemies) {
+			if(isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
+				b.life = 0;
+				e.hitPlayer();
+			}
+		}
+	}
+}
+
+//********************************************************************
+//BULLET COLLISION
+//********************************************************************
+
+function scenario :: isBulletColliding(b, e, radius) {
+	if (b.position.x >= e.position.x - radius &&
+	    b.position.x <= e.position.x + radius &&
+	    b.position.z >= e.position.z - radius &&
+	    b.position.z <= e.position.z + radius 
+		) {
+			return true;
+		}
+	else return false;
 }
 
 //********************************************************************
@@ -275,7 +307,6 @@ function scenario :: updateCamera(){
 
 	camera.SetPosition(camPos);
 	camera.SetDirection(myPlayer.direction);
-	//camera.RotateLocal(-playerArray[0].angleX, [1,0,0]);
 	
 	if(!isFirstPersonCamera){
 		var camPos = camera.GetPosition();

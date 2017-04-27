@@ -96,21 +96,6 @@ function OnFrame() {
 	// TODO: put your drawing code here
 	level.draw();
 	
-	//#define HIT_RANGE 0.2
-	/*if (level.playerArray[0].playerBullet.life > 0
-	&&	bullet0pos.x >= player1pos.x - HIT_RANGE 
-	&&  bullet0pos.x <= player1pos.x + HIT_RANGE	
-	&&  bullet0pos.z <= player1pos.z + HIT_RANGE
-	&&  bullet0pos.z >= player1pos.z - HIT_RANGE
-	)			
-	{
-		outputln("COLPITO");
-		level.playerArray[0].score++;
-		level.playerArray[0].playerBullet.life = 0;
-		level.playerArray[1].hit = true;
-		level.playerArray[1].sfxHit.Play();
-	}*/
-	
 	//keep cursor centered
 	SetCursorPos(0.5, 0.5);
 

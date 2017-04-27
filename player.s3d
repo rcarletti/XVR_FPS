@@ -1,6 +1,8 @@
 
 #define SWAT_START_WALK 16
 #define SWAT_END_WALK   48
+#define HIT_ANIM_START 40
+#define HIT_ANIM_END 0
 
 #include <weapon.s3d>
 
@@ -25,6 +27,7 @@ class player
 	var currentFrame;	
 	var sfxRailShoot;
 	var sfxShotgun;
+	var hitLenght;
 	
 	/*movement*/
 	
@@ -66,6 +69,7 @@ class player
 	readKeyboard();
 	swapWeapon(id);
 	spawn();
+	hitPlayer();
 };
 
 //********************************************************************
@@ -98,10 +102,8 @@ function player :: init(id, col, pos){
 	isFalling = false;
 	direction = [0,0,0];
 	health = 100.0;
+	hitLenght = HIT_ANIM_END;
 
-	//create player image
-	rootObj  = CVmObj();
-	
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
 	railgunMesh = CVmNewMesh("railgun.aam");
@@ -109,6 +111,7 @@ function player :: init(id, col, pos){
 	upperMesh.Scale(0.045);
 	railgunMesh.Scale(0.045);
 	
+	rootObj  = CVmObj();
 	lowerObj  = CVmObj(lowerMesh);
 	upperObj  = CVmObj(upperMesh);
 	weaponObj = CVmObj();
@@ -117,7 +120,6 @@ function player :: init(id, col, pos){
 	rootObj.AddChild(upperObj);
 	rootObj.AddChild(weaponObj);
 	
-	//applica il colore a tutte le parti del giocatore
 	rootObj.ModulateMaterials(color);
 	
 	billboardFire = CVmBillboard("flame43.avi");
@@ -139,10 +141,11 @@ function player :: init(id, col, pos){
 	
 	weapons[0] = weapon("railgun.aam");
 	weapons[1] = weapon("rocketl.aam");
-	hit = false;
-	swapWeapon(0);
 	magazines[0] = 2;
 	magazines[1] = 2;
+	hit = false;
+	swapWeapon(0);
+
 }
 
 //********************************************************************
@@ -158,13 +161,14 @@ function player::draw()
 		b.draw();
 	}
 	
-	if (hit)
+	if (hitLenght > 0)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
 		fireObj.Draw();
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		glDisable(GL_BLEND);
+		hitLenght--;
 	}
 	
 
@@ -194,7 +198,7 @@ function player :: update(){
 	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];	
 	
 	
-	//set positions
+	/*set positions */
 	rootObj.SetPosition(position);	
 	rootObj.SetRotation(angleY,0,1,0);
 	upperObj.SetRotation(-angleX,1,0,0);
@@ -410,4 +414,13 @@ function player :: spawn() {
 	}
 	while(level.isColliding(pos, 0.8));
 	health = MAX_HEALTH;
+}
+
+//********************************************************************
+//HIT PLAYER
+//********************************************************************
+
+function player :: hitPlayer() {
+	sfxHit.play();
+	hitLenght = HIT_ANIM_START;
 }
