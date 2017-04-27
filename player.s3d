@@ -45,6 +45,7 @@ class player
 	var speedMultiplier;
 	var isWalking;
 	var upperRotation;
+	var isRunning;
 	
 	/*attributes */
 	var ID;
@@ -108,6 +109,7 @@ function player :: init(ID, col, pos){
 	health = 100.0;
 	hitLenght = HIT_ANIM_END;
 	heartbeatTimer = 0;
+	isRunning = false;
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -212,7 +214,7 @@ function player :: update(){
 		}
 		
 		/*send movement data */
-		PDU = array(14);
+		var PDU = array(14);
 		PDU[0] = DATA_PDU;
 		PDU[1] = ID;
 		PDU[2] = position.x;
@@ -236,10 +238,10 @@ function player :: update(){
 			PDU[13] = 0;
 		}
 		
-		sendNetwork(PDU);
+		networkSend(PDU);
 		
 		/*send bullets data */
-		PDU = array((bulletNum * 8) + 2);
+		asize(PDU, (bulletNum * 8) + 2);
 		PDU[0] = BULLETS_PDU;
 		PDU[1] = ID;
 		var i = 2;
@@ -287,6 +289,7 @@ function player :: readKeyboard(){
 	var walkDirection = [0, 0, 0];
 	isWalking = false;
 	speedMultiplier = 1;	
+	isRunning = false;
 	
 	var mouseDelta = [Mouse.DeltaX, Mouse.DeltaY];
 	angleY -= angSpeedY * mouseDelta.x;
@@ -318,7 +321,8 @@ function player :: readKeyboard(){
 	/*run */
 	if (Keypressed(VK_SHIFT) && !isFalling) {	
 		isWalking = true;
-		speedMultiplier = 2;		
+		speedMultiplier = 2;	
+		isRunning = true;	
 	}
 	
 	/* go forward */
