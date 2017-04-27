@@ -209,7 +209,6 @@ function player :: update(){
 			PDU[4] = color.b;
 			
 			networkSend(PDU);
-			Outputln("heartbeat");
 		}
 	}
 	

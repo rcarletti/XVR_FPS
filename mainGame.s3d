@@ -63,7 +63,10 @@ function OnInit(params) {
 				}
 			}
 		}
+		else Outputln("nessuno online");
 	}
+	
+	Outputln("login terminato");
 	
 	playerID = enemyNumber + 1;
 	myPlayer = level.addPlayer(playerID, [11,5,0], level);
