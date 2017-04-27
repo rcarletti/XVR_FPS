@@ -5,9 +5,11 @@
 #include "player.s3d"
 #include "scenario.s3d"
 #include "weapon.s3d"
+#include "network.s3d"
 
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
+SET LOGIN_TIMEOUT = 7000;
 
 /* Light globals */
 var Light0;
@@ -21,8 +23,9 @@ function showStats();
 
 var level;
 var myPlayer;
-var enemy1;
-var enemy2;
+var playerID = 0;
+var enemyNumber = 0;
+var loginTimer = 0;
 
 function OnDownload() {
 	// TODO: download your resources here
@@ -38,23 +41,41 @@ function OnInit(params) {
 	Light0.SetDiffuse(1, 1, 1);
 	Light0.Enable();	
 	setFrameRate(90);
+	
+	networkInit();
 
 	// TODO: put your initialization code here
 	level = scenario();
 	level.init("level.txt");
-
-	myPlayer = level.addPlayer([11,5,0]);
-	myPlayer.level = level;
+	
+	while(getTime() - loginTimer > LOGIN_TIMEOUT){ 
+		var data = networkReceive();
+		if(data!= void) {
+			/*someone's online */
+			if (data[0] == HEARTBEAT_PDU){
+				var tmpEnemy = level.getEnemyByID(data[1]);
+				if (tmpEnemy == null) {
+					/*new player*/
+					Outputln("adding enemy" + data[1]);
+					var e = level.addPlayer(data[1], [data[2],data[3], data[4]], level);
+					level.addEnemy(e);
+					enemyNumber++;	
+				}
+			}
+		}
+	}
+	
+	playerID = enemyNumber + 1;
+	myPlayer = level.addPlayer(playerID, [11,5,0], level);
+	myPlayer.local = true;
 	level.myPlayer = myPlayer;
 	
-	/*add dummies */
+	/* 
 	enemy1 = level.addPlayer();
 	level.addEnemy(enemy1);
-	enemy1.level = level;
 	enemy2 = level.addPlayer();
 	level.addEnemy(enemy2);
-	enemy2.level = level;
-	
+	*/
 	ShowCursor(FALSE);
 	ShowCursor(FALSE);
 }

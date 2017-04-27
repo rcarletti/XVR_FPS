@@ -1,0 +1,27 @@
+#ifndef NETWORK_S3D
+#define NETWORK_S3D
+
+SET ADDRESS = "192.168.100.133";
+SET PORT = 50023;
+SET HEARTBEAT_PDU = 0;
+SET HEARTBEAT_TIMEOUT = 5000;
+
+
+var channel;
+var recAddress = "................";
+
+
+function networkInit() {
+	channel = NetCreateChannel(PORT, "0.0.0.0", VR_NO_BLOCKING);
+}
+
+function networkSend(PDU) {
+	NetVarSendTo(ADDRESS , PORT, PDU);
+}
+
+function networkReceive() {
+	var data = NetVarReceiveFrom(channel, recAddress);
+	return data;
+}
+
+#endif

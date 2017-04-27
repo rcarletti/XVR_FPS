@@ -47,7 +47,7 @@ class scenario
 	
 	//functions
 	init(textfile);	
-	addplayer(col);
+	addplayer(col, id, level);
 	update();
 	draw();
 	updateCamera();
@@ -59,6 +59,7 @@ class scenario
 	addEnemy(e);
 	checkPlayerCollision();
 	isBulletColliding(b, e, radius);
+	getEnemyById(ID);
 };
 
 //********************************************************************
@@ -191,12 +192,13 @@ function scenario :: draw()
 //ADD ONE PLAYER
 //********************************************************************
 
-function scenario :: addPlayer(col){
+function scenario :: addPlayer(id, col, level){
 	if (col == VOID) {
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
 	
 	var tmpPlayer = player();
+	tmpPlayer.level = level;
 	var pos, posx, posz;
 	/*spawn outside walls */
 	do {		
@@ -206,7 +208,7 @@ function scenario :: addPlayer(col){
 	}
 	while(isColliding(pos, 0.8));
 	
-	tmpPlayer.init(playerNumber,col,pos);
+	tmpPlayer.init(id,col,pos);
 
 	
 	return tmpPlayer;
@@ -217,6 +219,7 @@ function scenario :: addPlayer(col){
 //********************************************************************
 function scenario :: addEnemy(e) {
 	aadd(enemies, e);
+	e.local = false;
 }
 
 //********************************************************************
@@ -363,5 +366,14 @@ function scenario :: pickUpAmmos(posx, posz) {
 			ammosTimer[i] = getTime();
 		}
 	}
+}
+
+function scenario :: getEnemyById(ID) {
+	foreach ( var e in enemies )  {
+		if (e.id == ID)
+			return e;
+	}
+	
+	return null;
 }
 

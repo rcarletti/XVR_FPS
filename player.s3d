@@ -4,6 +4,8 @@
 #define HIT_ANIM_START 40
 #define HIT_ANIM_END 0
 
+#include "network.s3d"
+
 #include <weapon.s3d>
 
 SET MAX_HEALTH = 100.0;
@@ -59,6 +61,8 @@ class player
 	var level;
 	var isFalling;
 	var health;
+	var local;
+	var heartbeatTimer;
 
 
 	/*functions */
@@ -103,6 +107,7 @@ function player :: init(id, col, pos){
 	direction = [0,0,0];
 	health = 100.0;
 	hitLenght = HIT_ANIM_END;
+	heartbeatTimer = 0;
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -180,24 +185,35 @@ function player::draw()
 
 function player :: update(){
 	
-	readKeyboard();
-	
-	//mouse coords
-	var mouseDelta = [Mouse.DeltaX, Mouse.DeltaY];
-	angleY -= angSpeedY * mouseDelta.x;
-	angleX -= angSpeedX * mouseDelta.y;
-	
-	if (angleX >= 50) {
-		angleX = 50;
+	if(local) {
+		readKeyboard();
+		
+		/*bullets update */
+		for (var i = 0; i < bulletNum; i++) {
+			bullets[i].update(level);
+			if (bullets[i].life == 0) {
+				adel(bullets, i);
+				bulletNum--;
+				i--;
+			}
+		}
+		
+		/*heartbeat */
+		if(getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
+			heartbeatTimer = getTime();
+			var PDU = array(5);
+			PDU[0] = HEARTBEAT_PDU;
+			PDU[1] = id;
+			PDU[2] = color.r;
+			PDU[3] = color.g;
+			PDU[4] = color.b;
+			
+			networkSend(PDU);
+			Outputln("heartbeat");
+		}
 	}
 	
-	if (angleX <= -40) {
-		angleX = -40;
-	}
-	
-	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];	
-	
-	
+
 	/*set positions */
 	rootObj.SetPosition(position);	
 	rootObj.SetRotation(angleY,0,1,0);
@@ -213,39 +229,7 @@ function player :: update(){
 	sfxStep.SetListenerPosition(CameraGetPosition());
 	sfxStep.SetListenerOrientation(-CameraGetDirection());
 	
-	/*frame update */
-	
-	if (isWalking) {
-		var deltaFrame = 0.25 * speedMultiplier;
-		currentFrame += deltaFrame;
-		
-		if (currentFrame >= SWAT_END_WALK) {
-			currentFrame = SWAT_START_WALK;
-			sfxStep.Play();
-		}
-		else if (currentFrame == ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK) {
-			sfxStep.Play();
-		}
-		
-	}
-	
-	/*bullets update */
-	
-	for (var i = 0; i < bulletNum; i++) {
-		bullets[i].update(level);
-		if (bullets[i].life == 0) {
-			adel(bullets, i);
-			bulletNum--;
-			i--;
-		}
-	}
-	
-	
-	/*reload update */
-	
-	if(GetTime() - reloadTimer  > weapons[currWeapon].reloadTime) {
-		isReloading = false;
-	}
+
 }
 
 //********************************************************************
@@ -257,7 +241,21 @@ function player :: readKeyboard(){
 	var strafeDirection = [0, 0, 0];
 	var walkDirection = [0, 0, 0];
 	isWalking = false;
-	speedMultiplier = 1;		
+	speedMultiplier = 1;	
+	
+	var mouseDelta = [Mouse.DeltaX, Mouse.DeltaY];
+	angleY -= angSpeedY * mouseDelta.x;
+	angleX -= angSpeedX * mouseDelta.y;
+		
+	if (angleX >= 50) {
+		angleX = 50;
+	}
+		
+	if (angleX <= -40) {
+		angleX = -40;
+	}
+		
+	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];		
 	
 
 	/*go right */
@@ -387,6 +385,28 @@ function player :: readKeyboard(){
 	}
 	else if(name == "") {
 		isPickingAmmos = false;
+	}
+	
+		/*frame update */
+	
+	if (isWalking) {
+		var deltaFrame = 0.25 * speedMultiplier;
+		currentFrame += deltaFrame;
+		
+		if (currentFrame >= SWAT_END_WALK) {
+			currentFrame = SWAT_START_WALK;
+			sfxStep.Play();
+		}
+		else if (currentFrame == ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK) {
+			sfxStep.Play();
+		}
+		
+	}
+	
+	/*reload update */
+	
+	if(GetTime() - reloadTimer  > weapons[currWeapon].reloadTime) {
+		isReloading = false;
 	}
 }
 
