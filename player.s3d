@@ -210,6 +210,52 @@ function player :: update(){
 			
 			networkSend(PDU);
 		}
+		
+		/*send movement data */
+		PDU = array(14);
+		PDU[0] = DATA_PDU;
+		PDU[1] = ID;
+		PDU[2] = position.x;
+		PDU[3] = position.y;
+		PDU[4] = position.z;
+		PDU[5] = direction.x;
+		PDU[6] = direction.y;
+		PDU[7] = direction.z;
+		PDU[8] = angleX;
+		PDU[9] = angleY;
+		PDU[10] = currWeapon;
+		PDU[11] = health;
+		PDU[12] = currentFrame;
+		if(isRunning) {
+			PDU[13] = 2;
+		}
+		else if (isWalking) {
+			PDU[13] = 1;
+		}
+		else {
+			PDU[13] = 0;
+		}
+		
+		sendNetwork(PDU);
+		
+		/*send bullets data */
+		PDU = array((bulletNum * 8) + 2);
+		PDU[0] = BULLETS_PDU;
+		PDU[1] = ID;
+		var i = 2;
+		foreach (var b in bullets) {
+			PDU[i + 0] = b.position.x;
+			PDU[i + 1] = b.position.y;
+			PDU[i + 2] = b.position.z;
+			PDU[i + 3] = b.direction.x;
+			PDU[i + 4] = b.direction.y;
+			PDU[i + 5] = b.direction.z;
+			PDU[i + 6] = b.speed;
+			PDU[i + 7] = b.life;
+			i += 8;
+		}
+		
+		networkSend(PDU);
 	}
 	
 

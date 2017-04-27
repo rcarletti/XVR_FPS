@@ -57,7 +57,7 @@ function OnInit(params) {
 				var tmpEnemy = level.getEnemyByID(data[1]);
 				if (tmpEnemy == null) {
 					/*new player*/
-					Outputln("adding enemy" + data[1]);
+					Outputln("adding enemy" + str(data[1]));
 					var e = level.addPlayer(data[1], [data[2],data[3], data[4]], level);
 					level.addEnemy(e);
 					enemyNumber++;	
