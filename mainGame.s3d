@@ -48,11 +48,12 @@ function OnInit(params) {
 	level = scenario();
 	level.init("level.txt");
 	
-	while(getTime() - loginTimer > LOGIN_TIMEOUT){ 
+	while(getTime() - loginTimer < LOGIN_TIMEOUT){ 
 		var data = networkReceive();
 		if(data!= void) {
 			/*someone's online */
 			if (data[0] == HEARTBEAT_PDU){
+				trace(data);
 				var tmpEnemy = level.getEnemyByID(data[1]);
 				if (tmpEnemy == null) {
 					/*new player*/
@@ -63,11 +64,9 @@ function OnInit(params) {
 				}
 			}
 		}
-		else Outputln("nessuno online");
 	}
-	
+
 	Outputln("login terminato");
-	
 	playerID = enemyNumber + 1;
 	myPlayer = level.addPlayer(playerID, [11,5,0], level);
 	myPlayer.local = true;

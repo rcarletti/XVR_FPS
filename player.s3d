@@ -47,7 +47,7 @@ class player
 	var upperRotation;
 	
 	/*attributes */
-	var id;
+	var ID;
 	var color;
 	var score;
 	var hit;
@@ -67,11 +67,11 @@ class player
 
 	/*functions */
 	
-	init(id,col,pos);
+	init(ID,col,pos);
 	update();
 	draw();
 	readKeyboard();
-	swapWeapon(id);
+	swapWeapon(ID);
 	spawn();
 	hitPlayer();
 };
@@ -80,8 +80,8 @@ class player
 //INIT PLAYER
 //********************************************************************
 
-function player :: init(id, col, pos){
-	id = id;
+function player :: init(ID, col, pos){
+	this.ID = ID;
 	color = col;
 	position = pos;
 	angleY = 0;
@@ -203,7 +203,7 @@ function player :: update(){
 			heartbeatTimer = getTime();
 			var PDU = array(5);
 			PDU[0] = HEARTBEAT_PDU;
-			PDU[1] = id;
+			PDU[1] = ID;
 			PDU[2] = color.r;
 			PDU[3] = color.g;
 			PDU[4] = color.b;

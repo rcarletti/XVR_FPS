@@ -196,7 +196,7 @@ function scenario :: addPlayer(id, col, level){
 	if (col == VOID) {
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
-	
+	trace(id);
 	var tmpPlayer = player();
 	tmpPlayer.level = level;
 	var pos, posx, posz;
