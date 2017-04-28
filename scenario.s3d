@@ -257,7 +257,6 @@ function scenario :: update(){
 		if (data!= null) {
 			if (data[1] != myPlayer.ID) {
 				/*heartbeat PDU */
-				trace(data);
 				if (data[0] == HEARTBEAT_PDU) {
 					Outputln("heartbeat");
 					var e = getEnemyById(data[1]);
@@ -310,7 +309,8 @@ function scenario :: update(){
 						tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 						tmpB.life = data[i + 7];
 						aadd(e.bullets, tmpB);
-						tmpb.bulletObj.SetPosition(position);
+						tmpB.bulletObj.SetPosition(position);
+						e.bullets[j] = tmpB;
 						
 					}
 				}
