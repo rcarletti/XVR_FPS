@@ -505,5 +505,6 @@ function player :: spawn() {
 
 function player :: hitPlayer() {
 	sfxHit.play();
+	Outputln("hit");
 	hitLenght = HIT_ANIM_START;
 }

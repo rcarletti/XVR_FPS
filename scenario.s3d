@@ -219,7 +219,6 @@ function scenario :: addPlayer(id, col, level){
 	if (col == VOID) {
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
-	trace(id);
 	var tmpPlayer = player();
 	tmpPlayer.level = level;
 	var pos, posx, posz;
@@ -258,9 +257,7 @@ function scenario :: update(){
 			if (data[1] != myPlayer.ID) {
 				/*heartbeat PDU */
 				if (data[0] == HEARTBEAT_PDU) {
-					Outputln("heartbeat");
 					var e = getEnemyById(data[1]);
-					trace(e);
 					if (e == void) {		/*new enemy */
 						Outputln("adding enemy update" + str(data[1]));
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
@@ -271,8 +268,8 @@ function scenario :: update(){
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					var position = [data[2], data[3], data[4]];
-					//e.direction = [data[5], data[6], data[7]];
+					e.position = [data[2], data[3], data[4]];
+					e.direction = [data[5], data[6], data[7]];
 					e.angleX = data[8];
 					e.angleY = data[9];
 					if (data[10] != e.currWeapon) {
@@ -292,10 +289,7 @@ function scenario :: update(){
 						e.isWalking = false;
 						e.isRunning = false;
 					}
-					e.rootObj.SetPosition(position);
-					e.rootObj.SetRotation(data[9], 0,1,0);
-					e.upperObj.SetRotation(-data[8],1,0,0);
-					e.weaponObj.SetRotation(-data[8], 1,0,0);
+
 				}
 				
 				/*bullets PDU */
@@ -319,7 +313,7 @@ function scenario :: update(){
 					if (data[2] == myPlayer.ID) {
 						/*hit */
 						myPlayer.health -= data[3];
-						myPlayer.hit();
+						myPlayer.hitPlayer();
 						if(myPlayer.health <= 0)
 							myPlayer.spawn();
 					}
@@ -351,6 +345,9 @@ function scenario :: update(){
 	foreach (var h in healthPickups) {
 		h[0].update();
 	}
+	foreach (var e in enemies) {
+		e.update();
+	}
 	
 	updateCamera();
 	checkPlayerCollision();
@@ -367,10 +364,13 @@ function scenario :: update(){
 function scenario :: checkPlayerCollision() {
 	foreach (var b in myPlayer.bullets) {
 		foreach (var e in enemies) {
+			Outputln("enemy: " + str(e.position));
+			//Outputln("bullet "+ str(b.position));
+			Outputln("player" + str(myPlayer.position));
 			if(isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
 				b.life = 0;
 				e.hitPlayer();
-				var PDU = Array(4);
+				var PDU = Array(4);			
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
