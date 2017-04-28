@@ -301,15 +301,16 @@ function scenario :: update(){
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					e.bullets = array(0);
-					for (var i = 2, j = 0; i < (len(data) - 2) ; i+= 8, j++) {
+					var len = (len(data) - 2) / 8;
+					asize (e.bullets, len);
+					for (var i = 2, j = 0; i < (len * 8); i+= 8, j++) {
 						var tmpB = bullet();
 						tmpB.init(e.color, data[i + 6]);
 						var position = [data[i + 0], data[i + 1], data[i + 2]];
 						tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 						tmpB.life = data[i + 7];
 						tmpB.bulletObj.SetPosition(position);
-						e.bullets[i] = tmpB;
+						e.bullets[j] = tmpB;
 						
 					}
 				}
