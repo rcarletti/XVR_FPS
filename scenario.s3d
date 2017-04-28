@@ -364,12 +364,10 @@ function scenario :: update(){
 function scenario :: checkPlayerCollision() {
 	foreach (var b in myPlayer.bullets) {
 		foreach (var e in enemies) {
-			Outputln("enemy: " + str(e.position));
-			//Outputln("bullet "+ str(b.position));
-			Outputln("player" + str(myPlayer.position));
-			if(isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
-				b.life = 0;
+			if(b.life!= 0 && isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
+				Outputln(str(myPlayer.bulletNum));
 				e.hitPlayer();
+				b.life = 0;
 				var PDU = Array(4);			
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
