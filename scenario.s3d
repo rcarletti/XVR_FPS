@@ -251,7 +251,7 @@ function scenario :: update(){
 				e.angleX = data[8];
 				e.angleY = data[9];
 				if (data[10] != e.currWeapon) {
-					e.swapWeapons(data[10]);
+					e.swapWeapon(data[10]);
 				}
 				e.health = data[11];
 				e.currentFrame = data[12];
@@ -263,7 +263,7 @@ function scenario :: update(){
 					e.isWalking = true;
 					e.speedMultiplier = data[13];
 				}
-				else if(data[13 == 0]) {
+				else if(data[13] == 0) {
 					e.isWalking = false;
 					e.isRunning = false;
 				}
