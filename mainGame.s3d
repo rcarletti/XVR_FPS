@@ -9,7 +9,7 @@
 
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
-SET LOGIN_TIMEOUT = 7000;
+SET LOGIN_TIMEOUT = 2000;
 
 /* Light globals */
 var Light0;
@@ -53,7 +53,6 @@ function OnInit(params) {
 		if(data!= void) {
 			/*someone's online */
 			if (data[0] == HEARTBEAT_PDU){
-				trace(data);
 				var tmpEnemy = level.getEnemyByID(data[1]);
 				if (tmpEnemy == null) {
 					/*new player*/

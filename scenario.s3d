@@ -231,6 +231,7 @@ function scenario :: update(){
 		if (data!= null) {
 			if (data[1] != myPlayer.ID) {
 				/*heartbeat PDU */
+				Outputln("heartbeat");
 				if (data[0] == HEARTBEAT_PDU) {
 					var e = getEnemyById(data[1]);
 					if (e == void) {		/*new enemy */
@@ -242,6 +243,7 @@ function scenario :: update(){
 				
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
+					trace(data);
 					var e = getEnemyById(data[1]);
 					e.position = [data[2], data[3], data[4]];
 					e.direction = [data[5], data[6], data[7]];
@@ -264,6 +266,10 @@ function scenario :: update(){
 						e.isWalking = false;
 						e.isRunning = false;
 					}
+					e.rootObj.SetPosition(e.position);
+					e.rootObj.SetRotation(data[9], 0,1,0);
+					e.upperObj.SetRotation(-data[8],1,0,0);
+					e.weaponObj.SetRotation(-data[8], 1,0,0);
 				}
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
