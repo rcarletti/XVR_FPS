@@ -38,8 +38,6 @@ class scenario
 	var ammos;
 	var ammosNum;
 	var ammosTimer;
-	var playerArray;
-	var playerNumber;
 	var camera;
 	var isFirstPersonCamera;
 	var myPlayer;
@@ -67,7 +65,6 @@ class scenario
 //********************************************************************
 
 function scenario :: init(textfile){
-	playerNumber = 0;
 	ammosNum = 0;
 	
 	//load scenario
@@ -232,55 +229,56 @@ function scenario :: update(){
 	while (loop) {
 		var data = networkReceive();
 		if (data!= null) {
-			
-			/*heartbeat PDU */
-			if (data[0] == HEARTBEAT_PDU) {
-				var e = getEnemyById(data[1]);
-				if (e == null) {		/*new enemy */
-					Outputln("adding enemy" + str(data[1]));
-					var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
-					addEnemy(tmpEnemy);	
+			if (data[1] != myPlayer.ID) {
+				/*heartbeat PDU */
+				if (data[0] == HEARTBEAT_PDU) {
+					var e = getEnemyById(data[1]);
+					if (e == void) {		/*new enemy */
+						Outputln("adding enemy update" + str(data[1]));
+						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
+						addEnemy(tmpEnemy);	
+					}
 				}
-			}
-			
-			/*data PDU */
-			else if (data[0] == DATA_PDU) {
-				var e = getEnemyById(data[1]);
-				e.position = [data[2], data[3], data[4]];
-				e.direction = [data[5], data[6], data[7]];
-				e.angleX = data[8];
-				e.angleY = data[9];
-				if (data[10] != e.currWeapon) {
-					e.swapWeapon(data[10]);
+				
+				/*data PDU */
+				else if (data[0] == DATA_PDU) {
+					var e = getEnemyById(data[1]);
+					e.position = [data[2], data[3], data[4]];
+					e.direction = [data[5], data[6], data[7]];
+					e.angleX = data[8];
+					e.angleY = data[9];
+					if (data[10] != e.currWeapon) {
+						e.swapWeapon(data[10]);
+					}
+					e.health = data[11];
+					e.currentFrame = data[12];
+					if (data[13] == 1) {
+						e.isWalking = true;
+						e.speedMultiplier = data[13];
+					}
+					else if(data[13] == 2) {
+						e.isWalking = true;
+						e.speedMultiplier = data[13];
+					}
+					else if(data[13] == 0) {
+						e.isWalking = false;
+						e.isRunning = false;
+					}
 				}
-				e.health = data[11];
-				e.currentFrame = data[12];
-				if (data[13] == 1) {
-					e.isWalking = true;
-					e.speedMultiplier = data[13];
+				/*bullets PDU */
+				else if (data[0] == BULLETS_PDU) {
+					var e = getEnemyById(data[1]);
+					e.bullets = array(0);
+					for (var i = 0; i < (len(data) - 2) ; i+= 8) {
+						var tmpB = bullet();
+						tmpB.init(e.color, data[i + 6]);
+						tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
+						tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
+						tmpB.life = data[i + 7];
+						aadd(e.bullets, tmpB);
+					}
 				}
-				else if(data[13] == 2) {
-					e.isWalking = true;
-					e.speedMultiplier = data[13];
-				}
-				else if(data[13] == 0) {
-					e.isWalking = false;
-					e.isRunning = false;
-				}
-			}
-			/*bullets PDU */
-			else if (data[0] == BULLETS_PDU) {
-				var e = getEnemyById(data[1]);
-				e.bullets = array(0);
-				for (var i = 0; i < (len(data) - 2) ; i+= 8) {
-					var tmpB = bullet();
-					tmpB.init(e.color, data[i + 6]);
-					tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
-					tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
-					tmpB.life = data[i + 7];
-					aadd(e.bullets, tmpB);
-				}
-			}
+			}	
 		}
 		else {
 			loop = false;
