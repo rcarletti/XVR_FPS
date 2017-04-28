@@ -298,6 +298,7 @@ function scenario :: update(){
 					e.upperObj.SetRotation(-data[8],1,0,0);
 					e.weaponObj.SetRotation(-data[8], 1,0,0);
 				}
+				
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
@@ -309,7 +310,7 @@ function scenario :: update(){
 						tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 						tmpB.life = data[i + 7];
 						aadd(e.bullets, tmpB);
-						tmpb.SetPosition(position);
+						tmpb.bulletObj.SetPosition(position);
 						
 					}
 				}
@@ -338,7 +339,6 @@ function scenario :: update(){
 		w[0].update();
 	}
 	foreach (var h in healthPickups) {
-		trace(h);
 		h[0].update();
 	}
 	
