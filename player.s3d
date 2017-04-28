@@ -450,7 +450,7 @@ function player :: readKeyboard(){
 	}
 	
 	
-		/*frame update */
+	/*frame update */
 	
 	if (isWalking) {
 		var deltaFrame = 0.25 * speedMultiplier;

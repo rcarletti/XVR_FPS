@@ -301,9 +301,9 @@ function scenario :: update(){
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					var len = (len(data) - 2) / 8;
-					asize (e.bullets, len);
-					for (var i = 2, j = 0; i < (len * 8); i+= 8, j++) {
+					var bLen = (len(data) - 2) / 8;
+					asize (e.bullets, bLen);
+					for (var i = 2, j = 0; i < (bLen * 8); i+= 8, j++) {
 						var tmpB = bullet();
 						tmpB.init(e.color, data[i + 6]);
 						var position = [data[i + 0], data[i + 1], data[i + 2]];
@@ -311,7 +311,17 @@ function scenario :: update(){
 						tmpB.life = data[i + 7];
 						tmpB.bulletObj.SetPosition(position);
 						e.bullets[j] = tmpB;
-						
+					}
+				}
+				
+				/*hit PDU */
+				else if (data[0] == HIT_PDU) {
+					if (data[2] == myPlayer.ID) {
+						/*hit */
+						myPlayer.health -= data[3];
+						myPlayer.hit();
+						if(myPlayer.health <= 0)
+							myPlayer.spawn();
 					}
 				}
 			}	
@@ -360,6 +370,13 @@ function scenario :: checkPlayerCollision() {
 			if(isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
 				b.life = 0;
 				e.hitPlayer();
+				var PDU = Array(4);
+				PDU[0] = HIT_PDU;
+				PDU[1] = myPlayer.ID;
+				PDU[2] = e.ID;
+				PDU[3] = myPlayer.weapons[e.currWeapon].damage;
+				
+				networkSend(PDU);
 			}
 		}
 	}
