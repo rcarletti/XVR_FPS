@@ -231,9 +231,11 @@ function scenario :: update(){
 		if (data!= null) {
 			if (data[1] != myPlayer.ID) {
 				/*heartbeat PDU */
-				Outputln("heartbeat");
+				trace(data);
 				if (data[0] == HEARTBEAT_PDU) {
+					Outputln("heartbeat");
 					var e = getEnemyById(data[1]);
+					trace(e);
 					if (e == void) {		/*new enemy */
 						Outputln("adding enemy update" + str(data[1]));
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
@@ -243,7 +245,6 @@ function scenario :: update(){
 				
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
-					trace(data);
 					var e = getEnemyById(data[1]);
 					e.position = [data[2], data[3], data[4]];
 					e.direction = [data[5], data[6], data[7]];
