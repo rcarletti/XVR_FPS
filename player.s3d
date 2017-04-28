@@ -436,6 +436,20 @@ function player :: readKeyboard(){
 		isPickingAmmos = false;
 	}
 	
+	static var isPickingHealth = false;
+	if (level.isHealthPackPresent(position.x, position.z) && !isPickingHealth) {
+		isPickingHealth = true;
+		level.pickUpHealth(position.x, position.z);
+		health += 10;
+		if(health > 100) {
+			health = 100;
+		}
+	}
+	else if (!level.isHealthPackPresent(position.x, position.z) ) {
+		isPickingHealth = false;
+	}
+	
+	
 		/*frame update */
 	
 	if (isWalking) {

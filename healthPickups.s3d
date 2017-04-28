@@ -1,0 +1,29 @@
+class healthPickup {
+	var healthObj;
+	var healthMesh;
+	var position; 
+	
+	healthPickup();
+	update();
+	draw();
+	setSpawnPoint(pos);
+};
+
+function healthPickup :: healthPickup() {
+	position = [0,0,0];
+	healthMesh = CVmNewMesh("health.aam");
+	healthObj = CVmObj(healthMesh);
+	healthMesh.Scale(0.08);
+}
+
+function healthPickup :: update() {
+	healthObj.rotate(1, [0, 1, 0]);
+}
+
+function healthPickup :: draw() {
+	healthObj.Draw();
+}
+
+function healthPickup :: setSpawnPoint(pos) {
+	healthObj.setPosition(pos);
+}

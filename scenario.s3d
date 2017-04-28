@@ -3,8 +3,10 @@ SET CAMERA_NEAR = 0.3;
 SET CAMERA_FAR  = 300;
 SET CAMERA_HEIGHT = 1.5;
 SET AMMOS_INTERVAL = 30000;
+SET HEALTH_INTERVAL = 15000;
 
 #include "weapon.s3d"
+#include "healthPickups.s3d"
 
 function distance(x1, x2, y1, y2){
 	var dx = x1 - x2;
@@ -42,6 +44,9 @@ class scenario
 	var isFirstPersonCamera;
 	var myPlayer;
 	var enemies;
+	var healthPickups;
+	var healthTimer;
+	var healthNum;
 	
 	//functions
 	init(textfile);	
@@ -58,6 +63,9 @@ class scenario
 	checkPlayerCollision();
 	isBulletColliding(b, e, radius);
 	getEnemyById(ID);
+	isHealthPackPresent(posx, posz);
+	pickUpHealth(posx, posz);
+	updateHealthPickUps();
 };
 
 //********************************************************************
@@ -66,6 +74,7 @@ class scenario
 
 function scenario :: init(textfile){
 	ammosNum = 0;
+	healthNum = 0;
 	
 	//load scenario
 	if (!FileExist(textfile)) {
@@ -117,6 +126,7 @@ function scenario :: init(textfile){
 	wallObjArray = Array(0);
 	ammos = Array(0);
 	enemies = Array(0);
+	healthPickups = Array(0);
 	
 	var i,j;
 	/*parse level */
@@ -124,8 +134,7 @@ function scenario :: init(textfile){
 		for (j=0; j<columns; j++)
 		{
 			var height = val(lines[i][j]);
-			if (height < 10 && height > 0)
-			{
+			if (height < 10 && height > 0) {
 				levelMatrix[i][j] = height / 2;
 				wallMesh = CVmNewMesh(VRP_BOX);
 				var tmpWall = CVmObj(wallMesh);
@@ -138,11 +147,17 @@ function scenario :: init(textfile){
 				tmpWall.SetPosition(j,0,i);
 				aadd(wallObjArray,tmpWall);				
 			}
-			else if(lines[i][j] == "w"){
+			else if(lines[i][j] == "w") {
 				var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
 				tempW.setSpawnPoint([j, 0.2, i]);
 				aadd(ammos, {tempW, [j, 0, i], tempW.name, true} );
 				ammosNum++;
+			}
+			else if(lines[i][j] == "h") {
+				var tempH = healthPickup();
+				tempH.setSpawnPoint([j, 1, i]);
+				aadd(healthPickups, {tempH, [j, 0, i], true});
+				healthNum++;
 			}
 		}
 		
@@ -150,6 +165,12 @@ function scenario :: init(textfile){
 	for (var i = 0; i < ammosNum; i++) {
 		ammosTimer[i] = -1;
 	}
+	
+	healthTimer = array(healthNum);
+	for (i = 0; i < healthNum; i++) {
+		healthTimer[i] = -1;
+	}
+	
 	
 	/*init camera */		
 	camera = CameraGetCurrent();		
@@ -181,6 +202,11 @@ function scenario :: draw()
 			a[0].draw();
 		}
 	} 
+	foreach (var h in healthPickups) {
+		if(h[2]) {
+			h[0].draw();
+		}
+	}
 		
 	skyObj.Draw();
 }
@@ -246,8 +272,8 @@ function scenario :: update(){
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					e.position = [data[2], data[3], data[4]];
-					e.direction = [data[5], data[6], data[7]];
+					var position = [data[2], data[3], data[4]];
+					//e.direction = [data[5], data[6], data[7]];
 					e.angleX = data[8];
 					e.angleY = data[9];
 					if (data[10] != e.currWeapon) {
@@ -267,7 +293,7 @@ function scenario :: update(){
 						e.isWalking = false;
 						e.isRunning = false;
 					}
-					e.rootObj.SetPosition(e.position);
+					e.rootObj.SetPosition(position);
 					e.rootObj.SetRotation(data[9], 0,1,0);
 					e.upperObj.SetRotation(-data[8],1,0,0);
 					e.weaponObj.SetRotation(-data[8], 1,0,0);
@@ -279,10 +305,12 @@ function scenario :: update(){
 					for (var i = 0; i < (len(data) - 2) ; i+= 8) {
 						var tmpB = bullet();
 						tmpB.init(e.color, data[i + 6]);
-						tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
+						var position = [data[i + 0], data[i + 1], data[i + 2]];
 						tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 						tmpB.life = data[i + 7];
 						aadd(e.bullets, tmpB);
+						tmpb.SetPosition(position);
+						
 					}
 				}
 			}	
@@ -306,13 +334,18 @@ function scenario :: update(){
 
 	myPlayer.update();
 	
-	foreach (var w in ammos){
+	foreach (var w in ammos) {
 		w[0].update();
+	}
+	foreach (var h in healthPickups) {
+		trace(h);
+		h[0].update();
 	}
 	
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
+	updateHealthPickUps();
 	
 	//do some other stuff
 }
@@ -357,6 +390,21 @@ function scenario :: updateAmmos() {
 			if(getTime() - ammosTimer[i] > AMMOS_INTERVAL){
 				ammosTimer[i] = -1;
 				ammos[i][3] = true;
+			}
+		}
+	}
+}
+
+//********************************************************************
+//UPDATE AMMOS
+//********************************************************************
+
+function scenario :: updateHealthPickUps() {
+	for (var i = 0; i < healthNum; i++) {
+		if(healthTimer[i] != -1){
+			if(getTime() - healthTimer[i] > HEALTH_INTERVAL){
+				healthTimer[i] = -1;
+				healthPickups[i][2] = true;
 			}
 		}
 	}
@@ -418,6 +466,21 @@ function scenario :: isWeaponPresent(posx, posz){
 }
 
 //********************************************************************
+//CHECK IF THERE'S A HEALTH PACK IN X,Z
+//********************************************************************
+
+function scenario :: isHealthPackPresent(posx, posz){
+	foreach (var h in healthPickups) {
+		var hx = h[1].x;
+		var hz = h[1].z;
+		if(distance(posx, hx, posz, hz) < 0.5 && h[2]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+//********************************************************************
 //PICK UP AMMOS
 //********************************************************************
 
@@ -428,6 +491,20 @@ function scenario :: pickUpAmmos(posx, posz) {
 		if(distance(posx, ax, posz, az) < 0.5) {
 			ammos[i][3] = false;
 			ammosTimer[i] = getTime();
+		}
+	}
+}
+//********************************************************************
+//PICK UP HEALTH PACKS
+//********************************************************************
+
+function scenario :: pickUpHealth(posx, posz) {
+	for(var i = 0; i < len(healthPickups); i++) {
+		var hx = healthPickups[i][1].x;
+		var hz = healthPickups[i][1].z;
+		if(distance(posx, hx, posz, hz) < 0.5) {
+			healthPickups[i][2] = false;
+			healthTimer[i] = getTime();
 		}
 	}
 }
