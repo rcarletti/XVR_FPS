@@ -500,7 +500,6 @@ function player :: spawn() {
 	health = MAX_HEALTH;
 	position = pos;
 	
-	
 	Outputln("respawn");
 }
 

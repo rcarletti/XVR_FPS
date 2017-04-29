@@ -105,6 +105,8 @@ function showStats(){
 	else {
 		ConsoleText(0.08, y - 0.07, "-- / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
 	}
+	
+	ConsoleText(0.8, 0.93, "SCORE: " + str(myPlayer.score));
 }
 
 function OnFrame() {

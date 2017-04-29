@@ -311,11 +311,26 @@ function scenario :: update(){
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
 					if (data[2] == myPlayer.ID) {
-						/*hit */
+						/*damage*/
 						myPlayer.health -= data[3];
 						myPlayer.hitPlayer();
-						if(myPlayer.health <= 0)
+						if(myPlayer.health <= 0) {
 							myPlayer.spawn();
+							var PDU = Array(2);
+							PDU[0] = KILL_PDU;
+							PDU[1] = data[2];
+							
+							networkSend(PDU);
+						}
+					
+						
+					}
+				}
+				
+				/*kill PDU */
+				else if (data[0] == KILL_PDU) {
+					if(data[1] == myPlayer.ID) {
+						myPlayer.score += 10;
 					}
 				}
 			}	
