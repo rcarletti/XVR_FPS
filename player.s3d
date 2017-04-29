@@ -498,6 +498,10 @@ function player :: spawn() {
 	}
 	while(level.isColliding(pos, 0.8));
 	health = MAX_HEALTH;
+	position = pos;
+	
+	
+	Outputln("respawn");
 }
 
 //********************************************************************
