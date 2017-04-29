@@ -259,7 +259,6 @@ function scenario :: update(){
 				if (data[0] == HEARTBEAT_PDU) {
 					var e = getEnemyById(data[1]);
 					if (e == void) {		/*new enemy */
-						Outputln("adding enemy update" + str(data[1]));
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
 						addEnemy(tmpEnemy);	
 					}
@@ -310,6 +309,7 @@ function scenario :: update(){
 				
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
+					trace(data);
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
 						myPlayer.health -= data[3];
@@ -318,8 +318,8 @@ function scenario :: update(){
 							myPlayer.spawn();
 							var PDU = Array(2);
 							PDU[0] = KILL_PDU;
-							PDU[1] = data[2];
-							
+							PDU[1] = data[1];
+							trace(PDU);
 							networkSend(PDU);
 						}
 					
@@ -329,8 +329,11 @@ function scenario :: update(){
 				
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
+					trace(data);
 					if(data[1] == myPlayer.ID) {
 						myPlayer.score += 10;
+						Outputln("kill");
+						
 					}
 				}
 			}	
@@ -380,7 +383,6 @@ function scenario :: checkPlayerCollision() {
 	foreach (var b in myPlayer.bullets) {
 		foreach (var e in enemies) {
 			if(b.life!= 0 && isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
-				Outputln(str(myPlayer.bulletNum));
 				e.hitPlayer();
 				b.life = 0;
 				var PDU = Array(4);			

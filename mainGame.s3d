@@ -56,7 +56,7 @@ function OnInit(params) {
 				var tmpEnemy = level.getEnemyByID(data[1]);
 				if (tmpEnemy == null) {
 					/*new player*/
-					Outputln("adding enemy" + str(data[1]));
+					Outputln("adding enemy");
 					var e = level.addPlayer(data[1], [data[2],data[3], data[4]], level);
 					level.addEnemy(e);
 					enemyNumber++;	
@@ -67,6 +67,7 @@ function OnInit(params) {
 
 	Outputln("login terminato");
 	playerID = enemyNumber + 1;
+	trace(playerID);
 	myPlayer = level.addPlayer(playerID, [11,5,0], level);
 	myPlayer.local = true;
 	level.myPlayer = myPlayer;
