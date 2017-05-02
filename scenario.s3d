@@ -312,28 +312,28 @@ function scenario :: update(){
 					trace(data);
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
+						Outputln("i'm hurt");
 						myPlayer.health -= data[3];
 						myPlayer.hitPlayer();
 						if(myPlayer.health <= 0) {
 							myPlayer.spawn();
-							var PDU = Array(2);
+							var PDU = Array(3);
 							PDU[0] = KILL_PDU;
-							PDU[1] = data[1];
+							PDU[1] = myPlayer.ID;
+							PDU[2] = data[1];
+							Outputln("sending kill pdu");
 							trace(PDU);
 							networkSend(PDU);
-						}
-					
-						
+						}					
 					}
 				}
-				
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
 					trace(data);
-					if(data[1] == myPlayer.ID) {
+					Outputln("receiving kill pdu from "+ str(data[1]));
+					if(data[2] == myPlayer.ID) {
 						myPlayer.score += 10;
-						Outputln("kill");
-						
+						Outputln("killed someone");
 					}
 				}
 			}	
@@ -385,7 +385,7 @@ function scenario :: checkPlayerCollision() {
 			if(b.life!= 0 && isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
 				e.hitPlayer();
 				b.life = 0;
-				var PDU = Array(4);			
+				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;

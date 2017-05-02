@@ -46,6 +46,7 @@ class player
 	var isWalking;
 	var upperRotation;
 	var isRunning;
+	var walkDirection;
 	
 	/*attributes */
 	var ID;
@@ -75,6 +76,10 @@ class player
 	swapWeapon(ID);
 	spawn();
 	hitPlayer();
+	deadReckoning();
+	bulletsUpdate();
+	sendHeartbeats() ;
+	
 };
 
 //********************************************************************
@@ -189,29 +194,7 @@ function player :: update(){
 	
 	if(local) {
 		readKeyboard();
-		
-		/*bullets update */
-		for (var i = 0; i < bulletNum; i++) {
-			bullets[i].update(level);
-			if (bullets[i].life <= 0) {
-				adel(bullets, i);
-				bulletNum--;
-				i--;
-			}
-		}
-		
-		/*heartbeat */
-		if(getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
-			heartbeatTimer = getTime();
-			var PDU = array(5);
-			PDU[0] = HEARTBEAT_PDU;
-			PDU[1] = ID;
-			PDU[2] = color.r;
-			PDU[3] = color.g;
-			PDU[4] = color.b;
-			
-			networkSend(PDU);
-		}
+		sendHeartbeats();
 		
 		/*send movement data */
 		var PDU = array(14);
@@ -260,7 +243,9 @@ function player :: update(){
 		networkSend(PDU);
 	}
 	
-
+	else deadReckoning();
+	bulletsUpdate();
+	
 	/*set positions */
 	rootObj.SetPosition(position);	
 	rootObj.SetRotation(angleY,0,1,0);
@@ -275,10 +260,63 @@ function player :: update(){
 	sfxRailShoot.SetPosition(position);
 	sfxStep.SetListenerPosition(CameraGetPosition());
 	sfxStep.SetListenerOrientation(-CameraGetDirection());
+			
 	
 
 }
 
+//********************************************************************
+//SEND HEARTBEATS
+//********************************************************************
+
+function player :: sendHeartbeats() {
+	if(getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
+			heartbeatTimer = getTime();
+			var PDU = array(5);
+			PDU[0] = HEARTBEAT_PDU;
+			PDU[1] = ID;
+			PDU[2] = color.r;
+			PDU[3] = color.g;
+			PDU[4] = color.b;
+			
+			networkSend(PDU);
+		}
+}
+
+//********************************************************************
+//UPDATE BULLETS
+//********************************************************************
+
+function player ::  bulletsUpdate() {
+	for (var i = 0; i < bulletNum; i++) {
+		bullets[i].update(level);
+		if (bullets[i].life <= 0) {
+			adel(bullets, i);
+			bulletNum--;
+			i--;
+		}
+	}
+}
+
+//********************************************************************
+//DEAD RECKONING
+//********************************************************************
+
+function player :: deadReckoning(){
+	
+	if (isRunning) {
+		speedMultiplier = 2;
+	}
+	
+	if (isWalking) {
+		speedMultiplier = 1;
+		position += walkDirection * speed * speedMultiplier;
+	}
+	
+	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];	
+	
+
+}
 //********************************************************************
 //READ INPUT FROM KEYBOARD 
 //********************************************************************
@@ -286,7 +324,7 @@ function player :: update(){
 function player :: readKeyboard(){
 	
 	var strafeDirection = [0, 0, 0];
-	var walkDirection = [0, 0, 0];
+	var frontDirection = [0, 0, 0];
 	isWalking = false;
 	speedMultiplier = 1;	
 	isRunning = false;
@@ -328,13 +366,13 @@ function player :: readKeyboard(){
 	/* go forward */
 	if (Keypressed("W")) {			
 		isWalking = true;
-		walkDirection = direction.x_z;
+		frontDirection = direction.x_z;
 	}
 	
 	/*go backwards */
 	if (Keypressed("S")) {			
 		isWalking = true;
-		walkDirection = - direction.x_z;
+		frontDirection = - direction.x_z;
 	}
 
 	
@@ -396,10 +434,12 @@ function player :: readKeyboard(){
 		}	
 	}
 	
+	walkDirection = strafeDirection + frontDirection;
+	
 	
 	/*update position */
 	var oldPosition = position;
-	position += ((strafeDirection + walkDirection) * speed * speedMultiplier);
+	position += (walkDirection * speed * speedMultiplier);
 
 	/*check collision */
 	var h = level.LevelMatrix[int(position.z)][int(position.x)];	
