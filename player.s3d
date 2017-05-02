@@ -220,8 +220,6 @@ function player :: update(){
 	sfxRailShoot.SetPosition(position);
 	sfxStep.SetListenerPosition(CameraGetPosition());
 	sfxStep.SetListenerOrientation(-CameraGetDirection());
-			
-	
 
 }
 
