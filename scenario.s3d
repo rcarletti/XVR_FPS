@@ -268,7 +268,7 @@ function scenario :: update(){
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
 					e.position = [data[2], data[3], data[4]];
-					e.walkDirection = [data[5], data[6], data[7]];
+					e.direction = [data[5], data[6], data[7]];
 					e.angleX = data[8];
 					e.angleY = data[9];
 					if (data[10] != e.currWeapon) {
