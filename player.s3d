@@ -78,7 +78,9 @@ class player
 	hitPlayer();
 	deadReckoning();
 	bulletsUpdate();
-	sendHeartbeats() ;
+	sendHeartbeats();
+	sendData();
+	sendBulletsData();
 	
 };
 
@@ -195,8 +197,63 @@ function player :: update(){
 	if(local) {
 		readKeyboard();
 		sendHeartbeats();
+		sendData();
+		sendBulletsData();
+	}
+	
+	else 
+		deadReckoning();
 		
-		/*send movement data */
+	bulletsUpdate();
+	
+	/*set positions */
+	rootObj.SetPosition(position);	
+	rootObj.SetRotation(angleY,0,1,0);
+	upperObj.SetRotation(-angleX,1,0,0);
+	weaponObj.SetRotation(-angleX, 1,0,0);
+	fireObj.SetPosition(position + [0,1,0]);
+	sfxStep.SetPosition(position);
+	sfxHit.SetPosition(position);
+	sfxJam.SetPosition(position);
+	sfxShotgun.SetPosition(position);
+	sfxReload.SetPosition(position);
+	sfxRailShoot.SetPosition(position);
+	sfxStep.SetListenerPosition(CameraGetPosition());
+	sfxStep.SetListenerOrientation(-CameraGetDirection());
+			
+	
+
+}
+
+//********************************************************************
+//SEND BULLETS DATA
+//********************************************************************
+
+function player :: sendBulletsData() {
+	var PDU = Array((bulletNum * 8) + 2);
+		PDU[0] = BULLETS_PDU;
+		PDU[1] = ID;
+		var i = 2;
+		foreach (var b in bullets) {
+			PDU[i + 0] = b.position.x;
+			PDU[i + 1] = b.position.y;
+			PDU[i + 2] = b.position.z;
+			PDU[i + 3] = b.direction.x;
+			PDU[i + 4] = b.direction.y;
+			PDU[i + 5] = b.direction.z;
+			PDU[i + 6] = b.speed;
+			PDU[i + 7] = b.life;
+			i += 8;
+		}
+		
+		networkSend(PDU);
+}
+
+//********************************************************************
+//SEND MOVEMENT DATA
+//********************************************************************
+
+function player :: sendData() {
 		var PDU = array(14);
 		PDU[0] = DATA_PDU;
 		PDU[1] = ID;
@@ -222,47 +279,6 @@ function player :: update(){
 		}
 		
 		networkSend(PDU);
-		
-		/*send bullets data */
-		asize(PDU, (bulletNum * 8) + 2);
-		PDU[0] = BULLETS_PDU;
-		PDU[1] = ID;
-		var i = 2;
-		foreach (var b in bullets) {
-			PDU[i + 0] = b.position.x;
-			PDU[i + 1] = b.position.y;
-			PDU[i + 2] = b.position.z;
-			PDU[i + 3] = b.direction.x;
-			PDU[i + 4] = b.direction.y;
-			PDU[i + 5] = b.direction.z;
-			PDU[i + 6] = b.speed;
-			PDU[i + 7] = b.life;
-			i += 8;
-		}
-		
-		networkSend(PDU);
-	}
-	
-	else deadReckoning();
-	bulletsUpdate();
-	
-	/*set positions */
-	rootObj.SetPosition(position);	
-	rootObj.SetRotation(angleY,0,1,0);
-	upperObj.SetRotation(-angleX,1,0,0);
-	weaponObj.SetRotation(-angleX, 1,0,0);
-	fireObj.SetPosition(position + [0,1,0]);
-	sfxStep.SetPosition(position);
-	sfxHit.SetPosition(position);
-	sfxJam.SetPosition(position);
-	sfxShotgun.SetPosition(position);
-	sfxReload.SetPosition(position);
-	sfxRailShoot.SetPosition(position);
-	sfxStep.SetListenerPosition(CameraGetPosition());
-	sfxStep.SetListenerOrientation(-CameraGetDirection());
-			
-	
-
 }
 
 //********************************************************************
