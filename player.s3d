@@ -9,8 +9,8 @@
 #include <weapon.s3d>
 
 SET MAX_HEALTH = 100.0;
-SET POSITION_TIMER = 200;
-SET BULLETS_TIMER = 200;
+SET POSITION_TIMER = 100;
+SET BULLETS_TIMER = 100;
 
 class player
 {
@@ -98,7 +98,7 @@ function player :: init(ID, col, pos){
 	position = pos;
 	angleY = 0;
 	angleX = 0;
-	speed = 0.03;
+	speed = 0.05;
 	angSpeedX = 0.1;
 	angSpeedY = 0.1;
 	verticalSpeed = 0.0;
@@ -221,11 +221,12 @@ function player :: update(){
 			sendBulletsData();
 		}
 
-		
 	}
 	
-	else 
+	else {
 		deadReckoning();
+	}
+		
 		
 	bulletsUpdate();
 	

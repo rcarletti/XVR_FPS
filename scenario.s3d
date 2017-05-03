@@ -329,11 +329,19 @@ function scenario :: update(){
 				}
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
-					trace(data);
 					Outputln("receiving kill pdu from "+ str(data[1]));
 					if(data[2] == myPlayer.ID) {
 						myPlayer.score += 10;
 						Outputln("killed someone");
+					}
+				}
+				
+				else if(data[0] == DISCONNECT_PDU) {
+					trace(data);
+					for(var i = 0; i < len(enemies); i++) {
+						if(enemies[i].ID == data[1]) {
+							adel(enemies, i);
+						}
 					}
 				}
 			}	

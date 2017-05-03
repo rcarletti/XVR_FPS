@@ -36,13 +36,14 @@ function OnDownload() {
 function OnInit(params) {
 	
 	var w = CVmIEWindow();	
+	w.Navigate("index.html");
 
 	/* initialize light */
 	Light0 = CVmLight();
 	Light0.SetPosition(PosL);
 	Light0.SetDiffuse(1, 1, 1);
 	Light0.Enable();	
-	setFrameRate(90);
+	setFrameRate(60);
 	
 	networkInit();
 
@@ -151,6 +152,11 @@ function OnError() {
 
 function OnExit() {
 	// TODO: put your cleanup code here
+	var PDU = Array(2);
+	PDU[0] = DISCONNECT_PDU;
+	PDU[1] = myPlayer.ID;
+	
+	networkSend(PDU);
 }
 
 
