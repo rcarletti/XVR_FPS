@@ -34,6 +34,8 @@ function OnDownload() {
 }
 
 function OnInit(params) {
+	
+	var w = CVmIEWindow();	
 
 	/* initialize light */
 	Light0 = CVmLight();
