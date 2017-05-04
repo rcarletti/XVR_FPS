@@ -128,7 +128,7 @@ function drawMenu() {
 	ConsoleText(x - 0.1, y - 0.47 , "F" );
 	ConsoleText(x + 0.3, y - 0.47 , "First Person Camera" );
 	ConsoleLines([x - 0.13 , y - 0.5, x + 0.51, y- 0.5 ]);
-	ConsoleText(0.35, y - 0.6 , "PRESS SPACEBAR TO CONTINUE" );
+	ConsoleText(0.35, y - 0.6 , "PRESS ENTER TO CONTINUE" );
 }
 
 function showStats() {
@@ -174,7 +174,7 @@ function OnFrame() {
 	
 	if(showMenu) {
 		drawMenu();
-		if(Keypressed(VK_SPACE)) {
+		if(Keypressed(VK_RETURN)) {
 			showMenu = false;
 		}
 	}

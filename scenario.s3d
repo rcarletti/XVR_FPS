@@ -138,14 +138,14 @@ function scenario :: init(textfile){
 		{
 			var height = val(lines[i][j]);
 			if (height < 10 && height > 0) {
-				levelMatrix[i][j] = height / 2;
+				levelMatrix[i][j] = height / 3;
 				wallMesh = CVmNewMesh(VRP_BOX);
 				var tmpWall = CVmObj(wallMesh);
 				wallMaterial = CVmMaterial();
 				wallMaterial.Diffuse = [1, 1, 1];
 				wallMaterial.SetTexture(wallTexture);
-				wallMaterial.ChangeTextureParams(VR_V_TILING, height / 2);
-				wallMesh.Scale(1, height / 2 , 1);
+				wallMaterial.ChangeTextureParams(VR_V_TILING, height / 3);
+				wallMesh.Scale(1, height / 3, 1);
 				wallMesh.ForceMaterial(wallMaterial);
 				tmpWall.SetPosition(j,0,i);
 				aadd(wallObjArray,tmpWall);				
