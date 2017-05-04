@@ -125,7 +125,8 @@
 				"ENEMIES",
 				"HEALTHPICKUPS",
 				"HEALTHTIMER",
-				"HEALTHNUM"
+				"HEALTHNUM",
+				"SCORETIMER"
 			]
 		}
 	],
@@ -150,7 +151,7 @@
 	[
 		
 		{
-			"endLine" : 187,
+			"endLine" : 192,
 			"scopes" : 
 			[
 				
@@ -425,39 +426,51 @@
 				},
 				
 				{
-					"endLine" : 155,
+					"endLine" : 160,
 					"functionname" : "ONEXIT",
 					"params" : 0,
 					"startLine" : 153,
-					"type" : "function"
+					"type" : "function",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 155,
+							"name" : "PDU",
+							"offset" : 1,
+							"opt" : false,
+							"static" : false
+						}
+					]
 				},
 				
 				{
-					"endLine" : 183,
+					"endLine" : 188,
 					"functionname" : "DRAWGRID",
 					"params" : 2,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 178,
+							"endLine" : 183,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 178,
-									"startLine" : 172,
+									"endLine" : 183,
+									"startLine" : 177,
 									"type" : "block"
 								}
 							],
-							"startLine" : 171,
+							"startLine" : 176,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 171,
+									"line" : 176,
 									"name" : "I",
 									"offset" : 4,
 									"opt" : false,
@@ -466,14 +479,14 @@
 							]
 						}
 					],
-					"startLine" : 158,
+					"startLine" : 163,
 					"type" : "function",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 158,
+							"line" : 163,
 							"name" : "COL",
 							"offset" : -1,
 							"opt" : true,
@@ -482,7 +495,7 @@
 						
 						{
 							"global" : false,
-							"line" : 158,
+							"line" : 163,
 							"name" : "SIZE",
 							"offset" : -2,
 							"opt" : true,
@@ -491,7 +504,7 @@
 						
 						{
 							"global" : false,
-							"line" : 166,
+							"line" : 171,
 							"name" : "MAX",
 							"offset" : 1,
 							"opt" : false,
@@ -500,7 +513,7 @@
 						
 						{
 							"global" : false,
-							"line" : 167,
+							"line" : 172,
 							"name" : "MIN",
 							"offset" : 2,
 							"opt" : false,
@@ -509,7 +522,7 @@
 						
 						{
 							"global" : false,
-							"line" : 168,
+							"line" : 173,
 							"name" : "STEP",
 							"offset" : 3,
 							"opt" : false,
@@ -3431,30 +3444,30 @@
 		},
 		
 		{
-			"endLine" : 32,
+			"endLine" : 34,
 			"scopes" : 
 			[
 				
 				{
-					"endLine" : 20,
+					"endLine" : 22,
 					"functionname" : "NETWORKINIT",
 					"params" : 0,
-					"startLine" : 18,
+					"startLine" : 20,
 					"type" : "function"
 				},
 				
 				{
-					"endLine" : 24,
+					"endLine" : 26,
 					"functionname" : "NETWORKSEND",
 					"params" : 1,
-					"startLine" : 22,
+					"startLine" : 24,
 					"type" : "function",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 22,
+							"line" : 24,
 							"name" : "PDU",
 							"offset" : -1,
 							"opt" : true,
@@ -3464,17 +3477,17 @@
 				},
 				
 				{
-					"endLine" : 29,
+					"endLine" : 31,
 					"functionname" : "NETWORKRECEIVE",
 					"params" : 0,
-					"startLine" : 26,
+					"startLine" : 28,
 					"type" : "function",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 27,
+							"line" : 29,
 							"name" : "DATA",
 							"offset" : 1,
 							"opt" : false,
@@ -3490,7 +3503,7 @@
 				
 				{
 					"global" : true,
-					"line" : 14,
+					"line" : 16,
 					"name" : "CHANNEL",
 					"offset" : 149,
 					"opt" : true,
@@ -3499,7 +3512,7 @@
 				
 				{
 					"global" : true,
-					"line" : 15,
+					"line" : 17,
 					"name" : "RECADDRESS",
 					"offset" : 150,
 					"opt" : true,
@@ -3635,22 +3648,22 @@
 		},
 		
 		{
-			"endLine" : 553,
+			"endLine" : 593,
 			"scopes" : 
 			[
 				
 				{
-					"endLine" : 16,
+					"endLine" : 17,
 					"functionname" : "DISTANCE",
 					"params" : 4,
-					"startLine" : 11,
+					"startLine" : 12,
 					"type" : "function",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 11,
+							"line" : 12,
 							"name" : "X1",
 							"offset" : -1,
 							"opt" : true,
@@ -3659,7 +3672,7 @@
 						
 						{
 							"global" : false,
-							"line" : 11,
+							"line" : 12,
 							"name" : "X2",
 							"offset" : -2,
 							"opt" : true,
@@ -3668,7 +3681,7 @@
 						
 						{
 							"global" : false,
-							"line" : 11,
+							"line" : 12,
 							"name" : "Y1",
 							"offset" : -3,
 							"opt" : true,
@@ -3677,7 +3690,7 @@
 						
 						{
 							"global" : false,
-							"line" : 11,
+							"line" : 12,
 							"name" : "Y2",
 							"offset" : -4,
 							"opt" : true,
@@ -3686,7 +3699,7 @@
 						
 						{
 							"global" : false,
-							"line" : 12,
+							"line" : 13,
 							"name" : "DX",
 							"offset" : 1,
 							"opt" : false,
@@ -3695,7 +3708,7 @@
 						
 						{
 							"global" : false,
-							"line" : 13,
+							"line" : 14,
 							"name" : "DY",
 							"offset" : 2,
 							"opt" : false,
@@ -3704,7 +3717,7 @@
 						
 						{
 							"global" : false,
-							"line" : 14,
+							"line" : 15,
 							"name" : "DIST",
 							"offset" : 3,
 							"opt" : false,
@@ -3715,37 +3728,37 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 181,
+					"endLine" : 186,
 					"methodname" : "INIT",
 					"params" : 2,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 82,
-							"startLine" : 80,
+							"endLine" : 85,
+							"startLine" : 83,
 							"type" : "block"
 						},
 						
 						{
-							"endLine" : 91,
+							"endLine" : 94,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 91,
-									"startLine" : 89,
+									"endLine" : 94,
+									"startLine" : 92,
 									"type" : "block"
 								}
 							],
-							"startLine" : 89,
+							"startLine" : 92,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 89,
+									"line" : 92,
 									"name" : "I",
 									"offset" : 1,
 									"opt" : false,
@@ -3755,20 +3768,20 @@
 						},
 						
 						{
-							"endLine" : 95,
+							"endLine" : 98,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 95,
-									"startLine" : 94,
+									"endLine" : 98,
+									"startLine" : 97,
 									"type" : "block",
 									"variables" : 
 									[
 										
 										{
 											"global" : false,
-											"line" : 94,
+											"line" : 97,
 											"name" : "J",
 											"offset" : 4,
 											"opt" : false,
@@ -3777,14 +3790,14 @@
 									]
 								}
 							],
-							"startLine" : 93,
+							"startLine" : 96,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 93,
+									"line" : 96,
 									"name" : "I",
 									"offset" : 3,
 									"opt" : false,
@@ -3794,30 +3807,30 @@
 						},
 						
 						{
-							"endLine" : 162,
+							"endLine" : 165,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 162,
+									"endLine" : 165,
 									"scopes" : 
 									[
 										
 										{
-											"endLine" : 162,
+											"endLine" : 165,
 											"scopes" : 
 											[
 												
 												{
-													"endLine" : 149,
-													"startLine" : 137,
+													"endLine" : 152,
+													"startLine" : 140,
 													"type" : "block",
 													"variables" : 
 													[
 														
 														{
 															"global" : false,
-															"line" : 140,
+															"line" : 143,
 															"name" : "TMPWALL",
 															"offset" : 9,
 															"opt" : false,
@@ -3827,15 +3840,15 @@
 												},
 												
 												{
-													"endLine" : 155,
-													"startLine" : 150,
+													"endLine" : 158,
+													"startLine" : 153,
 													"type" : "block",
 													"variables" : 
 													[
 														
 														{
 															"global" : false,
-															"line" : 151,
+															"line" : 154,
 															"name" : "TEMPW",
 															"offset" : 9,
 															"opt" : true,
@@ -3845,15 +3858,15 @@
 												},
 												
 												{
-													"endLine" : 161,
-													"startLine" : 156,
+													"endLine" : 164,
+													"startLine" : 159,
 													"type" : "block",
 													"variables" : 
 													[
 														
 														{
 															"global" : false,
-															"line" : 157,
+															"line" : 160,
 															"name" : "TEMPH",
 															"offset" : 12,
 															"opt" : false,
@@ -3862,14 +3875,14 @@
 													]
 												}
 											],
-											"startLine" : 135,
+											"startLine" : 138,
 											"type" : "block",
 											"variables" : 
 											[
 												
 												{
 													"global" : false,
-													"line" : 136,
+													"line" : 139,
 													"name" : "HEIGHT",
 													"offset" : 8,
 													"opt" : false,
@@ -3878,33 +3891,33 @@
 											]
 										}
 									],
-									"startLine" : 134,
+									"startLine" : 137,
 									"type" : "block"
 								}
 							],
-							"startLine" : 133,
+							"startLine" : 136,
 							"type" : "block"
 						},
 						
 						{
-							"endLine" : 167,
+							"endLine" : 170,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 167,
-									"startLine" : 165,
+									"endLine" : 170,
+									"startLine" : 168,
 									"type" : "block"
 								}
 							],
-							"startLine" : 165,
+							"startLine" : 168,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 165,
+									"line" : 168,
 									"name" : "I",
 									"offset" : 7,
 									"opt" : false,
@@ -3914,28 +3927,28 @@
 						},
 						
 						{
-							"endLine" : 172,
+							"endLine" : 175,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 172,
-									"startLine" : 170,
+									"endLine" : 175,
+									"startLine" : 173,
 									"type" : "block"
 								}
 							],
-							"startLine" : 170,
+							"startLine" : 173,
 							"type" : "block"
 						}
 					],
-					"startLine" : 75,
+					"startLine" : 78,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 75,
+							"line" : 78,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -3944,7 +3957,7 @@
 						
 						{
 							"global" : false,
-							"line" : 75,
+							"line" : 78,
 							"name" : "TEXTFILE",
 							"offset" : -2,
 							"opt" : true,
@@ -3953,7 +3966,7 @@
 						
 						{
 							"global" : false,
-							"line" : 83,
+							"line" : 86,
 							"name" : "LINES",
 							"offset" : 2,
 							"opt" : false,
@@ -3962,7 +3975,7 @@
 						
 						{
 							"global" : false,
-							"line" : 131,
+							"line" : 134,
 							"name" : "I",
 							"offset" : 5,
 							"opt" : false,
@@ -3971,7 +3984,7 @@
 						
 						{
 							"global" : false,
-							"line" : 131,
+							"line" : 134,
 							"name" : "J",
 							"offset" : 6,
 							"opt" : false,
@@ -3982,35 +3995,20 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 212,
+					"endLine" : 217,
 					"methodname" : "DRAW",
 					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 193,
-							"startLine" : 192,
+							"endLine" : 198,
+							"startLine" : 197,
 							"type" : "block"
 						},
 						
 						{
-							"endLine" : 197,
-							"startLine" : 195,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 204,
-							"scopes" : 
-							[
-								
-								{
-									"endLine" : 203,
-									"startLine" : 201,
-									"type" : "block"
-								}
-							],
+							"endLine" : 202,
 							"startLine" : 200,
 							"type" : "block"
 						},
@@ -4028,16 +4026,31 @@
 							],
 							"startLine" : 205,
 							"type" : "block"
+						},
+						
+						{
+							"endLine" : 214,
+							"scopes" : 
+							[
+								
+								{
+									"endLine" : 213,
+									"startLine" : 211,
+									"type" : "block"
+								}
+							],
+							"startLine" : 210,
+							"type" : "block"
 						}
 					],
-					"startLine" : 187,
+					"startLine" : 192,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 187,
+							"line" : 192,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -4046,7 +4059,7 @@
 						
 						{
 							"global" : false,
-							"line" : 191,
+							"line" : 196,
 							"name" : "I",
 							"offset" : 1,
 							"opt" : false,
@@ -4055,7 +4068,7 @@
 						
 						{
 							"global" : false,
-							"line" : 195,
+							"line" : 200,
 							"name" : "E",
 							"offset" : 6,
 							"opt" : false,
@@ -4064,7 +4077,7 @@
 						
 						{
 							"global" : false,
-							"line" : 200,
+							"line" : 205,
 							"name" : "A",
 							"offset" : 7,
 							"opt" : false,
@@ -4073,7 +4086,7 @@
 						
 						{
 							"global" : false,
-							"line" : 205,
+							"line" : 210,
 							"name" : "H",
 							"offset" : 10,
 							"opt" : false,
@@ -4084,32 +4097,32 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 237,
+					"endLine" : 242,
 					"methodname" : "ADDPLAYER",
 					"params" : 4,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 221,
-							"startLine" : 219,
+							"endLine" : 226,
+							"startLine" : 224,
 							"type" : "block"
 						},
 						
 						{
-							"endLine" : 230,
-							"startLine" : 226,
+							"endLine" : 235,
+							"startLine" : 231,
 							"type" : "block"
 						}
 					],
-					"startLine" : 218,
+					"startLine" : 223,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 218,
+							"line" : 223,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -4118,7 +4131,7 @@
 						
 						{
 							"global" : false,
-							"line" : 218,
+							"line" : 223,
 							"name" : "ID",
 							"offset" : -2,
 							"opt" : true,
@@ -4127,7 +4140,7 @@
 						
 						{
 							"global" : false,
-							"line" : 218,
+							"line" : 223,
 							"name" : "COL",
 							"offset" : -3,
 							"opt" : true,
@@ -4136,7 +4149,7 @@
 						
 						{
 							"global" : false,
-							"line" : 218,
+							"line" : 223,
 							"name" : "LEVEL",
 							"offset" : -4,
 							"opt" : true,
@@ -4145,7 +4158,7 @@
 						
 						{
 							"global" : false,
-							"line" : 222,
+							"line" : 227,
 							"name" : "TMPPLAYER",
 							"offset" : 1,
 							"opt" : false,
@@ -4154,7 +4167,7 @@
 						
 						{
 							"global" : false,
-							"line" : 224,
+							"line" : 229,
 							"name" : "POS",
 							"offset" : 2,
 							"opt" : false,
@@ -4163,7 +4176,7 @@
 						
 						{
 							"global" : false,
-							"line" : 224,
+							"line" : 229,
 							"name" : "POSX",
 							"offset" : 3,
 							"opt" : false,
@@ -4172,7 +4185,7 @@
 						
 						{
 							"global" : false,
-							"line" : 224,
+							"line" : 229,
 							"name" : "POSZ",
 							"offset" : 4,
 							"opt" : false,
@@ -4183,17 +4196,17 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 245,
+					"endLine" : 250,
 					"methodname" : "ADDENEMY",
 					"params" : 2,
-					"startLine" : 242,
+					"startLine" : 247,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 242,
+							"line" : 247,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -4202,7 +4215,7 @@
 						
 						{
 							"global" : false,
-							"line" : 242,
+							"line" : 247,
 							"name" : "E",
 							"offset" : -2,
 							"opt" : true,
@@ -4213,42 +4226,42 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 376,
+					"endLine" : 397,
 					"methodname" : "UPDATE",
 					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 344,
+							"endLine" : 361,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 340,
+									"endLine" : 357,
 									"scopes" : 
 									[
 										
 										{
-											"endLine" : 339,
+											"endLine" : 356,
 											"scopes" : 
 											[
 												
 												{
-													"endLine" : 265,
+													"endLine" : 270,
 													"scopes" : 
 													[
 														
 														{
-															"endLine" : 264,
-															"startLine" : 261,
+															"endLine" : 269,
+															"startLine" : 266,
 															"type" : "block",
 															"variables" : 
 															[
 																
 																{
 																	"global" : false,
-																	"line" : 262,
+																	"line" : 267,
 																	"name" : "TMPENEMY",
 																	"offset" : 4,
 																	"opt" : false,
@@ -4257,14 +4270,14 @@
 															]
 														}
 													],
-													"startLine" : 259,
+													"startLine" : 264,
 													"type" : "block",
 													"variables" : 
 													[
 														
 														{
 															"global" : false,
-															"line" : 260,
+															"line" : 265,
 															"name" : "E",
 															"offset" : 3,
 															"opt" : false,
@@ -4274,42 +4287,42 @@
 												},
 												
 												{
-													"endLine" : 292,
+													"endLine" : 297,
 													"scopes" : 
 													[
 														
 														{
-															"endLine" : 276,
-															"startLine" : 274,
-															"type" : "block"
-														},
-														
-														{
-															"endLine" : 282,
+															"endLine" : 281,
 															"startLine" : 279,
 															"type" : "block"
 														},
 														
 														{
-															"endLine" : 286,
-															"startLine" : 283,
+															"endLine" : 287,
+															"startLine" : 284,
 															"type" : "block"
 														},
 														
 														{
-															"endLine" : 290,
-															"startLine" : 287,
+															"endLine" : 291,
+															"startLine" : 288,
+															"type" : "block"
+														},
+														
+														{
+															"endLine" : 295,
+															"startLine" : 292,
 															"type" : "block"
 														}
 													],
-													"startLine" : 268,
+													"startLine" : 273,
 													"type" : "block",
 													"variables" : 
 													[
 														
 														{
 															"global" : false,
-															"line" : 269,
+															"line" : 274,
 															"name" : "E",
 															"offset" : 5,
 															"opt" : false,
@@ -4319,25 +4332,25 @@
 												},
 												
 												{
-													"endLine" : 308,
+													"endLine" : 313,
 													"scopes" : 
 													[
 														
 														{
-															"endLine" : 307,
+															"endLine" : 312,
 															"scopes" : 
 															[
 																
 																{
-																	"endLine" : 307,
-																	"startLine" : 299,
+																	"endLine" : 312,
+																	"startLine" : 304,
 																	"type" : "block",
 																	"variables" : 
 																	[
 																		
 																		{
 																			"global" : false,
-																			"line" : 300,
+																			"line" : 305,
 																			"name" : "TMPB",
 																			"offset" : 10,
 																			"opt" : false,
@@ -4346,7 +4359,7 @@
 																		
 																		{
 																			"global" : false,
-																			"line" : 302,
+																			"line" : 307,
 																			"name" : "POSITION",
 																			"offset" : 11,
 																			"opt" : true,
@@ -4355,14 +4368,14 @@
 																	]
 																}
 															],
-															"startLine" : 299,
+															"startLine" : 304,
 															"type" : "block",
 															"variables" : 
 															[
 																
 																{
 																	"global" : false,
-																	"line" : 299,
+																	"line" : 304,
 																	"name" : "I",
 																	"offset" : 7,
 																	"opt" : false,
@@ -4371,7 +4384,7 @@
 																
 																{
 																	"global" : false,
-																	"line" : 299,
+																	"line" : 304,
 																	"name" : "J",
 																	"offset" : 9,
 																	"opt" : false,
@@ -4380,14 +4393,14 @@
 															]
 														}
 													],
-													"startLine" : 295,
+													"startLine" : 300,
 													"type" : "block",
 													"variables" : 
 													[
 														
 														{
 															"global" : false,
-															"line" : 296,
+															"line" : 301,
 															"name" : "E",
 															"offset" : 8,
 															"opt" : false,
@@ -4396,7 +4409,7 @@
 														
 														{
 															"global" : false,
-															"line" : 297,
+															"line" : 302,
 															"name" : "BLEN",
 															"offset" : 6,
 															"opt" : false,
@@ -4406,25 +4419,25 @@
 												},
 												
 												{
-													"endLine" : 329,
+													"endLine" : 332,
 													"scopes" : 
 													[
 														
 														{
-															"endLine" : 328,
+															"endLine" : 331,
 															"scopes" : 
 															[
 																
 																{
-																	"endLine" : 327,
-																	"startLine" : 318,
+																	"endLine" : 330,
+																	"startLine" : 322,
 																	"type" : "block",
 																	"variables" : 
 																	[
 																		
 																		{
 																			"global" : false,
-																			"line" : 320,
+																			"line" : 324,
 																			"name" : "PDU",
 																			"offset" : 11,
 																			"opt" : false,
@@ -4433,11 +4446,11 @@
 																	]
 																}
 															],
-															"startLine" : 313,
+															"startLine" : 318,
 															"type" : "block"
 														}
 													],
-													"startLine" : 311,
+													"startLine" : 316,
 													"type" : "block"
 												},
 												
@@ -4448,66 +4461,144 @@
 														
 														{
 															"endLine" : 337,
-															"startLine" : 334,
+															"startLine" : 335,
 															"type" : "block"
 														}
 													],
-													"startLine" : 331,
+													"startLine" : 334,
+													"type" : "block"
+												},
+												
+												{
+													"endLine" : 346,
+													"scopes" : 
+													[
+														
+														{
+															"endLine" : 345,
+															"scopes" : 
+															[
+																
+																{
+																	"endLine" : 345,
+																	"scopes" : 
+																	[
+																		
+																		{
+																			"endLine" : 344,
+																			"startLine" : 342,
+																			"type" : "block"
+																		}
+																	],
+																	"startLine" : 341,
+																	"type" : "block"
+																}
+															],
+															"startLine" : 341,
+															"type" : "block",
+															"variables" : 
+															[
+																
+																{
+																	"global" : false,
+																	"line" : 341,
+																	"name" : "I",
+																	"offset" : 12,
+																	"opt" : false,
+																	"static" : false
+																}
+															]
+														}
+													],
+													"startLine" : 340,
+													"type" : "block"
+												},
+												
+												{
+													"endLine" : 355,
+													"scopes" : 
+													[
+														
+														{
+															"endLine" : 354,
+															"scopes" : 
+															[
+																
+																{
+																	"endLine" : 354,
+																	"scopes" : 
+																	[
+																		
+																		{
+																			"endLine" : 353,
+																			"startLine" : 351,
+																			"type" : "block"
+																		}
+																	],
+																	"startLine" : 349,
+																	"type" : "block",
+																	"variables" : 
+																	[
+																		
+																		{
+																			"global" : false,
+																			"line" : 350,
+																			"name" : "E",
+																			"offset" : 14,
+																			"opt" : false,
+																			"static" : false
+																		}
+																	]
+																}
+															],
+															"startLine" : 349,
+															"type" : "block",
+															"variables" : 
+															[
+																
+																{
+																	"global" : false,
+																	"line" : 349,
+																	"name" : "I",
+																	"offset" : 13,
+																	"opt" : false,
+																	"static" : false
+																}
+															]
+														}
+													],
+													"startLine" : 348,
 													"type" : "block"
 												}
 											],
-											"startLine" : 257,
+											"startLine" : 262,
 											"type" : "block"
 										}
 									],
-									"startLine" : 256,
+									"startLine" : 261,
 									"type" : "block"
 								},
 								
 								{
-									"endLine" : 343,
-									"startLine" : 341,
+									"endLine" : 360,
+									"startLine" : 358,
 									"type" : "block"
 								}
 							],
-							"startLine" : 254,
+							"startLine" : 259,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 255,
+									"line" : 260,
 									"name" : "DATA",
 									"offset" : 2,
 									"opt" : false,
 									"static" : false
 								}
 							]
-						},
-						
-						{
-							"endLine" : 348,
-							"startLine" : 346,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 351,
-							"startLine" : 349,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 354,
-							"startLine" : 352,
-							"type" : "block"
-						},
-						
-						{
-							"endLine" : 362,
-							"startLine" : 360,
-							"type" : "block"
 						},
 						
 						{
@@ -4520,16 +4611,46 @@
 							"endLine" : 368,
 							"startLine" : 366,
 							"type" : "block"
+						},
+						
+						{
+							"endLine" : 371,
+							"startLine" : 369,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 379,
+							"startLine" : 377,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 382,
+							"startLine" : 380,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 385,
+							"startLine" : 383,
+							"type" : "block"
+						},
+						
+						{
+							"endLine" : 395,
+							"startLine" : 392,
+							"type" : "block"
 						}
 					],
-					"startLine" : 251,
+					"startLine" : 256,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 251,
+							"line" : 256,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -4538,7 +4659,7 @@
 						
 						{
 							"global" : false,
-							"line" : 253,
+							"line" : 258,
 							"name" : "LOOP",
 							"offset" : 1,
 							"opt" : false,
@@ -4547,17 +4668,8 @@
 						
 						{
 							"global" : false,
-							"line" : 360,
+							"line" : 377,
 							"name" : "W",
-							"offset" : 16,
-							"opt" : false,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 363,
-							"name" : "H",
 							"offset" : 19,
 							"opt" : false,
 							"static" : false
@@ -4565,9 +4677,18 @@
 						
 						{
 							"global" : false,
-							"line" : 366,
+							"line" : 380,
+							"name" : "H",
+							"offset" : 22,
+							"opt" : false,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 383,
 							"name" : "E",
-							"offset" : 20,
+							"offset" : 23,
 							"opt" : false,
 							"static" : false
 						}
@@ -4576,68 +4697,26 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 398,
-					"methodname" : "CHECKPLAYERCOLLISION",
+					"endLine" : 416,
+					"methodname" : "SENDSCORES",
 					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 397,
-							"scopes" : 
-							[
-								
-								{
-									"endLine" : 396,
-									"scopes" : 
-									[
-										
-										{
-											"endLine" : 395,
-											"startLine" : 385,
-											"type" : "block",
-											"variables" : 
-											[
-												
-												{
-													"global" : false,
-													"line" : 388,
-													"name" : "PDU",
-													"offset" : 7,
-													"opt" : false,
-													"static" : false
-												}
-											]
-										}
-									],
-									"startLine" : 384,
-									"type" : "block"
-								}
-							],
-							"startLine" : 383,
-							"type" : "block",
-							"variables" : 
-							[
-								
-								{
-									"global" : false,
-									"line" : 384,
-									"name" : "E",
-									"offset" : 6,
-									"opt" : false,
-									"static" : false
-								}
-							]
+							"endLine" : 413,
+							"startLine" : 409,
+							"type" : "block"
 						}
 					],
-					"startLine" : 382,
+					"startLine" : 403,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 382,
+							"line" : 403,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -4646,7 +4725,106 @@
 						
 						{
 							"global" : false,
-							"line" : 383,
+							"line" : 404,
+							"name" : "PDU",
+							"offset" : 1,
+							"opt" : false,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 408,
+							"name" : "I",
+							"offset" : 2,
+							"opt" : false,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 409,
+							"name" : "E",
+							"offset" : 5,
+							"opt" : false,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "SCENARIO",
+					"endLine" : 438,
+					"methodname" : "CHECKPLAYERCOLLISION",
+					"params" : 1,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 437,
+							"scopes" : 
+							[
+								
+								{
+									"endLine" : 436,
+									"scopes" : 
+									[
+										
+										{
+											"endLine" : 435,
+											"startLine" : 425,
+											"type" : "block",
+											"variables" : 
+											[
+												
+												{
+													"global" : false,
+													"line" : 428,
+													"name" : "PDU",
+													"offset" : 7,
+													"opt" : false,
+													"static" : false
+												}
+											]
+										}
+									],
+									"startLine" : 424,
+									"type" : "block"
+								}
+							],
+							"startLine" : 423,
+							"type" : "block",
+							"variables" : 
+							[
+								
+								{
+									"global" : false,
+									"line" : 424,
+									"name" : "E",
+									"offset" : 6,
+									"opt" : false,
+									"static" : false
+								}
+							]
+						}
+					],
+					"startLine" : 422,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 422,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 423,
 							"name" : "B",
 							"offset" : 5,
 							"opt" : false,
@@ -4657,26 +4835,26 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 413,
+					"endLine" : 453,
 					"methodname" : "ISBULLETCOLLIDING",
 					"params" : 4,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 411,
-							"startLine" : 409,
+							"endLine" : 451,
+							"startLine" : 449,
 							"type" : "block"
 						}
 					],
-					"startLine" : 404,
+					"startLine" : 444,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 404,
+							"line" : 444,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
@@ -4685,7 +4863,7 @@
 						
 						{
 							"global" : false,
-							"line" : 404,
+							"line" : 444,
 							"name" : "B",
 							"offset" : -2,
 							"opt" : true,
@@ -4694,7 +4872,7 @@
 						
 						{
 							"global" : false,
-							"line" : 404,
+							"line" : 444,
 							"name" : "E",
 							"offset" : -3,
 							"opt" : true,
@@ -4703,7 +4881,7 @@
 						
 						{
 							"global" : false,
-							"line" : 404,
+							"line" : 444,
 							"name" : "RADIUS",
 							"offset" : -4,
 							"opt" : true,
@@ -4714,206 +4892,68 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 428,
+					"endLine" : 468,
 					"methodname" : "UPDATEAMMOS",
 					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 427,
+							"endLine" : 467,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 427,
+									"endLine" : 467,
 									"scopes" : 
 									[
 										
 										{
-											"endLine" : 426,
+											"endLine" : 466,
 											"scopes" : 
 											[
 												
 												{
-													"endLine" : 425,
-													"startLine" : 422,
+													"endLine" : 465,
+													"startLine" : 462,
 													"type" : "block"
 												}
 											],
-											"startLine" : 421,
+											"startLine" : 461,
 											"type" : "block"
 										}
 									],
-									"startLine" : 420,
+									"startLine" : 460,
 									"type" : "block"
 								}
 							],
-							"startLine" : 420,
+							"startLine" : 460,
 							"type" : "block",
 							"variables" : 
 							[
-								
-								{
-									"global" : false,
-									"line" : 420,
-									"name" : "I",
-									"offset" : 1,
-									"opt" : false,
-									"static" : false
-								}
-							]
-						}
-					],
-					"startLine" : 419,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 419,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "SCENARIO",
-					"endLine" : 443,
-					"methodname" : "UPDATEHEALTHPICKUPS",
-					"params" : 1,
-					"scopes" : 
-					[
-						
-						{
-							"endLine" : 442,
-							"scopes" : 
-							[
-								
-								{
-									"endLine" : 442,
-									"scopes" : 
-									[
-										
-										{
-											"endLine" : 441,
-											"scopes" : 
-											[
-												
-												{
-													"endLine" : 440,
-													"startLine" : 437,
-													"type" : "block"
-												}
-											],
-											"startLine" : 436,
-											"type" : "block"
-										}
-									],
-									"startLine" : 435,
-									"type" : "block"
-								}
-							],
-							"startLine" : 435,
-							"type" : "block",
-							"variables" : 
-							[
-								
-								{
-									"global" : false,
-									"line" : 435,
-									"name" : "I",
-									"offset" : 1,
-									"opt" : false,
-									"static" : false
-								}
-							]
-						}
-					],
-					"startLine" : 434,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 434,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "SCENARIO",
-					"endLine" : 465,
-					"methodname" : "UPDATECAMERA",
-					"params" : 1,
-					"scopes" : 
-					[
-						
-						{
-							"endLine" : 464,
-							"startLine" : 458,
-							"type" : "block",
-							"variables" : 
-							[
-								
-								{
-									"global" : false,
-									"line" : 459,
-									"name" : "CAMPOS",
-									"offset" : 3,
-									"opt" : false,
-									"static" : false
-								},
 								
 								{
 									"global" : false,
 									"line" : 460,
-									"name" : "CAMDIR",
-									"offset" : 4,
+									"name" : "I",
+									"offset" : 1,
 									"opt" : false,
 									"static" : false
 								}
 							]
 						}
 					],
-					"startLine" : 449,
+					"startLine" : 459,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 449,
+							"line" : 459,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 451,
-							"name" : "NORMAL",
-							"offset" : 1,
-							"opt" : false,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 452,
-							"name" : "CAMPOS",
-							"offset" : 2,
-							"opt" : false,
 							"static" : false
 						}
 					]
@@ -4922,85 +4962,67 @@
 				{
 					"classname" : "SCENARIO",
 					"endLine" : 483,
-					"methodname" : "ISCOLLIDING",
-					"params" : 3,
+					"methodname" : "UPDATEHEALTHPICKUPS",
+					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 478,
+							"endLine" : 482,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 477,
+									"endLine" : 482,
+									"scopes" : 
+									[
+										
+										{
+											"endLine" : 481,
+											"scopes" : 
+											[
+												
+												{
+													"endLine" : 480,
+													"startLine" : 477,
+													"type" : "block"
+												}
+											],
+											"startLine" : 476,
+											"type" : "block"
+										}
+									],
 									"startLine" : 475,
 									"type" : "block"
 								}
 							],
-							"startLine" : 473,
+							"startLine" : 475,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 474,
-									"name" : "WPOS",
-									"offset" : 4,
+									"line" : 475,
+									"name" : "I",
+									"offset" : 1,
 									"opt" : false,
 									"static" : false
 								}
 							]
 						}
 					],
-					"startLine" : 471,
+					"startLine" : 474,
 					"type" : "method",
 					"variables" : 
 					[
 						
 						{
 							"global" : false,
-							"line" : 471,
+							"line" : 474,
 							"name" : "THIS",
 							"offset" : -1,
 							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 471,
-							"name" : "POS",
-							"offset" : -2,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 471,
-							"name" : "RADIUS",
-							"offset" : -3,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 472,
-							"name" : "TEMPWALLS",
-							"offset" : 1,
-							"opt" : false,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 473,
-							"name" : "W",
-							"offset" : 5,
-							"opt" : false,
 							"static" : false
 						}
 					]
@@ -5008,42 +5030,33 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 498,
-					"methodname" : "ISWEAPONPRESENT",
-					"params" : 3,
+					"endLine" : 505,
+					"methodname" : "UPDATECAMERA",
+					"params" : 1,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 496,
-							"scopes" : 
-							[
-								
-								{
-									"endLine" : 495,
-									"startLine" : 493,
-									"type" : "block"
-								}
-							],
-							"startLine" : 490,
+							"endLine" : 504,
+							"startLine" : 498,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 491,
-									"name" : "AX",
-									"offset" : 4,
+									"line" : 499,
+									"name" : "CAMPOS",
+									"offset" : 3,
 									"opt" : false,
 									"static" : false
 								},
 								
 								{
 									"global" : false,
-									"line" : 492,
-									"name" : "AZ",
-									"offset" : 5,
+									"line" : 500,
+									"name" : "CAMDIR",
+									"offset" : 4,
 									"opt" : false,
 									"static" : false
 								}
@@ -5066,7 +5079,172 @@
 						
 						{
 							"global" : false,
-							"line" : 489,
+							"line" : 491,
+							"name" : "NORMAL",
+							"offset" : 1,
+							"opt" : false,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 492,
+							"name" : "CAMPOS",
+							"offset" : 2,
+							"opt" : false,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "SCENARIO",
+					"endLine" : 523,
+					"methodname" : "ISCOLLIDING",
+					"params" : 3,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 518,
+							"scopes" : 
+							[
+								
+								{
+									"endLine" : 517,
+									"startLine" : 515,
+									"type" : "block"
+								}
+							],
+							"startLine" : 513,
+							"type" : "block",
+							"variables" : 
+							[
+								
+								{
+									"global" : false,
+									"line" : 514,
+									"name" : "WPOS",
+									"offset" : 4,
+									"opt" : false,
+									"static" : false
+								}
+							]
+						}
+					],
+					"startLine" : 511,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 511,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 511,
+							"name" : "POS",
+							"offset" : -2,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 511,
+							"name" : "RADIUS",
+							"offset" : -3,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 512,
+							"name" : "TEMPWALLS",
+							"offset" : 1,
+							"opt" : false,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 513,
+							"name" : "W",
+							"offset" : 5,
+							"opt" : false,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "SCENARIO",
+					"endLine" : 538,
+					"methodname" : "ISWEAPONPRESENT",
+					"params" : 3,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 536,
+							"scopes" : 
+							[
+								
+								{
+									"endLine" : 535,
+									"startLine" : 533,
+									"type" : "block"
+								}
+							],
+							"startLine" : 530,
+							"type" : "block",
+							"variables" : 
+							[
+								
+								{
+									"global" : false,
+									"line" : 531,
+									"name" : "AX",
+									"offset" : 4,
+									"opt" : false,
+									"static" : false
+								},
+								
+								{
+									"global" : false,
+									"line" : 532,
+									"name" : "AZ",
+									"offset" : 5,
+									"opt" : false,
+									"static" : false
+								}
+							]
+						}
+					],
+					"startLine" : 529,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 529,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 529,
 							"name" : "POSX",
 							"offset" : -2,
 							"opt" : true,
@@ -5075,7 +5253,7 @@
 						
 						{
 							"global" : false,
-							"line" : 489,
+							"line" : 529,
 							"name" : "POSZ",
 							"offset" : -3,
 							"opt" : true,
@@ -5084,7 +5262,7 @@
 						
 						{
 							"global" : false,
-							"line" : 490,
+							"line" : 530,
 							"name" : "A",
 							"offset" : 3,
 							"opt" : false,
@@ -5095,31 +5273,31 @@
 				
 				{
 					"classname" : "SCENARIO",
-					"endLine" : 513,
+					"endLine" : 553,
 					"methodname" : "ISHEALTHPACKPRESENT",
 					"params" : 3,
 					"scopes" : 
 					[
 						
 						{
-							"endLine" : 511,
+							"endLine" : 551,
 							"scopes" : 
 							[
 								
 								{
-									"endLine" : 510,
-									"startLine" : 508,
+									"endLine" : 550,
+									"startLine" : 548,
 									"type" : "block"
 								}
 							],
-							"startLine" : 505,
+							"startLine" : 545,
 							"type" : "block",
 							"variables" : 
 							[
 								
 								{
 									"global" : false,
-									"line" : 506,
+									"line" : 546,
 									"name" : "HX",
 									"offset" : 4,
 									"opt" : false,
@@ -5128,268 +5306,13 @@
 								
 								{
 									"global" : false,
-									"line" : 507,
+									"line" : 547,
 									"name" : "HZ",
 									"offset" : 5,
 									"opt" : false,
 									"static" : false
 								}
 							]
-						}
-					],
-					"startLine" : 504,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 504,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 504,
-							"name" : "POSX",
-							"offset" : -2,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 504,
-							"name" : "POSZ",
-							"offset" : -3,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 505,
-							"name" : "H",
-							"offset" : 3,
-							"opt" : false,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "SCENARIO",
-					"endLine" : 528,
-					"methodname" : "PICKUPAMMOS",
-					"params" : 3,
-					"scopes" : 
-					[
-						
-						{
-							"endLine" : 527,
-							"scopes" : 
-							[
-								
-								{
-									"endLine" : 527,
-									"scopes" : 
-									[
-										
-										{
-											"endLine" : 526,
-											"startLine" : 523,
-											"type" : "block"
-										}
-									],
-									"startLine" : 520,
-									"type" : "block",
-									"variables" : 
-									[
-										
-										{
-											"global" : false,
-											"line" : 521,
-											"name" : "AX",
-											"offset" : 2,
-											"opt" : false,
-											"static" : false
-										},
-										
-										{
-											"global" : false,
-											"line" : 522,
-											"name" : "AZ",
-											"offset" : 3,
-											"opt" : false,
-											"static" : false
-										}
-									]
-								}
-							],
-							"startLine" : 520,
-							"type" : "block",
-							"variables" : 
-							[
-								
-								{
-									"global" : false,
-									"line" : 520,
-									"name" : "I",
-									"offset" : 1,
-									"opt" : false,
-									"static" : false
-								}
-							]
-						}
-					],
-					"startLine" : 519,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 519,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 519,
-							"name" : "POSX",
-							"offset" : -2,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 519,
-							"name" : "POSZ",
-							"offset" : -3,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "SCENARIO",
-					"endLine" : 542,
-					"methodname" : "PICKUPHEALTH",
-					"params" : 3,
-					"scopes" : 
-					[
-						
-						{
-							"endLine" : 541,
-							"scopes" : 
-							[
-								
-								{
-									"endLine" : 541,
-									"scopes" : 
-									[
-										
-										{
-											"endLine" : 540,
-											"startLine" : 537,
-											"type" : "block"
-										}
-									],
-									"startLine" : 534,
-									"type" : "block",
-									"variables" : 
-									[
-										
-										{
-											"global" : false,
-											"line" : 535,
-											"name" : "HX",
-											"offset" : 2,
-											"opt" : false,
-											"static" : false
-										},
-										
-										{
-											"global" : false,
-											"line" : 536,
-											"name" : "HZ",
-											"offset" : 3,
-											"opt" : false,
-											"static" : false
-										}
-									]
-								}
-							],
-							"startLine" : 534,
-							"type" : "block",
-							"variables" : 
-							[
-								
-								{
-									"global" : false,
-									"line" : 534,
-									"name" : "I",
-									"offset" : 1,
-									"opt" : false,
-									"static" : false
-								}
-							]
-						}
-					],
-					"startLine" : 533,
-					"type" : "method",
-					"variables" : 
-					[
-						
-						{
-							"global" : false,
-							"line" : 533,
-							"name" : "THIS",
-							"offset" : -1,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 533,
-							"name" : "POSX",
-							"offset" : -2,
-							"opt" : true,
-							"static" : false
-						},
-						
-						{
-							"global" : false,
-							"line" : 533,
-							"name" : "POSZ",
-							"offset" : -3,
-							"opt" : true,
-							"static" : false
-						}
-					]
-				},
-				
-				{
-					"classname" : "SCENARIO",
-					"endLine" : 551,
-					"methodname" : "GETENEMYBYID",
-					"params" : 2,
-					"scopes" : 
-					[
-						
-						{
-							"endLine" : 548,
-							"startLine" : 545,
-							"type" : "block"
 						}
 					],
 					"startLine" : 544,
@@ -5409,6 +5332,261 @@
 						{
 							"global" : false,
 							"line" : 544,
+							"name" : "POSX",
+							"offset" : -2,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 544,
+							"name" : "POSZ",
+							"offset" : -3,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 545,
+							"name" : "H",
+							"offset" : 3,
+							"opt" : false,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "SCENARIO",
+					"endLine" : 568,
+					"methodname" : "PICKUPAMMOS",
+					"params" : 3,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 567,
+							"scopes" : 
+							[
+								
+								{
+									"endLine" : 567,
+									"scopes" : 
+									[
+										
+										{
+											"endLine" : 566,
+											"startLine" : 563,
+											"type" : "block"
+										}
+									],
+									"startLine" : 560,
+									"type" : "block",
+									"variables" : 
+									[
+										
+										{
+											"global" : false,
+											"line" : 561,
+											"name" : "AX",
+											"offset" : 2,
+											"opt" : false,
+											"static" : false
+										},
+										
+										{
+											"global" : false,
+											"line" : 562,
+											"name" : "AZ",
+											"offset" : 3,
+											"opt" : false,
+											"static" : false
+										}
+									]
+								}
+							],
+							"startLine" : 560,
+							"type" : "block",
+							"variables" : 
+							[
+								
+								{
+									"global" : false,
+									"line" : 560,
+									"name" : "I",
+									"offset" : 1,
+									"opt" : false,
+									"static" : false
+								}
+							]
+						}
+					],
+					"startLine" : 559,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 559,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 559,
+							"name" : "POSX",
+							"offset" : -2,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 559,
+							"name" : "POSZ",
+							"offset" : -3,
+							"opt" : true,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "SCENARIO",
+					"endLine" : 582,
+					"methodname" : "PICKUPHEALTH",
+					"params" : 3,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 581,
+							"scopes" : 
+							[
+								
+								{
+									"endLine" : 581,
+									"scopes" : 
+									[
+										
+										{
+											"endLine" : 580,
+											"startLine" : 577,
+											"type" : "block"
+										}
+									],
+									"startLine" : 574,
+									"type" : "block",
+									"variables" : 
+									[
+										
+										{
+											"global" : false,
+											"line" : 575,
+											"name" : "HX",
+											"offset" : 2,
+											"opt" : false,
+											"static" : false
+										},
+										
+										{
+											"global" : false,
+											"line" : 576,
+											"name" : "HZ",
+											"offset" : 3,
+											"opt" : false,
+											"static" : false
+										}
+									]
+								}
+							],
+							"startLine" : 574,
+							"type" : "block",
+							"variables" : 
+							[
+								
+								{
+									"global" : false,
+									"line" : 574,
+									"name" : "I",
+									"offset" : 1,
+									"opt" : false,
+									"static" : false
+								}
+							]
+						}
+					],
+					"startLine" : 573,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 573,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 573,
+							"name" : "POSX",
+							"offset" : -2,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 573,
+							"name" : "POSZ",
+							"offset" : -3,
+							"opt" : true,
+							"static" : false
+						}
+					]
+				},
+				
+				{
+					"classname" : "SCENARIO",
+					"endLine" : 591,
+					"methodname" : "GETENEMYBYID",
+					"params" : 2,
+					"scopes" : 
+					[
+						
+						{
+							"endLine" : 588,
+							"startLine" : 585,
+							"type" : "block"
+						}
+					],
+					"startLine" : 584,
+					"type" : "method",
+					"variables" : 
+					[
+						
+						{
+							"global" : false,
+							"line" : 584,
+							"name" : "THIS",
+							"offset" : -1,
+							"opt" : true,
+							"static" : false
+						},
+						
+						{
+							"global" : false,
+							"line" : 584,
 							"name" : "ID",
 							"offset" : -2,
 							"opt" : true,
@@ -5417,7 +5595,7 @@
 						
 						{
 							"global" : false,
-							"line" : 545,
+							"line" : 585,
 							"name" : "E",
 							"offset" : 3,
 							"opt" : false,
@@ -5545,7 +5723,7 @@
 		},
 		
 		{
-			"endLine" : 32,
+			"endLine" : 34,
 			"startLine" : 0,
 			"type" : "global"
 		}
@@ -5583,475 +5761,495 @@
 				},
 				
 				{
-					"line" : 187,
+					"line" : 192,
 					"offset" : 16
 				},
 				
 				{
 					"line" : 30,
-					"offset" : 3265
+					"offset" : 3324
 				},
 				
 				{
 					"line" : 33,
-					"offset" : 3266
+					"offset" : 3325
 				},
 				
 				{
 					"line" : 34,
-					"offset" : 3269
+					"offset" : 3328
 				},
 				
 				{
 					"line" : 36,
-					"offset" : 3270
+					"offset" : 3329
 				},
 				
 				{
 					"line" : 38,
-					"offset" : 3271
-				},
-				
-				{
-					"line" : 39,
-					"offset" : 3273
-				},
-				
-				{
-					"line" : 42,
-					"offset" : 3276
-				},
-				
-				{
-					"line" : 43,
-					"offset" : 3278
-				},
-				
-				{
-					"line" : 44,
-					"offset" : 3281
-				},
-				
-				{
-					"line" : 45,
-					"offset" : 3286
-				},
-				
-				{
-					"line" : 46,
-					"offset" : 3288
-				},
-				
-				{
-					"line" : 48,
-					"offset" : 3291
-				},
-				
-				{
-					"line" : 51,
-					"offset" : 3293
-				},
-				
-				{
-					"line" : 52,
-					"offset" : 3295
-				},
-				
-				{
-					"line" : 54,
-					"offset" : 3298
-				},
-				
-				{
-					"line" : 55,
-					"offset" : 3302
-				},
-				
-				{
-					"line" : 56,
-					"offset" : 3304
-				},
-				
-				{
-					"line" : 58,
-					"offset" : 3305
-				},
-				
-				{
-					"line" : 59,
-					"offset" : 3307
-				},
-				
-				{
-					"line" : 60,
-					"offset" : 3312
-				},
-				
-				{
-					"line" : 62,
-					"offset" : 3313
-				},
-				
-				{
-					"line" : 63,
-					"offset" : 3316
-				},
-				
-				{
-					"line" : 64,
 					"offset" : 3330
 				},
 				
 				{
-					"line" : 65,
-					"offset" : 3333
+					"line" : 39,
+					"offset" : 3332
 				},
 				
 				{
-					"line" : 69,
-					"offset" : 3334
-				},
-				
-				{
-					"line" : 71,
+					"line" : 42,
 					"offset" : 3335
 				},
 				
 				{
-					"line" : 72,
-					"offset" : 3338
+					"line" : 43,
+					"offset" : 3337
 				},
 				
 				{
-					"line" : 73,
-					"offset" : 3339
+					"line" : 44,
+					"offset" : 3340
 				},
 				
 				{
-					"line" : 74,
-					"offset" : 3343
+					"line" : 45,
+					"offset" : 3345
 				},
 				
 				{
-					"line" : 75,
-					"offset" : 3349
+					"line" : 46,
+					"offset" : 3347
 				},
 				
 				{
-					"line" : 76,
+					"line" : 48,
 					"offset" : 3350
 				},
 				
 				{
-					"line" : 84,
-					"offset" : 3351
+					"line" : 51,
+					"offset" : 3352
 				},
 				
 				{
-					"line" : 85,
+					"line" : 52,
 					"offset" : 3354
 				},
 				
 				{
-					"line" : 86,
+					"line" : 54,
 					"offset" : 3357
 				},
 				
 				{
-					"line" : 88,
-					"offset" : 3358
+					"line" : 55,
+					"offset" : 3361
 				},
 				
 				{
-					"line" : 90,
-					"offset" : 3359
+					"line" : 56,
+					"offset" : 3363
 				},
 				
 				{
-					"line" : 91,
-					"offset" : 3362
+					"line" : 58,
+					"offset" : 3364
 				},
 				
 				{
-					"line" : 92,
-					"offset" : 3365
+					"line" : 59,
+					"offset" : 3366
 				},
 				
 				{
-					"line" : 93,
-					"offset" : 3368
-				},
-				
-				{
-					"line" : 95,
-					"offset" : 3369
-				},
-				
-				{
-					"line" : 96,
-					"offset" : 3370
-				},
-				
-				{
-					"line" : 97,
+					"line" : 60,
 					"offset" : 3371
 				},
 				
 				{
-					"line" : 98,
+					"line" : 62,
 					"offset" : 3372
 				},
 				
 				{
-					"line" : 101,
-					"offset" : 3373
+					"line" : 63,
+					"offset" : 3375
 				},
 				
 				{
-					"line" : 102,
-					"offset" : 3377
+					"line" : 64,
+					"offset" : 3389
 				},
 				
 				{
-					"line" : 103,
-					"offset" : 3380
+					"line" : 65,
+					"offset" : 3392
 				},
 				
 				{
-					"line" : 104,
-					"offset" : 3388
+					"line" : 69,
+					"offset" : 3393
 				},
 				
 				{
-					"line" : 105,
+					"line" : 71,
 					"offset" : 3394
 				},
 				
 				{
-					"line" : 106,
+					"line" : 72,
+					"offset" : 3397
+				},
+				
+				{
+					"line" : 73,
+					"offset" : 3398
+				},
+				
+				{
+					"line" : 74,
 					"offset" : 3402
 				},
 				
 				{
-					"line" : 107,
-					"offset" : 3404
+					"line" : 75,
+					"offset" : 3408
 				},
 				
 				{
-					"line" : 111,
+					"line" : 76,
+					"offset" : 3409
+				},
+				
+				{
+					"line" : 84,
+					"offset" : 3410
+				},
+				
+				{
+					"line" : 85,
+					"offset" : 3413
+				},
+				
+				{
+					"line" : 86,
+					"offset" : 3416
+				},
+				
+				{
+					"line" : 88,
+					"offset" : 3417
+				},
+				
+				{
+					"line" : 90,
+					"offset" : 3418
+				},
+				
+				{
+					"line" : 91,
 					"offset" : 3421
 				},
 				
 				{
-					"line" : 110,
-					"offset" : 3422
+					"line" : 92,
+					"offset" : 3424
 				},
 				
 				{
-					"line" : 113,
-					"offset" : 3433
+					"line" : 93,
+					"offset" : 3427
 				},
 				
 				{
-					"line" : 114,
-					"offset" : 3441
+					"line" : 95,
+					"offset" : 3428
 				},
 				
 				{
-					"line" : 116,
-					"offset" : 3442
+					"line" : 96,
+					"offset" : 3429
 				},
 				
 				{
-					"line" : 120,
-					"offset" : 3443
+					"line" : 97,
+					"offset" : 3430
 				},
 				
 				{
-					"line" : 121,
-					"offset" : 3445
+					"line" : 98,
+					"offset" : 3431
 				},
 				
 				{
-					"line" : 122,
+					"line" : 101,
+					"offset" : 3432
+				},
+				
+				{
+					"line" : 102,
+					"offset" : 3436
+				},
+				
+				{
+					"line" : 103,
+					"offset" : 3439
+				},
+				
+				{
+					"line" : 104,
 					"offset" : 3447
 				},
 				
 				{
-					"line" : 123,
-					"offset" : 3449
-				},
-				
-				{
-					"line" : 125,
-					"offset" : 3451
-				},
-				
-				{
-					"line" : 128,
+					"line" : 105,
 					"offset" : 3453
 				},
 				
 				{
-					"line" : 130,
-					"offset" : 3457
-				},
-				
-				{
-					"line" : 131,
-					"offset" : 3459
-				},
-				
-				{
-					"line" : 133,
-					"offset" : 3460
-				},
-				
-				{
-					"line" : 135,
+					"line" : 106,
 					"offset" : 3461
 				},
 				
 				{
-					"line" : 139,
-					"offset" : 3462
-				},
-				
-				{
-					"line" : 141,
+					"line" : 107,
 					"offset" : 3463
 				},
 				
 				{
-					"line" : 144,
-					"offset" : 3464
-				},
-				
-				{
-					"line" : 146,
-					"offset" : 3465
-				},
-				
-				{
-					"line" : 148,
-					"offset" : 3466
-				},
-				
-				{
-					"line" : 150,
-					"offset" : 3467
-				},
-				
-				{
-					"line" : 153,
-					"offset" : 3468
-				},
-				
-				{
-					"line" : 155,
-					"offset" : 3469
-				},
-				
-				{
-					"line" : 158,
-					"offset" : 3470
-				},
-				
-				{
-					"line" : 161,
-					"offset" : 3471
-				},
-				
-				{
-					"line" : 163,
-					"offset" : 3474
-				},
-				
-				{
-					"line" : 164,
-					"offset" : 3477
-				},
-				
-				{
-					"line" : 165,
+					"line" : 111,
 					"offset" : 3480
 				},
 				
 				{
-					"line" : 166,
-					"offset" : 3483
+					"line" : 110,
+					"offset" : 3481
 				},
 				
 				{
-					"line" : 167,
-					"offset" : 3484
+					"line" : 113,
+					"offset" : 3492
 				},
 				
 				{
-					"line" : 168,
-					"offset" : 3485
+					"line" : 114,
+					"offset" : 3500
 				},
 				
 				{
-					"line" : 170,
-					"offset" : 3486
-				},
-				
-				{
-					"line" : 171,
-					"offset" : 3489
-				},
-				
-				{
-					"line" : 173,
-					"offset" : 3491
-				},
-				
-				{
-					"line" : 174,
-					"offset" : 3496
-				},
-				
-				{
-					"line" : 176,
+					"line" : 116,
 					"offset" : 3501
 				},
 				
 				{
-					"line" : 177,
+					"line" : 120,
+					"offset" : 3502
+				},
+				
+				{
+					"line" : 121,
+					"offset" : 3504
+				},
+				
+				{
+					"line" : 122,
 					"offset" : 3506
 				},
 				
 				{
-					"line" : 171,
-					"offset" : 3511
+					"line" : 123,
+					"offset" : 3508
 				},
 				
 				{
-					"line" : 178,
+					"line" : 125,
+					"offset" : 3510
+				},
+				
+				{
+					"line" : 128,
 					"offset" : 3512
 				},
 				
 				{
+					"line" : 130,
+					"offset" : 3516
+				},
+				
+				{
+					"line" : 131,
+					"offset" : 3518
+				},
+				
+				{
+					"line" : 133,
+					"offset" : 3519
+				},
+				
+				{
+					"line" : 135,
+					"offset" : 3520
+				},
+				
+				{
+					"line" : 139,
+					"offset" : 3521
+				},
+				
+				{
+					"line" : 141,
+					"offset" : 3522
+				},
+				
+				{
+					"line" : 144,
+					"offset" : 3523
+				},
+				
+				{
+					"line" : 146,
+					"offset" : 3524
+				},
+				
+				{
+					"line" : 148,
+					"offset" : 3525
+				},
+				
+				{
+					"line" : 150,
+					"offset" : 3526
+				},
+				
+				{
+					"line" : 153,
+					"offset" : 3527
+				},
+				
+				{
+					"line" : 155,
+					"offset" : 3528
+				},
+				
+				{
+					"line" : 156,
+					"offset" : 3529
+				},
+				
+				{
+					"line" : 157,
+					"offset" : 3530
+				},
+				
+				{
+					"line" : 159,
+					"offset" : 3532
+				},
+				
+				{
+					"line" : 160,
+					"offset" : 3535
+				},
+				
+				{
+					"line" : 163,
+					"offset" : 3536
+				},
+				
+				{
+					"line" : 166,
+					"offset" : 3537
+				},
+				
+				{
+					"line" : 168,
+					"offset" : 3540
+				},
+				
+				{
+					"line" : 169,
+					"offset" : 3543
+				},
+				
+				{
+					"line" : 170,
+					"offset" : 3546
+				},
+				
+				{
+					"line" : 171,
+					"offset" : 3549
+				},
+				
+				{
+					"line" : 172,
+					"offset" : 3550
+				},
+				
+				{
+					"line" : 173,
+					"offset" : 3551
+				},
+				
+				{
+					"line" : 175,
+					"offset" : 3552
+				},
+				
+				{
+					"line" : 176,
+					"offset" : 3555
+				},
+				
+				{
+					"line" : 178,
+					"offset" : 3557
+				},
+				
+				{
 					"line" : 179,
-					"offset" : 3513
+					"offset" : 3562
+				},
+				
+				{
+					"line" : 181,
+					"offset" : 3567
 				},
 				
 				{
 					"line" : 182,
-					"offset" : 3515
+					"offset" : 3572
+				},
+				
+				{
+					"line" : 176,
+					"offset" : 3577
 				},
 				
 				{
 					"line" : 183,
-					"offset" : 3517
+					"offset" : 3578
+				},
+				
+				{
+					"line" : 184,
+					"offset" : 3579
+				},
+				
+				{
+					"line" : 187,
+					"offset" : 3581
+				},
+				
+				{
+					"line" : 188,
+					"offset" : 3583
 				}
 			],
 			"offsets" : 
 			[
 				
 				{
-					"endoffset" : 3517,
+					"endoffset" : 3583,
 					"startoffset" : 0
 				}
 			]
@@ -9980,52 +10178,52 @@
 			[
 				
 				{
-					"line" : 15,
+					"line" : 17,
 					"offset" : 11
 				},
 				
 				{
-					"line" : 18,
+					"line" : 20,
 					"offset" : 1059
 				},
 				
 				{
-					"line" : 19,
+					"line" : 21,
 					"offset" : 1060
 				},
 				
 				{
-					"line" : 20,
+					"line" : 22,
 					"offset" : 1066
 				},
 				
 				{
-					"line" : 22,
+					"line" : 24,
 					"offset" : 1067
 				},
 				
 				{
-					"line" : 23,
+					"line" : 25,
 					"offset" : 1068
 				},
 				
 				{
-					"line" : 24,
+					"line" : 26,
 					"offset" : 1073
 				},
 				
 				{
-					"line" : 26,
+					"line" : 28,
 					"offset" : 1074
 				},
 				
 				{
-					"line" : 27,
+					"line" : 29,
 					"offset" : 1075
 				},
 				
 				{
-					"line" : 28,
+					"line" : 30,
 					"offset" : 1080
 				}
 			],
@@ -10228,1363 +10426,1393 @@
 			[
 				
 				{
-					"line" : 11,
+					"line" : 12,
 					"offset" : 2189
 				},
 				
 				{
-					"line" : 12,
+					"line" : 13,
 					"offset" : 2190
 				},
 				
 				{
-					"line" : 13,
+					"line" : 14,
 					"offset" : 2191
 				},
 				
 				{
-					"line" : 14,
+					"line" : 15,
 					"offset" : 2192
 				},
 				
 				{
-					"line" : 15,
+					"line" : 16,
 					"offset" : 2196
 				},
 				
 				{
-					"line" : 75,
+					"line" : 78,
 					"offset" : 2197
 				},
 				
 				{
-					"line" : 76,
+					"line" : 79,
 					"offset" : 2198
 				},
 				
 				{
-					"line" : 77,
+					"line" : 80,
 					"offset" : 2199
 				},
 				
 				{
-					"line" : 80,
+					"line" : 83,
 					"offset" : 2200
 				},
 				
 				{
-					"line" : 81,
+					"line" : 84,
 					"offset" : 2205
 				},
 				
 				{
-					"line" : 83,
+					"line" : 86,
 					"offset" : 2209
 				},
 				
 				{
-					"line" : 84,
+					"line" : 87,
 					"offset" : 2213
 				},
 				
 				{
-					"line" : 85,
+					"line" : 88,
 					"offset" : 2215
 				},
 				
 				{
-					"line" : 88,
+					"line" : 91,
 					"offset" : 2218
 				},
 				
 				{
-					"line" : 89,
+					"line" : 92,
 					"offset" : 2221
 				},
 				
 				{
-					"line" : 90,
+					"line" : 93,
 					"offset" : 2224
 				},
 				
 				{
-					"line" : 89,
+					"line" : 92,
 					"offset" : 2229
 				},
 				
 				{
-					"line" : 91,
+					"line" : 94,
 					"offset" : 2230
 				},
 				
 				{
-					"line" : 93,
+					"line" : 96,
 					"offset" : 2231
 				},
 				
 				{
-					"line" : 94,
+					"line" : 97,
 					"offset" : 2234
 				},
 				
 				{
-					"line" : 95,
+					"line" : 98,
 					"offset" : 2237
 				},
 				
 				{
-					"line" : 94,
+					"line" : 97,
 					"offset" : 2242
 				},
 				
 				{
-					"line" : 95,
+					"line" : 98,
 					"offset" : 2243
 				},
 				
 				{
-					"line" : 93,
+					"line" : 96,
 					"offset" : 2244
 				},
 				
 				{
-					"line" : 95,
+					"line" : 98,
 					"offset" : 2245
 				},
 				
 				{
-					"line" : 101,
+					"line" : 104,
 					"offset" : 2246
 				},
 				
 				{
-					"line" : 102,
+					"line" : 105,
 					"offset" : 2249
 				},
 				
 				{
-					"line" : 103,
+					"line" : 106,
 					"offset" : 2254
 				},
 				
 				{
-					"line" : 104,
+					"line" : 107,
 					"offset" : 2259
 				},
 				
 				{
-					"line" : 105,
+					"line" : 108,
 					"offset" : 2264
 				},
 				
 				{
-					"line" : 106,
+					"line" : 109,
 					"offset" : 2269
 				},
 				
 				{
-					"line" : 107,
+					"line" : 110,
 					"offset" : 2274
 				},
 				
 				{
-					"line" : 108,
+					"line" : 111,
 					"offset" : 2282
 				},
 				
 				{
-					"line" : 109,
+					"line" : 112,
 					"offset" : 2287
 				},
 				
 				{
-					"line" : 110,
+					"line" : 113,
 					"offset" : 2293
 				},
 				
 				{
-					"line" : 113,
+					"line" : 116,
 					"offset" : 2299
 				},
 				
 				{
-					"line" : 116,
+					"line" : 119,
 					"offset" : 2304
 				},
 				
 				{
-					"line" : 117,
+					"line" : 120,
 					"offset" : 2307
 				},
 				
 				{
-					"line" : 118,
+					"line" : 121,
 					"offset" : 2312
 				},
 				
 				{
-					"line" : 119,
+					"line" : 122,
 					"offset" : 2317
 				},
 				
 				{
-					"line" : 120,
+					"line" : 123,
 					"offset" : 2322
 				},
 				
 				{
-					"line" : 121,
+					"line" : 124,
 					"offset" : 2326
 				},
 				
 				{
-					"line" : 122,
+					"line" : 125,
 					"offset" : 2330
 				},
 				
 				{
-					"line" : 123,
+					"line" : 126,
 					"offset" : 2335
 				},
 				
 				{
-					"line" : 124,
+					"line" : 127,
 					"offset" : 2341
 				},
 				
 				{
-					"line" : 126,
+					"line" : 129,
 					"offset" : 2344
 				},
 				
 				{
-					"line" : 127,
+					"line" : 130,
 					"offset" : 2346
 				},
 				
 				{
-					"line" : 128,
+					"line" : 131,
 					"offset" : 2348
 				},
 				
 				{
-					"line" : 129,
+					"line" : 132,
 					"offset" : 2350
 				},
 				
 				{
-					"line" : 133,
+					"line" : 136,
 					"offset" : 2352
 				},
 				
 				{
-					"line" : 134,
+					"line" : 137,
 					"offset" : 2355
 				},
 				
 				{
-					"line" : 136,
+					"line" : 139,
 					"offset" : 2358
 				},
 				
 				{
-					"line" : 137,
+					"line" : 140,
 					"offset" : 2361
 				},
 				
 				{
-					"line" : 138,
+					"line" : 141,
 					"offset" : 2363
 				},
 				
 				{
-					"line" : 139,
+					"line" : 142,
 					"offset" : 2369
 				},
 				
 				{
-					"line" : 140,
+					"line" : 143,
 					"offset" : 2374
 				},
 				
 				{
-					"line" : 141,
+					"line" : 144,
 					"offset" : 2379
 				},
 				
 				{
-					"line" : 142,
+					"line" : 145,
 					"offset" : 2382
 				},
 				
 				{
-					"line" : 143,
+					"line" : 146,
 					"offset" : 2385
 				},
 				
 				{
-					"line" : 144,
+					"line" : 147,
 					"offset" : 2390
 				},
 				
 				{
-					"line" : 145,
+					"line" : 148,
 					"offset" : 2396
 				},
 				
 				{
-					"line" : 146,
+					"line" : 149,
 					"offset" : 2403
 				},
 				
 				{
-					"line" : 147,
+					"line" : 150,
 					"offset" : 2408
 				},
 				
 				{
-					"line" : 148,
+					"line" : 151,
 					"offset" : 2413
 				},
 				
 				{
-					"line" : 162,
+					"line" : 165,
 					"offset" : 2415
 				},
 				
 				{
-					"line" : 150,
+					"line" : 153,
 					"offset" : 2416
 				},
 				
 				{
-					"line" : 151,
+					"line" : 154,
 					"offset" : 2419
 				},
 				
 				{
-					"line" : 152,
+					"line" : 155,
 					"offset" : 2437
 				},
 				
 				{
-					"line" : 153,
+					"line" : 156,
 					"offset" : 2443
 				},
 				
 				{
-					"line" : 154,
+					"line" : 157,
 					"offset" : 2454
 				},
 				
 				{
-					"line" : 162,
+					"line" : 165,
 					"offset" : 2457
 				},
 				
 				{
-					"line" : 156,
+					"line" : 159,
 					"offset" : 2458
 				},
 				
 				{
-					"line" : 157,
+					"line" : 160,
 					"offset" : 2461
 				},
 				
 				{
-					"line" : 158,
+					"line" : 161,
 					"offset" : 2463
 				},
 				
 				{
-					"line" : 159,
+					"line" : 162,
 					"offset" : 2469
 				},
 				
 				{
-					"line" : 160,
+					"line" : 163,
 					"offset" : 2478
 				},
 				
 				{
-					"line" : 134,
+					"line" : 137,
 					"offset" : 2481
 				},
 				
 				{
-					"line" : 162,
+					"line" : 165,
 					"offset" : 2482
 				},
 				
 				{
-					"line" : 133,
+					"line" : 136,
 					"offset" : 2483
 				},
 				
 				{
-					"line" : 162,
+					"line" : 165,
 					"offset" : 2484
 				},
 				
 				{
-					"line" : 164,
+					"line" : 167,
 					"offset" : 2485
 				},
 				
 				{
-					"line" : 165,
+					"line" : 168,
 					"offset" : 2488
 				},
 				
 				{
-					"line" : 166,
+					"line" : 169,
 					"offset" : 2491
 				},
 				
 				{
-					"line" : 165,
+					"line" : 168,
 					"offset" : 2494
 				},
 				
 				{
-					"line" : 167,
+					"line" : 170,
 					"offset" : 2495
 				},
 				
 				{
-					"line" : 169,
+					"line" : 172,
 					"offset" : 2496
 				},
 				
 				{
-					"line" : 170,
+					"line" : 173,
 					"offset" : 2499
 				},
 				
 				{
-					"line" : 171,
+					"line" : 174,
 					"offset" : 2502
 				},
 				
 				{
-					"line" : 170,
+					"line" : 173,
 					"offset" : 2505
 				},
 				
 				{
-					"line" : 172,
+					"line" : 175,
 					"offset" : 2506
 				},
 				
 				{
-					"line" : 176,
+					"line" : 177,
 					"offset" : 2507
 				},
 				
 				{
-					"line" : 177,
-					"offset" : 2510
+					"line" : 181,
+					"offset" : 2508
 				},
 				
 				{
-					"line" : 178,
+					"line" : 182,
 					"offset" : 2511
 				},
 				
 				{
-					"line" : 179,
-					"offset" : 2515
+					"line" : 183,
+					"offset" : 2512
 				},
 				
 				{
-					"line" : 180,
-					"offset" : 2519
+					"line" : 184,
+					"offset" : 2516
 				},
 				
 				{
-					"line" : 181,
-					"offset" : 2523
+					"line" : 185,
+					"offset" : 2520
 				},
 				
 				{
-					"line" : 187,
+					"line" : 186,
 					"offset" : 2524
 				},
 				
 				{
-					"line" : 189,
+					"line" : 192,
 					"offset" : 2525
 				},
 				
 				{
-					"line" : 192,
-					"offset" : 2528
-				},
-				
-				{
-					"line" : 193,
-					"offset" : 2532
-				},
-				
-				{
-					"line" : 192,
-					"offset" : 2536
-				},
-				
-				{
-					"line" : 193,
-					"offset" : 2537
+					"line" : 194,
+					"offset" : 2526
 				},
 				
 				{
 					"line" : 197,
-					"offset" : 2538
-				},
-				
-				{
-					"line" : 195,
-					"offset" : 2539
-				},
-				
-				{
-					"line" : 197,
-					"offset" : 2540
-				},
-				
-				{
-					"line" : 196,
-					"offset" : 2543
-				},
-				
-				{
-					"line" : 197,
-					"offset" : 2545
+					"offset" : 2529
 				},
 				
 				{
 					"line" : 198,
-					"offset" : 2547
+					"offset" : 2533
 				},
 				
 				{
-					"line" : 204,
-					"offset" : 2550
+					"line" : 197,
+					"offset" : 2537
 				},
 				
 				{
-					"line" : 200,
-					"offset" : 2551
-				},
-				
-				{
-					"line" : 204,
-					"offset" : 2552
-				},
-				
-				{
-					"line" : 201,
-					"offset" : 2555
+					"line" : 198,
+					"offset" : 2538
 				},
 				
 				{
 					"line" : 202,
-					"offset" : 2557
+					"offset" : 2539
 				},
 				
 				{
-					"line" : 204,
-					"offset" : 2560
+					"line" : 200,
+					"offset" : 2540
+				},
+				
+				{
+					"line" : 202,
+					"offset" : 2541
+				},
+				
+				{
+					"line" : 201,
+					"offset" : 2544
+				},
+				
+				{
+					"line" : 202,
+					"offset" : 2546
+				},
+				
+				{
+					"line" : 203,
+					"offset" : 2548
 				},
 				
 				{
 					"line" : 209,
-					"offset" : 2562
+					"offset" : 2551
 				},
 				
 				{
 					"line" : 205,
-					"offset" : 2563
+					"offset" : 2552
 				},
 				
 				{
 					"line" : 209,
-					"offset" : 2564
+					"offset" : 2553
 				},
 				
 				{
 					"line" : 206,
-					"offset" : 2567
+					"offset" : 2556
 				},
 				
 				{
 					"line" : 207,
-					"offset" : 2569
+					"offset" : 2558
 				},
 				
 				{
 					"line" : 209,
-					"offset" : 2572
+					"offset" : 2561
+				},
+				
+				{
+					"line" : 214,
+					"offset" : 2563
+				},
+				
+				{
+					"line" : 210,
+					"offset" : 2564
+				},
+				
+				{
+					"line" : 214,
+					"offset" : 2565
 				},
 				
 				{
 					"line" : 211,
-					"offset" : 2574
+					"offset" : 2568
 				},
 				
 				{
 					"line" : 212,
-					"offset" : 2577
+					"offset" : 2570
 				},
 				
 				{
-					"line" : 218,
+					"line" : 214,
+					"offset" : 2573
+				},
+				
+				{
+					"line" : 216,
+					"offset" : 2575
+				},
+				
+				{
+					"line" : 217,
 					"offset" : 2578
 				},
 				
 				{
-					"line" : 219,
+					"line" : 223,
 					"offset" : 2579
 				},
 				
 				{
-					"line" : 220,
+					"line" : 224,
 					"offset" : 2580
 				},
 				
 				{
-					"line" : 222,
-					"offset" : 2600
-				},
-				
-				{
-					"line" : 223,
-					"offset" : 2602
+					"line" : 225,
+					"offset" : 2581
 				},
 				
 				{
 					"line" : 227,
-					"offset" : 2603
+					"offset" : 2601
 				},
 				
 				{
 					"line" : 228,
-					"offset" : 2609
+					"offset" : 2603
 				},
 				
 				{
-					"line" : 229,
-					"offset" : 2615
-				},
-				
-				{
-					"line" : 231,
-					"offset" : 2619
+					"line" : 232,
+					"offset" : 2604
 				},
 				
 				{
 					"line" : 233,
-					"offset" : 2625
+					"offset" : 2610
+				},
+				
+				{
+					"line" : 234,
+					"offset" : 2616
 				},
 				
 				{
 					"line" : 236,
-					"offset" : 2630
+					"offset" : 2620
 				},
 				
 				{
-					"line" : 242,
+					"line" : 238,
+					"offset" : 2626
+				},
+				
+				{
+					"line" : 241,
 					"offset" : 2631
 				},
 				
 				{
-					"line" : 243,
+					"line" : 247,
 					"offset" : 2632
 				},
 				
 				{
-					"line" : 244,
-					"offset" : 2634
+					"line" : 248,
+					"offset" : 2633
 				},
 				
 				{
-					"line" : 245,
+					"line" : 249,
 					"offset" : 2635
 				},
 				
 				{
-					"line" : 251,
+					"line" : 250,
 					"offset" : 2636
 				},
 				
 				{
-					"line" : 253,
+					"line" : 256,
 					"offset" : 2637
 				},
 				
 				{
-					"line" : 254,
+					"line" : 258,
 					"offset" : 2638
 				},
 				
 				{
-					"line" : 255,
+					"line" : 259,
 					"offset" : 2639
 				},
 				
 				{
-					"line" : 256,
-					"offset" : 2641
-				},
-				
-				{
-					"line" : 257,
-					"offset" : 2642
-				},
-				
-				{
-					"line" : 259,
-					"offset" : 2646
-				},
-				
-				{
 					"line" : 260,
-					"offset" : 2648
+					"offset" : 2640
 				},
 				
 				{
 					"line" : 261,
-					"offset" : 2653
+					"offset" : 2642
 				},
 				
 				{
 					"line" : 262,
+					"offset" : 2643
+				},
+				
+				{
+					"line" : 264,
+					"offset" : 2647
+				},
+				
+				{
+					"line" : 265,
+					"offset" : 2649
+				},
+				
+				{
+					"line" : 266,
 					"offset" : 2654
 				},
 				
 				{
-					"line" : 263,
-					"offset" : 2668
-				},
-				
-				{
-					"line" : 339,
-					"offset" : 2671
+					"line" : 267,
+					"offset" : 2655
 				},
 				
 				{
 					"line" : 268,
+					"offset" : 2669
+				},
+				
+				{
+					"line" : 356,
 					"offset" : 2672
 				},
 				
 				{
-					"line" : 269,
-					"offset" : 2674
-				},
-				
-				{
-					"line" : 270,
-					"offset" : 2679
-				},
-				
-				{
-					"line" : 271,
-					"offset" : 2687
-				},
-				
-				{
-					"line" : 272,
-					"offset" : 2695
-				},
-				
-				{
 					"line" : 273,
-					"offset" : 2697
+					"offset" : 2673
 				},
 				
 				{
 					"line" : 274,
-					"offset" : 2699
+					"offset" : 2675
 				},
 				
 				{
 					"line" : 275,
-					"offset" : 2702
+					"offset" : 2680
+				},
+				
+				{
+					"line" : 276,
+					"offset" : 2688
 				},
 				
 				{
 					"line" : 277,
-					"offset" : 2706
+					"offset" : 2696
 				},
 				
 				{
 					"line" : 278,
-					"offset" : 2708
+					"offset" : 2698
 				},
 				
 				{
 					"line" : 279,
-					"offset" : 2710
+					"offset" : 2700
 				},
 				
 				{
 					"line" : 280,
-					"offset" : 2712
+					"offset" : 2703
 				},
 				
 				{
-					"line" : 281,
-					"offset" : 2713
-				},
-				
-				{
-					"line" : 292,
-					"offset" : 2715
+					"line" : 282,
+					"offset" : 2707
 				},
 				
 				{
 					"line" : 283,
-					"offset" : 2716
+					"offset" : 2709
 				},
 				
 				{
 					"line" : 284,
-					"offset" : 2718
+					"offset" : 2711
 				},
 				
 				{
 					"line" : 285,
-					"offset" : 2719
+					"offset" : 2713
 				},
 				
 				{
-					"line" : 292,
-					"offset" : 2721
-				},
-				
-				{
-					"line" : 287,
-					"offset" : 2722
-				},
-				
-				{
-					"line" : 288,
-					"offset" : 2724
-				},
-				
-				{
-					"line" : 289,
-					"offset" : 2725
-				},
-				
-				{
-					"line" : 339,
-					"offset" : 2726
-				},
-				
-				{
-					"line" : 295,
-					"offset" : 2727
-				},
-				
-				{
-					"line" : 296,
-					"offset" : 2729
+					"line" : 286,
+					"offset" : 2714
 				},
 				
 				{
 					"line" : 297,
-					"offset" : 2734
+					"offset" : 2716
 				},
 				
 				{
-					"line" : 298,
-					"offset" : 2737
+					"line" : 288,
+					"offset" : 2717
 				},
 				
 				{
-					"line" : 299,
-					"offset" : 2739
+					"line" : 289,
+					"offset" : 2719
+				},
+				
+				{
+					"line" : 290,
+					"offset" : 2720
+				},
+				
+				{
+					"line" : 297,
+					"offset" : 2722
+				},
+				
+				{
+					"line" : 292,
+					"offset" : 2723
+				},
+				
+				{
+					"line" : 293,
+					"offset" : 2725
+				},
+				
+				{
+					"line" : 294,
+					"offset" : 2726
+				},
+				
+				{
+					"line" : 356,
+					"offset" : 2727
 				},
 				
 				{
 					"line" : 300,
-					"offset" : 2743
+					"offset" : 2728
 				},
 				
 				{
 					"line" : 301,
-					"offset" : 2745
+					"offset" : 2730
 				},
 				
 				{
 					"line" : 302,
-					"offset" : 2752
+					"offset" : 2735
 				},
 				
 				{
 					"line" : 303,
-					"offset" : 2762
+					"offset" : 2738
 				},
 				
 				{
 					"line" : 304,
-					"offset" : 2773
+					"offset" : 2740
 				},
 				
 				{
 					"line" : 305,
-					"offset" : 2776
+					"offset" : 2744
 				},
 				
 				{
 					"line" : 306,
-					"offset" : 2780
-				},
-				
-				{
-					"line" : 299,
-					"offset" : 2783
+					"offset" : 2746
 				},
 				
 				{
 					"line" : 307,
-					"offset" : 2785
+					"offset" : 2753
+				},
+				
+				{
+					"line" : 308,
+					"offset" : 2763
+				},
+				
+				{
+					"line" : 309,
+					"offset" : 2774
+				},
+				
+				{
+					"line" : 310,
+					"offset" : 2777
 				},
 				
 				{
 					"line" : 311,
-					"offset" : 2786
+					"offset" : 2781
+				},
+				
+				{
+					"line" : 304,
+					"offset" : 2784
 				},
 				
 				{
 					"line" : 312,
-					"offset" : 2788
-				},
-				
-				{
-					"line" : 313,
-					"offset" : 2792
-				},
-				
-				{
-					"line" : 315,
-					"offset" : 2796
+					"offset" : 2786
 				},
 				
 				{
 					"line" : 316,
-					"offset" : 2799
+					"offset" : 2787
 				},
 				
 				{
 					"line" : 317,
-					"offset" : 2805
+					"offset" : 2789
 				},
 				
 				{
 					"line" : 318,
-					"offset" : 2808
-				},
-				
-				{
-					"line" : 319,
-					"offset" : 2811
+					"offset" : 2793
 				},
 				
 				{
 					"line" : 320,
-					"offset" : 2814
+					"offset" : 2797
 				},
 				
 				{
 					"line" : 321,
-					"offset" : 2815
+					"offset" : 2803
 				},
 				
 				{
 					"line" : 322,
-					"offset" : 2816
+					"offset" : 2806
 				},
 				
 				{
 					"line" : 323,
-					"offset" : 2819
+					"offset" : 2809
 				},
 				
 				{
 					"line" : 324,
-					"offset" : 2821
+					"offset" : 2812
 				},
 				
 				{
 					"line" : 325,
-					"offset" : 2824
+					"offset" : 2813
 				},
 				
 				{
 					"line" : 326,
-					"offset" : 2828
+					"offset" : 2814
 				},
 				
 				{
-					"line" : 339,
-					"offset" : 2831
+					"line" : 327,
+					"offset" : 2817
 				},
 				
 				{
-					"line" : 331,
-					"offset" : 2832
+					"line" : 328,
+					"offset" : 2819
 				},
 				
 				{
-					"line" : 332,
-					"offset" : 2834
+					"line" : 329,
+					"offset" : 2823
 				},
 				
 				{
-					"line" : 333,
-					"offset" : 2838
+					"line" : 356,
+					"offset" : 2826
 				},
 				
 				{
 					"line" : 334,
-					"offset" : 2844
+					"offset" : 2827
 				},
 				
 				{
 					"line" : 335,
-					"offset" : 2848
+					"offset" : 2829
 				},
 				
 				{
 					"line" : 336,
-					"offset" : 2853
+					"offset" : 2833
 				},
 				
 				{
-					"line" : 343,
-					"offset" : 2856
+					"line" : 356,
+					"offset" : 2838
+				},
+				
+				{
+					"line" : 340,
+					"offset" : 2839
+				},
+				
+				{
+					"line" : 341,
+					"offset" : 2841
 				},
 				
 				{
 					"line" : 342,
-					"offset" : 2857
+					"offset" : 2845
 				},
 				
 				{
-					"line" : 344,
-					"offset" : 2858
+					"line" : 343,
+					"offset" : 2850
 				},
 				
 				{
-					"line" : 346,
-					"offset" : 2859
+					"line" : 341,
+					"offset" : 2852
 				},
 				
 				{
-					"line" : 347,
-					"offset" : 2864
+					"line" : 345,
+					"offset" : 2853
+				},
+				
+				{
+					"line" : 348,
+					"offset" : 2854
 				},
 				
 				{
 					"line" : 349,
-					"offset" : 2865
+					"offset" : 2856
 				},
 				
 				{
 					"line" : 350,
-					"offset" : 2870
+					"offset" : 2860
+				},
+				
+				{
+					"line" : 351,
+					"offset" : 2865
 				},
 				
 				{
 					"line" : 352,
-					"offset" : 2871
+					"offset" : 2870
 				},
 				
 				{
-					"line" : 358,
+					"line" : 349,
+					"offset" : 2873
+				},
+				
+				{
+					"line" : 354,
 					"offset" : 2874
 				},
 				
 				{
-					"line" : 362,
-					"offset" : 2877
-				},
-				
-				{
-					"line" : 360,
-					"offset" : 2878
-				},
-				
-				{
-					"line" : 362,
-					"offset" : 2879
+					"line" : 359,
+					"offset" : 2875
 				},
 				
 				{
 					"line" : 361,
-					"offset" : 2882
-				},
-				
-				{
-					"line" : 362,
-					"offset" : 2885
-				},
-				
-				{
-					"line" : 365,
-					"offset" : 2887
+					"offset" : 2876
 				},
 				
 				{
 					"line" : 363,
-					"offset" : 2888
-				},
-				
-				{
-					"line" : 365,
-					"offset" : 2889
+					"offset" : 2877
 				},
 				
 				{
 					"line" : 364,
-					"offset" : 2892
-				},
-				
-				{
-					"line" : 365,
-					"offset" : 2895
-				},
-				
-				{
-					"line" : 368,
-					"offset" : 2897
+					"offset" : 2882
 				},
 				
 				{
 					"line" : 366,
-					"offset" : 2898
-				},
-				
-				{
-					"line" : 368,
-					"offset" : 2899
+					"offset" : 2883
 				},
 				
 				{
 					"line" : 367,
-					"offset" : 2902
+					"offset" : 2888
 				},
 				
 				{
-					"line" : 368,
-					"offset" : 2904
+					"line" : 369,
+					"offset" : 2889
 				},
 				
 				{
-					"line" : 370,
-					"offset" : 2906
+					"line" : 375,
+					"offset" : 2892
 				},
 				
 				{
-					"line" : 371,
-					"offset" : 2908
+					"line" : 379,
+					"offset" : 2895
 				},
 				
 				{
-					"line" : 372,
-					"offset" : 2910
+					"line" : 377,
+					"offset" : 2896
 				},
 				
 				{
-					"line" : 373,
-					"offset" : 2912
+					"line" : 379,
+					"offset" : 2897
 				},
 				
 				{
-					"line" : 376,
-					"offset" : 2914
+					"line" : 378,
+					"offset" : 2900
+				},
+				
+				{
+					"line" : 379,
+					"offset" : 2903
 				},
 				
 				{
 					"line" : 382,
-					"offset" : 2915
+					"offset" : 2905
 				},
 				
 				{
-					"line" : 397,
-					"offset" : 2916
+					"line" : 380,
+					"offset" : 2906
 				},
 				
 				{
-					"line" : 383,
-					"offset" : 2917
+					"line" : 382,
+					"offset" : 2907
 				},
 				
 				{
-					"line" : 397,
-					"offset" : 2919
+					"line" : 381,
+					"offset" : 2910
 				},
 				
 				{
-					"line" : 396,
-					"offset" : 2922
-				},
-				
-				{
-					"line" : 384,
-					"offset" : 2923
-				},
-				
-				{
-					"line" : 396,
-					"offset" : 2924
+					"line" : 382,
+					"offset" : 2913
 				},
 				
 				{
 					"line" : 385,
-					"offset" : 2927
+					"offset" : 2915
 				},
 				
 				{
-					"line" : 386,
-					"offset" : 2942
+					"line" : 383,
+					"offset" : 2916
+				},
+				
+				{
+					"line" : 385,
+					"offset" : 2917
+				},
+				
+				{
+					"line" : 384,
+					"offset" : 2920
+				},
+				
+				{
+					"line" : 385,
+					"offset" : 2922
 				},
 				
 				{
 					"line" : 387,
-					"offset" : 2944
+					"offset" : 2924
 				},
 				
 				{
 					"line" : 388,
-					"offset" : 2945
+					"offset" : 2926
 				},
 				
 				{
 					"line" : 389,
-					"offset" : 2946
+					"offset" : 2928
 				},
 				
 				{
 					"line" : 390,
-					"offset" : 2947
-				},
-				
-				{
-					"line" : 391,
-					"offset" : 2950
+					"offset" : 2930
 				},
 				
 				{
 					"line" : 392,
-					"offset" : 2952
+					"offset" : 2932
+				},
+				
+				{
+					"line" : 393,
+					"offset" : 2937
 				},
 				
 				{
 					"line" : 394,
-					"offset" : 2958
-				},
-				
-				{
-					"line" : 396,
-					"offset" : 2961
+					"offset" : 2939
 				},
 				
 				{
 					"line" : 397,
-					"offset" : 2963
+					"offset" : 2942
 				},
 				
 				{
-					"line" : 398,
-					"offset" : 2965
+					"line" : 403,
+					"offset" : 2943
 				},
 				
 				{
 					"line" : 404,
-					"offset" : 2966
+					"offset" : 2944
 				},
 				
 				{
 					"line" : 405,
-					"offset" : 2967
+					"offset" : 2949
 				},
 				
 				{
 					"line" : 406,
-					"offset" : 2973
+					"offset" : 2950
 				},
 				
 				{
 					"line" : 407,
-					"offset" : 2979
+					"offset" : 2953
 				},
 				
 				{
 					"line" : 408,
-					"offset" : 2985
+					"offset" : 2956
+				},
+				
+				{
+					"line" : 413,
+					"offset" : 2957
 				},
 				
 				{
 					"line" : 409,
-					"offset" : 2989
+					"offset" : 2958
+				},
+				
+				{
+					"line" : 413,
+					"offset" : 2959
 				},
 				
 				{
 					"line" : 410,
-					"offset" : 2991
+					"offset" : 2962
+				},
+				
+				{
+					"line" : 411,
+					"offset" : 2964
 				},
 				
 				{
 					"line" : 412,
-					"offset" : 2992
+					"offset" : 2967
 				},
 				
 				{
-					"line" : 419,
-					"offset" : 2993
+					"line" : 413,
+					"offset" : 2968
 				},
 				
 				{
-					"line" : 420,
-					"offset" : 2994
+					"line" : 415,
+					"offset" : 2970
 				},
 				
 				{
-					"line" : 421,
-					"offset" : 2997
+					"line" : 416,
+					"offset" : 2973
 				},
 				
 				{
 					"line" : 422,
-					"offset" : 3000
+					"offset" : 2974
+				},
+				
+				{
+					"line" : 437,
+					"offset" : 2975
 				},
 				
 				{
 					"line" : 423,
-					"offset" : 3006
+					"offset" : 2976
+				},
+				
+				{
+					"line" : 437,
+					"offset" : 2978
+				},
+				
+				{
+					"line" : 436,
+					"offset" : 2981
 				},
 				
 				{
 					"line" : 424,
-					"offset" : 3009
+					"offset" : 2982
 				},
 				
 				{
-					"line" : 420,
-					"offset" : 3014
+					"line" : 436,
+					"offset" : 2983
+				},
+				
+				{
+					"line" : 425,
+					"offset" : 2986
+				},
+				
+				{
+					"line" : 426,
+					"offset" : 3001
 				},
 				
 				{
 					"line" : 427,
-					"offset" : 3015
+					"offset" : 3003
 				},
 				
 				{
 					"line" : 428,
-					"offset" : 3016
+					"offset" : 3004
+				},
+				
+				{
+					"line" : 429,
+					"offset" : 3005
+				},
+				
+				{
+					"line" : 430,
+					"offset" : 3006
+				},
+				
+				{
+					"line" : 431,
+					"offset" : 3009
+				},
+				
+				{
+					"line" : 432,
+					"offset" : 3011
 				},
 				
 				{
@@ -11593,53 +11821,53 @@
 				},
 				
 				{
-					"line" : 435,
-					"offset" : 3018
-				},
-				
-				{
 					"line" : 436,
-					"offset" : 3021
+					"offset" : 3020
 				},
 				
 				{
 					"line" : 437,
-					"offset" : 3024
+					"offset" : 3022
 				},
 				
 				{
 					"line" : 438,
-					"offset" : 3030
+					"offset" : 3024
 				},
 				
 				{
-					"line" : 439,
-					"offset" : 3033
+					"line" : 444,
+					"offset" : 3025
 				},
 				
 				{
-					"line" : 435,
+					"line" : 445,
+					"offset" : 3026
+				},
+				
+				{
+					"line" : 446,
+					"offset" : 3032
+				},
+				
+				{
+					"line" : 447,
 					"offset" : 3038
 				},
 				
 				{
-					"line" : 442,
-					"offset" : 3039
-				},
-				
-				{
-					"line" : 443,
-					"offset" : 3040
+					"line" : 448,
+					"offset" : 3044
 				},
 				
 				{
 					"line" : 449,
-					"offset" : 3041
+					"offset" : 3048
 				},
 				
 				{
-					"line" : 451,
-					"offset" : 3042
+					"line" : 450,
+					"offset" : 3050
 				},
 				
 				{
@@ -11648,360 +11876,465 @@
 				},
 				
 				{
-					"line" : 453,
-					"offset" : 3054
-				},
-				
-				{
-					"line" : 455,
-					"offset" : 3063
-				},
-				
-				{
-					"line" : 456,
-					"offset" : 3067
-				},
-				
-				{
-					"line" : 458,
-					"offset" : 3073
-				},
-				
-				{
 					"line" : 459,
-					"offset" : 3075
+					"offset" : 3052
 				},
 				
 				{
 					"line" : 460,
-					"offset" : 3078
+					"offset" : 3053
 				},
 				
 				{
 					"line" : 461,
-					"offset" : 3081
+					"offset" : 3056
 				},
 				
 				{
 					"line" : 462,
-					"offset" : 3082
+					"offset" : 3059
 				},
 				
 				{
 					"line" : 463,
-					"offset" : 3093
+					"offset" : 3065
 				},
 				
 				{
-					"line" : 465,
-					"offset" : 3097
+					"line" : 464,
+					"offset" : 3068
 				},
 				
 				{
-					"line" : 471,
-					"offset" : 3098
+					"line" : 460,
+					"offset" : 3073
 				},
 				
 				{
-					"line" : 472,
-					"offset" : 3099
+					"line" : 467,
+					"offset" : 3074
 				},
 				
 				{
-					"line" : 478,
-					"offset" : 3100
-				},
-				
-				{
-					"line" : 473,
-					"offset" : 3101
-				},
-				
-				{
-					"line" : 478,
-					"offset" : 3102
+					"line" : 468,
+					"offset" : 3075
 				},
 				
 				{
 					"line" : 474,
-					"offset" : 3105
+					"offset" : 3076
 				},
 				
 				{
 					"line" : 475,
-					"offset" : 3107
+					"offset" : 3077
 				},
 				
 				{
 					"line" : 476,
-					"offset" : 3129
+					"offset" : 3080
+				},
+				
+				{
+					"line" : 477,
+					"offset" : 3083
 				},
 				
 				{
 					"line" : 478,
-					"offset" : 3130
+					"offset" : 3089
 				},
 				
 				{
 					"line" : 479,
-					"offset" : 3132
+					"offset" : 3092
 				},
 				
 				{
-					"line" : 480,
-					"offset" : 3134
+					"line" : 475,
+					"offset" : 3097
 				},
 				
 				{
 					"line" : 482,
-					"offset" : 3135
+					"offset" : 3098
+				},
+				
+				{
+					"line" : 483,
+					"offset" : 3099
 				},
 				
 				{
 					"line" : 489,
-					"offset" : 3136
-				},
-				
-				{
-					"line" : 496,
-					"offset" : 3137
-				},
-				
-				{
-					"line" : 490,
-					"offset" : 3138
-				},
-				
-				{
-					"line" : 496,
-					"offset" : 3139
+					"offset" : 3100
 				},
 				
 				{
 					"line" : 491,
-					"offset" : 3142
+					"offset" : 3101
 				},
 				
 				{
 					"line" : 492,
-					"offset" : 3144
+					"offset" : 3110
 				},
 				
 				{
 					"line" : 493,
-					"offset" : 3146
+					"offset" : 3113
 				},
 				
 				{
-					"line" : 494,
-					"offset" : 3156
+					"line" : 495,
+					"offset" : 3122
 				},
 				
 				{
 					"line" : 496,
-					"offset" : 3158
+					"offset" : 3126
 				},
 				
 				{
-					"line" : 497,
-					"offset" : 3160
+					"line" : 498,
+					"offset" : 3132
 				},
 				
 				{
-					"line" : 504,
-					"offset" : 3161
+					"line" : 499,
+					"offset" : 3134
 				},
 				
 				{
-					"line" : 511,
-					"offset" : 3162
+					"line" : 500,
+					"offset" : 3137
+				},
+				
+				{
+					"line" : 501,
+					"offset" : 3140
+				},
+				
+				{
+					"line" : 502,
+					"offset" : 3141
+				},
+				
+				{
+					"line" : 503,
+					"offset" : 3152
 				},
 				
 				{
 					"line" : 505,
-					"offset" : 3163
+					"offset" : 3156
 				},
 				
 				{
 					"line" : 511,
-					"offset" : 3164
-				},
-				
-				{
-					"line" : 506,
-					"offset" : 3167
-				},
-				
-				{
-					"line" : 507,
-					"offset" : 3169
-				},
-				
-				{
-					"line" : 508,
-					"offset" : 3171
-				},
-				
-				{
-					"line" : 509,
-					"offset" : 3181
-				},
-				
-				{
-					"line" : 511,
-					"offset" : 3182
+					"offset" : 3157
 				},
 				
 				{
 					"line" : 512,
-					"offset" : 3184
+					"offset" : 3158
 				},
 				
 				{
-					"line" : 519,
-					"offset" : 3185
+					"line" : 518,
+					"offset" : 3159
 				},
 				
 				{
-					"line" : 520,
-					"offset" : 3186
+					"line" : 513,
+					"offset" : 3160
 				},
 				
 				{
-					"line" : 521,
+					"line" : 518,
+					"offset" : 3161
+				},
+				
+				{
+					"line" : 514,
+					"offset" : 3164
+				},
+				
+				{
+					"line" : 515,
+					"offset" : 3166
+				},
+				
+				{
+					"line" : 516,
+					"offset" : 3188
+				},
+				
+				{
+					"line" : 518,
 					"offset" : 3189
 				},
 				
 				{
-					"line" : 522,
-					"offset" : 3193
-				},
-				
-				{
-					"line" : 523,
-					"offset" : 3197
-				},
-				
-				{
-					"line" : 524,
-					"offset" : 3205
-				},
-				
-				{
-					"line" : 525,
-					"offset" : 3210
+					"line" : 519,
+					"offset" : 3191
 				},
 				
 				{
 					"line" : 520,
-					"offset" : 3215
+					"offset" : 3193
 				},
 				
 				{
-					"line" : 527,
-					"offset" : 3216
+					"line" : 522,
+					"offset" : 3194
 				},
 				
 				{
-					"line" : 528,
-					"offset" : 3217
-				},
-				
-				{
-					"line" : 533,
-					"offset" : 3218
-				},
-				
-				{
-					"line" : 534,
-					"offset" : 3219
-				},
-				
-				{
-					"line" : 535,
-					"offset" : 3223
+					"line" : 529,
+					"offset" : 3195
 				},
 				
 				{
 					"line" : 536,
-					"offset" : 3227
+					"offset" : 3196
 				},
 				
 				{
-					"line" : 537,
-					"offset" : 3231
+					"line" : 530,
+					"offset" : 3197
 				},
 				
 				{
-					"line" : 538,
-					"offset" : 3239
+					"line" : 536,
+					"offset" : 3198
 				},
 				
 				{
-					"line" : 539,
-					"offset" : 3244
+					"line" : 531,
+					"offset" : 3201
+				},
+				
+				{
+					"line" : 532,
+					"offset" : 3203
+				},
+				
+				{
+					"line" : 533,
+					"offset" : 3205
 				},
 				
 				{
 					"line" : 534,
-					"offset" : 3249
+					"offset" : 3215
 				},
 				
 				{
-					"line" : 541,
-					"offset" : 3250
+					"line" : 536,
+					"offset" : 3217
 				},
 				
 				{
-					"line" : 542,
-					"offset" : 3251
+					"line" : 537,
+					"offset" : 3219
 				},
 				
 				{
 					"line" : 544,
-					"offset" : 3252
+					"offset" : 3220
 				},
 				
 				{
-					"line" : 548,
-					"offset" : 3253
+					"line" : 551,
+					"offset" : 3221
 				},
 				
 				{
 					"line" : 545,
-					"offset" : 3254
+					"offset" : 3222
 				},
 				
 				{
-					"line" : 548,
-					"offset" : 3255
+					"line" : 551,
+					"offset" : 3223
 				},
 				
 				{
 					"line" : 546,
-					"offset" : 3258
+					"offset" : 3226
 				},
 				
 				{
 					"line" : 547,
-					"offset" : 3260
+					"offset" : 3228
 				},
 				
 				{
 					"line" : 548,
-					"offset" : 3261
+					"offset" : 3230
 				},
 				
 				{
-					"line" : 550,
-					"offset" : 3263
+					"line" : 549,
+					"offset" : 3240
+				},
+				
+				{
+					"line" : 551,
+					"offset" : 3241
+				},
+				
+				{
+					"line" : 552,
+					"offset" : 3243
+				},
+				
+				{
+					"line" : 559,
+					"offset" : 3244
+				},
+				
+				{
+					"line" : 560,
+					"offset" : 3245
+				},
+				
+				{
+					"line" : 561,
+					"offset" : 3248
+				},
+				
+				{
+					"line" : 562,
+					"offset" : 3252
+				},
+				
+				{
+					"line" : 563,
+					"offset" : 3256
+				},
+				
+				{
+					"line" : 564,
+					"offset" : 3264
+				},
+				
+				{
+					"line" : 565,
+					"offset" : 3269
+				},
+				
+				{
+					"line" : 560,
+					"offset" : 3274
+				},
+				
+				{
+					"line" : 567,
+					"offset" : 3275
+				},
+				
+				{
+					"line" : 568,
+					"offset" : 3276
+				},
+				
+				{
+					"line" : 573,
+					"offset" : 3277
+				},
+				
+				{
+					"line" : 574,
+					"offset" : 3278
+				},
+				
+				{
+					"line" : 575,
+					"offset" : 3282
+				},
+				
+				{
+					"line" : 576,
+					"offset" : 3286
+				},
+				
+				{
+					"line" : 577,
+					"offset" : 3290
+				},
+				
+				{
+					"line" : 578,
+					"offset" : 3298
+				},
+				
+				{
+					"line" : 579,
+					"offset" : 3303
+				},
+				
+				{
+					"line" : 574,
+					"offset" : 3308
+				},
+				
+				{
+					"line" : 581,
+					"offset" : 3309
+				},
+				
+				{
+					"line" : 582,
+					"offset" : 3310
+				},
+				
+				{
+					"line" : 584,
+					"offset" : 3311
+				},
+				
+				{
+					"line" : 588,
+					"offset" : 3312
+				},
+				
+				{
+					"line" : 585,
+					"offset" : 3313
+				},
+				
+				{
+					"line" : 588,
+					"offset" : 3314
+				},
+				
+				{
+					"line" : 586,
+					"offset" : 3317
+				},
+				
+				{
+					"line" : 587,
+					"offset" : 3319
+				},
+				
+				{
+					"line" : 588,
+					"offset" : 3320
+				},
+				
+				{
+					"line" : 590,
+					"offset" : 3322
 				}
 			],
 			"offsets" : 
 			[
 				
 				{
-					"endoffset" : 3264,
+					"endoffset" : 3323,
 					"startoffset" : 2189
 				}
 			]

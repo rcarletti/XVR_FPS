@@ -4,6 +4,7 @@ SET CAMERA_FAR  = 300;
 SET CAMERA_HEIGHT = 1.5;
 SET AMMOS_INTERVAL = 30000;
 SET HEALTH_INTERVAL = 15000;
+SET SCORE_TIMER = 1000;
 
 #include "weapon.s3d"
 #include "healthPickups.s3d"
@@ -47,6 +48,7 @@ class scenario
 	var healthPickups;
 	var healthTimer;
 	var healthNum;
+	var scoreTimer;
 	
 	//functions
 	init(textfile);	
@@ -66,6 +68,7 @@ class scenario
 	isHealthPackPresent(posx, posz);
 	pickUpHealth(posx, posz);
 	updateHealthPickUps();
+	sendScores();
 };
 
 //********************************************************************
@@ -170,6 +173,8 @@ function scenario :: init(textfile){
 	for (i = 0; i < healthNum; i++) {
 		healthTimer[i] = -1;
 	}
+	
+	scoreTimer = 0;
 	
 	
 	/*init camera */		
@@ -312,7 +317,6 @@ function scenario :: update(){
 					trace(data);
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
-						Outputln("i'm hurt");
 						myPlayer.health -= data[3];
 						myPlayer.hitPlayer();
 						if(myPlayer.health <= 0) {
@@ -321,7 +325,6 @@ function scenario :: update(){
 							PDU[0] = KILL_PDU;
 							PDU[1] = myPlayer.ID;
 							PDU[2] = data[1];
-							Outputln("sending kill pdu");
 							trace(PDU);
 							networkSend(PDU);
 						}					
@@ -329,18 +332,27 @@ function scenario :: update(){
 				}
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
-					Outputln("receiving kill pdu from "+ str(data[1]));
 					if(data[2] == myPlayer.ID) {
 						myPlayer.score += 10;
-						Outputln("killed someone");
 					}
 				}
 				
-				else if(data[0] == DISCONNECT_PDU) {
-					trace(data);
+				else if (data[0] == DISCONNECT_PDU) {
 					for(var i = 0; i < len(enemies); i++) {
 						if(enemies[i].ID == data[1]) {
 							adel(enemies, i);
+						}
+					}
+				}
+				
+				else if (data[0] == SCORE_PDU) {
+					trace(data);
+					for(var i = 1; i < len(data) - 1; i += 2) {
+						Outputln("len data: " + str(len(data)));
+						Outputln(str(i));
+						var e = getEnemyById(data[i]);
+						if(e != null && data[i + 1] > e.score) {
+							e.score = data[i + 1];
 						}
 					}
 				}
@@ -380,7 +392,30 @@ function scenario :: update(){
 	updateAmmos();
 	updateHealthPickUps();
 	
-	//do some other stuff
+	if(getTime() - scoreTimer > SCORE_TIMER) {
+		sendScores();
+		scoreTimer = getTime();
+	}
+
+}
+
+//********************************************************************
+//SEND SCORES
+//********************************************************************
+
+function scenario :: sendScores() {
+	var PDU = Array((len(enemies) * 2) + 3);
+	PDU[0] = SCORE_PDU;
+	PDU[1] = myPlayer.ID;
+	PDU[2] = myPlayer.score;
+	var i = 3;
+	foreach (var e in enemies) {
+		PDU[i] = e.ID;
+		PDU[i + 1] = e.score;
+		i += 2;
+	}
+	trace(PDU);
+	networkSend(PDU);
 }
 
 //********************************************************************
