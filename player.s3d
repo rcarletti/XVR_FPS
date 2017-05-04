@@ -282,9 +282,9 @@ function player :: sendData() {
 		PDU[2] = position.x;
 		PDU[3] = position.y;
 		PDU[4] = position.z;
-		PDU[5] = direction.x;
-		PDU[6] = direction.y;
-		PDU[7] = direction.z;
+		PDU[5] = walkDirection.x;
+		PDU[6] = walkDirection.y;
+		PDU[7] = walkDirection.z;
 		PDU[8] = angleX;
 		PDU[9] = angleY;
 		PDU[10] = currWeapon;
