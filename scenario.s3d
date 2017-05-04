@@ -267,24 +267,24 @@ function scenario :: update(){
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					e.position = [data[3], data[4], data[5]];
-					e.walkDirection = [data[6], data[7], data[8]];
-					e.angleX = data[9];
-					e.angleY = data[10];
-					if (data[11] != e.currWeapon) {
-						e.swapWeapon(data[11]);
+					e.position = [data[2], data[3], data[4]];
+					e.walkDirection = [data[5], data[6], data[7]];
+					e.angleX = data[8];
+					e.angleY = data[9];
+					if (data[10] != e.currWeapon) {
+						e.swapWeapon(data[10]);
 					}
-					e.health = data[12];
-					e.currentFrame = data[13];
-					if (data[14] == 1) {
-						e.isWalking = true;
-						e.speedMultiplier = data[14];
-					}
-					else if(data[14] == 2) {
+					e.health = data[11];
+					e.currentFrame = data[12];
+					if (data[13] == 1) {
 						e.isWalking = true;
 						e.speedMultiplier = data[13];
 					}
-					else if(data[14] == 0) {
+					else if(data[13] == 2) {
+						e.isWalking = true;
+						e.speedMultiplier = data[13];
+					}
+					else if(data[13] == 0) {
 						e.isWalking = false;
 						e.isRunning = false;
 					}
@@ -294,9 +294,9 @@ function scenario :: update(){
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					var bLen = (len(data) - 3) / 8;
+					var bLen = (len(data) - 2) / 8;
 					asize (e.bullets, bLen);
-					for (var i = 3, j = 0; i < (bLen * 8); i+= 8, j++) {
+					for (var i = 2, j = 0; i < (bLen * 8); i+= 8, j++) {
 						var tmpB = bullet();
 						tmpB.init(e.color, data[i + 6]);
 						var position = [data[i + 0], data[i + 1], data[i + 2]];
@@ -310,18 +310,17 @@ function scenario :: update(){
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
 					trace(data);
-					if (data[3] == myPlayer.ID) {
+					if (data[2] == myPlayer.ID) {
 						/*damage*/
 						Outputln("i'm hurt");
-						myPlayer.health -= data[4];
+						myPlayer.health -= data[3];
 						myPlayer.hitPlayer();
 						if(myPlayer.health <= 0) {
 							myPlayer.spawn();
-							var PDU = Array(4);
+							var PDU = Array(3);
 							PDU[0] = KILL_PDU;
 							PDU[1] = myPlayer.ID;
-							PDU[2] = myPlayer.packetNum++;
-							PDU[3] = data[1];
+							PDU[2] = data[1];
 							Outputln("sending kill pdu");
 							trace(PDU);
 							networkSend(PDU);
@@ -331,7 +330,7 @@ function scenario :: update(){
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
 					Outputln("receiving kill pdu from "+ str(data[1]));
-					if(data[3] == myPlayer.ID) {
+					if(data[2] == myPlayer.ID) {
 						myPlayer.score += 10;
 						Outputln("killed someone");
 					}
@@ -394,12 +393,11 @@ function scenario :: checkPlayerCollision() {
 			if(b.life!= 0 && isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
 				e.hitPlayer();
 				b.life = 0;
-				var PDU = Array(5);
+				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
-				PDU[2] = myPlayer.packetNum++;
-				PDU[3] = e.ID;
-				PDU[4] = myPlayer.weapons[e.currWeapon].damage;
+				PDU[2] = e.ID;
+				PDU[3] = myPlayer.weapons[e.currWeapon].damage;
 				
 				networkSend(PDU);
 			}

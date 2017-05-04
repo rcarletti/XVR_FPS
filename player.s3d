@@ -69,7 +69,6 @@ class player
 	var heartbeatTimer;
 	var positionTimer;
 	var bulletsTimer;
-	var packetNum;
 
 
 	/*functions */
@@ -124,7 +123,6 @@ function player :: init(ID, col, pos){
 	isRunning = false;
 	positionTimer = 0;
 	bulletsTimer = 0;
-	packetNum = 0;
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -254,11 +252,10 @@ function player :: update(){
 //********************************************************************
 
 function player :: sendBulletsData() {
-	var PDU = Array((bulletNum * 8) + 3);
+	var PDU = Array((bulletNum * 8) + 2);
 		PDU[0] = BULLETS_PDU;
 		PDU[1] = ID;
-		PDU[2] = packetNum++;
-		var i = 3;
+		var i = 2;
 		foreach (var b in bullets) {
 			PDU[i + 0] = b.position.x;
 			PDU[i + 1] = b.position.y;
@@ -279,29 +276,28 @@ function player :: sendBulletsData() {
 //********************************************************************
 
 function player :: sendData() {
-		var PDU = array(15);
+		var PDU = array(14);
 		PDU[0] = DATA_PDU;
 		PDU[1] = ID;
-		PDU[2] = packetNum++;
-		PDU[3] = position.x;
-		PDU[4] = position.y;
-		PDU[5] = position.z;
-		PDU[6] = direction.x;
-		PDU[7] = direction.y;
-		PDU[8] = direction.z;
-		PDU[9] = angleX;
-		PDU[10] = angleY;
-		PDU[11] = currWeapon;
-		PDU[12] = health;
-		PDU[13] = currentFrame;
+		PDU[2] = position.x;
+		PDU[3] = position.y;
+		PDU[4] = position.z;
+		PDU[5] = direction.x;
+		PDU[6] = direction.y;
+		PDU[7] = direction.z;
+		PDU[8] = angleX;
+		PDU[9] = angleY;
+		PDU[10] = currWeapon;
+		PDU[11] = health;
+		PDU[12] = currentFrame;
 		if(isRunning) {
-			PDU[14] = 2;
+			PDU[13] = 2;
 		}
 		else if (isWalking) {
-			PDU[14] = 1;
+			PDU[13] = 1;
 		}
 		else {
-			PDU[14] = 0;
+			PDU[13] = 0;
 		}
 		
 		networkSend(PDU);
@@ -312,13 +308,12 @@ function player :: sendData() {
 //********************************************************************
 
 function player :: sendHeartbeats() {
-			var PDU = array(6);
+			var PDU = array(5);
 			PDU[0] = HEARTBEAT_PDU;
 			PDU[1] = ID;
-			PDU[2] = packetNum++;
-			PDU[3] = color.r;
-			PDU[4] = color.g;
-			PDU[5] = color.b;
+			PDU[2] = color.r;
+			PDU[3] = color.g;
+			PDU[4] = color.b;
 			
 			networkSend(PDU);
 		
