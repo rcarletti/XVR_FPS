@@ -54,6 +54,8 @@ class scenario
 	var headshotTimer;
 	var killPktNum;
 	var hitPktNum;
+	var kRecvPktNum;
+	var hRecvPktNum;
 	
 	//functions
 	init(textfile);	
@@ -88,6 +90,8 @@ function scenario :: init(textfile){
 	headshotTimer = 0;
 	hitPktNum = 0;
 	killPktNum = 0;
+	kRecvPktNum = -1;
+	hRecvPktNum = -1;
 	
 	//load scenario
 	if (!FileExist(textfile)) {
@@ -355,9 +359,12 @@ function scenario :: update(){
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
 					if(data[2] == myPlayer.ID) {
-						if(data[3])
-							myPlayer.score += 20;
-						else myPlayer.score += 10;
+						if(data[4] > kRecvPktNum){
+							if(data[3])
+								myPlayer.score += 20;
+							else myPlayer.score += 10;
+						kRecvPktNum = data[4];
+						}
 					}
 				}
 				
@@ -372,8 +379,6 @@ function scenario :: update(){
 				else if (data[0] == SCORE_PDU) {
 
 					for(var i = 1; i < len(data) - 1; i += 2) {
-						Outputln("len data: " + str(len(data)));
-						Outputln(str(i));
 						var e = getEnemyById(data[i]);
 						if(e != null && data[i + 1] > e.score) {
 							e.score = data[i + 1];
@@ -492,7 +497,6 @@ function scenario :: checkPlayerCollision() {
 				PDU[4] = hitPktNum;
 				networkSend(PDU);
 				hitPktNum++;
-				trace(PDU);
 			}
 		}
 	}
@@ -510,7 +514,7 @@ function scenario :: isBulletColliding(b, e, radius) {
 	    b.position.y >= e.position.y + 1 - radius &&
 	    b.position.y < e.position.y + 1 + radius
 		) {
-			Outputln(b.position.y);
+
 			return  b.position.y;
 		}
 	else return -1;
