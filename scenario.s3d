@@ -344,6 +344,15 @@ function scenario :: update(){
 								PDU[3] = true;
 							else PDU[3] = false;
 							PDU[4] = killPktNum;
+							var pktTimer = getTime();
+							for(var i = 0; i < 4; i++) {
+								if(getTime() - pktTimer > PACKET_TIMER) {
+									networkSend(PDU);
+									pktTimer = getTime();
+								}
+									
+								
+							}
 							networkSend(PDU);
 							killPktNum++;
 						}					
@@ -369,8 +378,6 @@ function scenario :: update(){
 				else if (data[0] == SCORE_PDU) {
 
 					for(var i = 1; i < len(data) - 1; i += 2) {
-						Outputln("len data: " + str(len(data)));
-						Outputln(str(i));
 						var e = getEnemyById(data[i]);
 						if(e != null && data[i + 1] > e.score) {
 							e.score = data[i + 1];
@@ -489,7 +496,6 @@ function scenario :: checkPlayerCollision() {
 				PDU[4] = hitPktNum;
 				networkSend(PDU);
 				hitPktNum++;
-				trace(PDU);
 			}
 		}
 	}
