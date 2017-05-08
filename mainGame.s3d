@@ -22,9 +22,10 @@ function CameraMoveMouse();
 function DrawGrid(col, size);
 function showCrosshair();
 function showStats();
-function prova();
+function showBar();
 function showScores();
 function drawMenu();
+function drawRect(minx, miny, maxx, maxy);
 
 var level;
 var myPlayer;
@@ -33,6 +34,11 @@ var enemyNumber = 0;
 var loginTimer = 0;
 var showMenu = true;
 var enemyLastId = 0;
+var hText;
+var bText;
+var cText;
+var mText;
+var grabMouse = false;
 
 function OnDownload() {
 	// TODO: download your resources here
@@ -51,9 +57,11 @@ function maxID() {
 }
 
 function OnInit(params) {
-	
-	var w = CVmIEWindow();	
-	w.Navigate("index.html");
+
+	htext = CVmTexture("health.png");
+	bText = CVmTexture("bullets.png");
+	cText = CVmTexture("cup.png");
+	mText = CVmTexture("menu.jpg");
 
 	/* initialize light */
 	Light0 = CVmLight();
@@ -105,6 +113,7 @@ function OnInit(params) {
 	enemy2 = level.addPlayer();
 	level.addEnemy(enemy2);
 	*/
+	grabMouse = true;
 	ShowCursor(FALSE);
 	ShowCursor(FALSE);
 }
@@ -117,60 +126,83 @@ function showCrosshair()
 }
 
 function drawMenu() {
+	
+	
+	
+	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+	glDisable(GL_LIGHTING);
+	
+	glEnable(GL_BLEND);
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0, 40, 0, 30, -1.0, 1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			glColor([1, 1, 1, 1]);
+			SetActiveTexture(mText);
+			drawRect(0, 0, 40, 40);
+			glColor([1, 1, 1, 0.6]);
+			glLoadIdentity();
+			glBegin(GL_QUADS);
+			glVertex(0,  3, 0.0);
+			glVertex(40, 3, 0.0);
+			glVertex(40, 23, 0.0);
+			glVertex(0, 23, 0.0);
+			glEnd();
+	glPopMatrix();
+
+	
+	glMatrixMode(GL_PROJECTION);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+	glPopAttrib();
+	glDisable(GL_BLEND);
+	
+	
 	var x = 0.3;
 	var y = 0.8;
-	ConsoleColor([0.18,0.18,0.18]);
-	ConsoleFilledRect (0.15, 0.9, 0.68, 0.8);
 	ConsoleColor([0.93, 0.92, 0.55]);
-	ConsoleFont("Tahoma", 60);
-	ConsoleText(x + 0.05, y , "CONTROLS" );
-	ConsoleLines([x - 0.13 , y - 0.03, x + 0.51, y- 0.03 ]);
-	ConsoleFont("Arial", 20);
+	ConsoleFont("Tahoma", 40);
+	ConsoleText(x + 0.025, y , "CONTROLS" );
+	ConsoleFont("Arial", 18);
 	ConsoleText(x - 0.1, y - 0.07 , "Left Mouse Button" );
 	ConsoleText(x + 0.3, y - 0.07 , "Shoot" );
-	ConsoleText(x - 0.1, y - 0.11 , "Spacebar" );
-	ConsoleText(x + 0.3, y - 0.11 , "Jump" );
-	ConsoleText(x - 0.1, y - 0.15 , "1" );
-	ConsoleText(x + 0.3, y - 0.15 , "Change Weapon" );
-	ConsoleText(x - 0.1, y - 0.19 , "R" );
-	ConsoleText(x + 0.3, y - 0.19 , "Reload" );
-	ConsoleText(x - 0.1, y - 0.23 , "W" );
-	ConsoleText(x + 0.3, y - 0.23 , "Walk Forward" );
-	ConsoleText(x - 0.1, y - 0.27 , "S" );
-	ConsoleText(x + 0.3, y - 0.27 , "Walk Backwards" );
-	ConsoleText(x - 0.1, y - 0.31 , "A" );
-	ConsoleText(x + 0.3, y - 0.31 , "Walk Left" );
-	ConsoleText(x - 0.1, y - 0.35 , "D" );
-	ConsoleText(x + 0.3, y - 0.35 , "Walk right" );
-	ConsoleText(x - 0.1, y - 0.39 , "SHIFT" );
-	ConsoleText(x + 0.3, y - 0.39 , "Run" );	
-	ConsoleText(x - 0.1, y - 0.43 , "T" );
-	ConsoleText(x + 0.3, y - 0.43 , "Third Person Camera" );
-	ConsoleText(x - 0.1, y - 0.47 , "F" );
-	ConsoleText(x + 0.3, y - 0.47 , "First Person Camera" );
-	ConsoleLines([x - 0.13 , y - 0.5, x + 0.51, y- 0.5 ]);
-	ConsoleText(0.35, y - 0.6 , "PRESS ENTER TO CONTINUE" );
+	ConsoleText(x - 0.1, y - 0.12 , "Spacebar" );
+	ConsoleText(x + 0.3, y - 0.12 , "Jump" );
+	ConsoleText(x - 0.1, y - 0.17 , "1" );
+	ConsoleText(x + 0.3, y - 0.17 , "Change Weapon" );
+	ConsoleText(x - 0.1, y - 0.22 , "R" );
+	ConsoleText(x + 0.3, y - 0.22 , "Reload" );
+	ConsoleText(x - 0.1, y - 0.27 , "W" );
+	ConsoleText(x + 0.3, y - 0.27 , "Walk Forward" );
+	ConsoleText(x - 0.1, y - 0.32 , "S" );
+	ConsoleText(x + 0.3, y - 0.32 , "Walk Backwards" );
+	ConsoleText(x - 0.1, y - 0.37 , "A" );
+	ConsoleText(x + 0.3, y - 0.37 , "Walk Left" );
+	ConsoleText(x - 0.1, y - 0.42 , "D" );
+	ConsoleText(x + 0.3, y - 0.42 , "Walk right" );
+	ConsoleText(x - 0.1, y - 0.47 , "SHIFT" );
+	ConsoleText(x + 0.3, y - 0.47 , "Run" );	
+	ConsoleText(x - 0.1, y - 0.52 , "T" );
+	ConsoleText(x + 0.3, y - 0.52 , "Third Person Camera" );
+	ConsoleText(x - 0.1, y - 0.57 , "F" );
+	ConsoleText(x + 0.3, y - 0.57 , "First Person Camera" );
+	ConsoleText(0.25, y - 0.65 , "PRESS ENTER TO CONTINUE" );
 }
 
 function showStats() {
-	var remainingHealth = myPlayer.health;
-	var x = 0.035;
-	var y = 0.95;
-	var width = 0.4;
-	var height = 0.05;
-	ConsoleFont("Arial", 20);
 	ConsoleColor([1,1,1]);
-	ConsoleText(0.08, 0.93, str(remainingHealth) + "/"+ str(MAX_HEALTH) );
-	ConsoleFilledRect (x, y, 0.03, 0.01);
-	ConsoleFilledRect (x + 0.01, y + 0.012, 0.01, 0.035);
 	if (!myPlayer.isReloading){
-		ConsoleText(0.08, y - 0.07, str(myPlayer.weapons[myPlayer.currWeapon].bullets) + " / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
+		ConsoleText(0.45, 0.06, str(myPlayer.weapons[myPlayer.currWeapon].bullets) + " / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
 	}
 	else {
-		ConsoleText(0.08, y - 0.07, "-- / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
+		ConsoleText(0.45,0.06, "-- / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
 	}
-	
-	ConsoleText(x, 0.05, "SCORE: " + str(myPlayer.score));
+	ConsoleFont("Arial", 20);
+	ConsoleText(0.17, 0.06,str(myPlayer.health));
+	ConsoleText(0.71, 0.06,str(myPlayer.score));
 }
 
 function showScores() {
@@ -194,28 +226,43 @@ function OnFrame() {
 	//CameraMoveMouse();
 	
 	if(showMenu) {
+		SceneBegin();
 		drawMenu();
+		
 		if(Keypressed(VK_RETURN)) {
 			showMenu = false;
 		}
+		
+		SceneEnd();
 	}
 	
 	else {
+		static var esc_pressed = false;
+		if (KeyPressed(VK_ESCAPE) && !esc_pressed)
+		{
+			esc_pressed = true;
+			GrabMouse = !GrabMouse;
+			ShowCursor(!GrabMouse);
+		}
+		else
+			esc_pressed = false;
+			
 		level.update();
 		showCrosshair();
 		showStats();
+	
 		SceneBegin();
 		// TODO: put your drawing code here
 		level.draw();
-		prova();
+		showBar();
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
-		}
-		
+		}		
 		Light0.SetPosition(Level.myPlayer.Position);
-		
 		//keep cursor centered
-		SetCursorPos(0.5, 0.5);
+		if(grabMouse)
+			SetCursorPos(0.5, 0.5);
+		
 		SceneEnd();
 	}
 		
@@ -248,51 +295,61 @@ function OnExit() {
 	PDU[1] = myPlayer.ID;
 	
 	networkSend(PDU);
+	
+	Outputln("exit");
 }
 
 
-function DrawGrid(col, size)
-{
-	/* let's not mess up current OpenGL status */
-	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+function showBar() {
 	
-	glLineWidth(1);
-	glDisable(GL_LIGHTING);
-	glColor(col);
-	var max = size / 2.0;
-	var min = -max;	
-	var step = size / 10.0;
-	
-	glBegin(GL_LINES);
-		for (var i = min; i <= max; i += step)
-		{
-			glVertex(i, 0, max);
-			glVertex(i, 0, min);
-			
-			glVertex(max, 0, i);
-			glVertex(min, 0, i);
-		}
-	glEnd();
-	
-	/* polite restoration of previous OpenGL status */
-	glPopAttrib();
-}
-
-function prova() {
 	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
 	glDisable(GL_LIGHTING);
-	glColor([0.9, 0.9, 0.9]);
+	glColor([0.75, 0.94, 1, 0.11]);
 	glEnable(GL_BLEND);
-	//glEnable(GL_TEXTURE_2D);
-	glBegin(GL_QUADS);
-	glVertex(1, 2, 0.0);
-	glVertex(1, 3, 0.0);
-	glVertex(4, 3, 0.0);
-	glVertex(5, 3, 0.0);
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0, 40, 0, 30, -1.0, 1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			glLoadIdentity();
+			glBegin(GL_QUADS);
+			glVertex(0, 0, 0.0);
+			glVertex(40,0, 0.0);
+			glVertex(40, 4, 0.0);
+			glVertex(0,4, 0.0);
+			glEnd();
+				glEnable(GL_TEXTURE_2D);
+				glColor([1.0, 1.0, 1.0, 1.0]);
+				SetActiveTexture(hText);
+				drawRect(3.5, 1.0, 6.5, 3.4);
+				SetActiveTexture(bText);
+				drawRect(15, 1.0, 17.5, 3.5);
+				SetActiveTexture(cText);
+				drawRect(25, 1.0, 27.5, 3.5);
+		glPopMatrix();
 
-	glEnd();
+	
+	glMatrixMode(GL_PROJECTION);
 	glEnable(GL_LIGHTING);
+	glPopMatrix();
 	glPopAttrib();
+	glDisable(GL_BLEND);
+
+}
+
+function drawRect(minx, miny, maxx, maxy){
+	glBegin(GL_QUADS);
+	glTexCoord(0.0, 1.0);
+	glVertex(minx, miny, 0.0);
+	glTexCoord(1.0, 1.0);
+	glVertex(maxx, miny, 0.0);
+	glTexCoord(1.0, 0.0);
+	glVertex(maxx, maxy, 0.0);
+	glTexCoord(0.0, 0.0);
+	glVertex(minx, maxy, 0.0);
+	glEnd();
 }
 
 
