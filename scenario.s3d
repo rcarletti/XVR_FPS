@@ -344,12 +344,16 @@ function scenario :: update(){
 								PDU[3] = true;
 							else PDU[3] = false;
 							PDU[4] = killPktNum;
-							var pktTimer = getTime();
-							for(var i = 0; i < 4; i++) {
+							static var pktTimer = 0;
+							var i = 0;
+							if(i < 4){ 
 								if(getTime() - pktTimer > PACKET_TIMER) {
 									networkSend(PDU);
+									Outputln("ciao");
 									pktTimer = getTime();
-								}
+									trace(PDU);
+									i++;
+							}
 									
 								
 							}
