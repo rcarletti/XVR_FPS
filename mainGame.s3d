@@ -31,7 +31,7 @@ var playerID = 0;
 var enemyNumber = 0;
 var loginTimer = 0;
 var showMenu = true;
-var enemyLastId;
+var enemyLastId = 0;
 
 function OnDownload() {
 	// TODO: download your resources here
@@ -40,11 +40,10 @@ function OnDownload() {
 }
 
 function maxID() {
-	var ID = -1;
+	var ID = 0;
 	foreach(var e in level.enemies) {
 		if(e.ID > ID){
 			ID = e.ID;
-			Outputln(ID);
 		}
 	}
 	return ID;
@@ -95,7 +94,6 @@ function OnInit(params) {
 	enemyNumber = len(level.enemies);
 	enemyLastId = maxID();
 	playerID = enemyLastId + 1;
-	trace(playerID);
 	myPlayer = level.addPlayer(playerID, [11,5,0], level);
 	myPlayer.local = true;
 	level.myPlayer = myPlayer;

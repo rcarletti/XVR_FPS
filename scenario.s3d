@@ -222,9 +222,9 @@ function scenario :: draw()
 	skyObj.Draw();
 	
 	if(headshot) {
-		ConsoleFont("Tahoma", 60);
-		ConsoleColor([0.8, 0, 0]);
-		ConsoleText(0.25, 0.8 , "HEADSHOT" );
+		ConsoleFont("Tahoma", 40);
+		ConsoleColor([1, 1, 1]);
+		ConsoleText(0.35, 0.8 , "HEADSHOT" );
 	}
 }
 
@@ -332,10 +332,13 @@ function scenario :: update(){
 						myPlayer.hitPlayer();
 						if(myPlayer.health <= 0) {
 							myPlayer.spawn();
-							var PDU = Array(3);
+							var PDU = Array(4);
 							PDU[0] = KILL_PDU;
 							PDU[1] = myPlayer.ID;
 							PDU[2] = data[1];
+							if(data[3] == 100)
+								PDU[3] = true;
+							else PDU[3] = false;
 							networkSend(PDU);
 						}					
 					}
@@ -343,7 +346,9 @@ function scenario :: update(){
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
 					if(data[2] == myPlayer.ID) {
-						myPlayer.score += 10;
+						if(data[3])
+							myPlayer.score += 20;
+						else myPlayer.score += 10;
 					}
 				}
 				
