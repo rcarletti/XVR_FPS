@@ -69,6 +69,7 @@ class scenario
 	pickUpHealth(posx, posz);
 	updateHealthPickUps();
 	sendScores();
+	updateEnemies();
 };
 
 //********************************************************************
@@ -125,6 +126,7 @@ function scenario :: init(textfile){
 	skyMesh.ForceMaterial(SkyMaterial);
 	skyObj = CVmObj(SkyMesh);
 	SkyMaterial.Diffuse = [1, 1, 1];
+	SkyMaterial.Emission = [1, 1, 1];
 	
 	wallObjArray = Array(0);
 	ammos = Array(0);
@@ -175,7 +177,6 @@ function scenario :: init(textfile){
 	}
 	
 	scoreTimer = 0;
-	
 	
 	/*init camera */		
 	camera = CameraGetCurrent();		
@@ -383,14 +384,14 @@ function scenario :: update(){
 	foreach (var h in healthPickups) {
 		h[0].update();
 	}
-	foreach (var e in enemies) {
-		e.update();
-	}
 	
+	updateEnemies();
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
 	updateHealthPickUps();
+	
+
 	
 	if(getTime() - scoreTimer > SCORE_TIMER) {
 		sendScores();
@@ -398,6 +399,26 @@ function scenario :: update(){
 	}
 
 }
+
+
+//********************************************************************
+//UPDATE ENEMIES
+//********************************************************************
+
+function scenario :: updateEnemies() {
+	for (var i = 0; i < len(enemies); i++) {
+		var e = enemies[i];
+		if(getTime() - e.heartbeatTimer > PLAYER_TIMEOUT) {
+			adel(enemies,i);
+			i--;
+		}
+		
+		else {
+			e.update();
+		}
+	}
+}
+
 
 //********************************************************************
 //SEND SCORES
@@ -471,7 +492,7 @@ function scenario :: updateAmmos() {
 }
 
 //********************************************************************
-//UPDATE AMMOS
+//UPDATE HEALTH PICKUPS
 //********************************************************************
 
 function scenario :: updateHealthPickUps() {
@@ -583,6 +604,10 @@ function scenario :: pickUpHealth(posx, posz) {
 		}
 	}
 }
+
+//********************************************************************
+//GET ENEMY BY ID
+//********************************************************************
 
 function scenario :: getEnemyById(ID) {
 	foreach ( var e in enemies )  {

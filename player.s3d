@@ -183,11 +183,15 @@ function player::draw()
 	
 	if (hitLenght > 0)
 	{
+		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
-		fireObj.Draw();
+		glColor(1, 1, 1);
+		glDisable(GL_DEPTH_TEST);
+		FireObj.Draw();
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_BLEND);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_DEPTH_TEST);
 		hitLenght--;
 	}
 	

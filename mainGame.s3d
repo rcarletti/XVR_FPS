@@ -13,7 +13,9 @@ SET LOGIN_TIMEOUT = 2000;
 
 /* Light globals */
 var Light0;
+var AmbientLight;
 var PosL = [16.0, 10.0, 16.0];
+var AmbientPos = [0, 20, 0];
 
 /* Function declarations */
 function CameraMoveMouse();
@@ -45,14 +47,21 @@ function OnInit(params) {
 	Light0 = CVmLight();
 	Light0.SetPosition(PosL);
 	Light0.SetDiffuse(1, 1, 1);
-	Light0.Enable();	
+	Light0.SetParameter(GL_SPOT_EXPONENT, 30);
+	Light0.SetParameter(GL_SPOT_CUTOFF, 90);
+	Light0.Enable();
+	
+	ambientLight = CVmLight();
+	ambientLight.SetPosition(AmbientPos);
+	ambientLight.Enable();
+	
 	setFrameRate(60);
 	
 	networkInit();
 
 	// TODO: put your initialization code here
 	level = scenario();
-	level.init("level.txt");
+	level.init("level_debug.txt");
 	
 	while(getTime() - loginTimer < LOGIN_TIMEOUT){ 
 		var data = networkReceive();
@@ -189,6 +198,8 @@ function OnFrame() {
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
 		}
+		
+		Light0.SetPosition(Level.myPlayer.Position);
 		
 		//keep cursor centered
 		SetCursorPos(0.5, 0.5);
