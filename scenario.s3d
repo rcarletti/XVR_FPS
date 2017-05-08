@@ -336,23 +336,24 @@ function scenario :: update(){
 				else if (data[0] == HIT_PDU) {
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
-						myPlayer.health -= data[3];
-						myPlayer.hitPlayer();
-						if(myPlayer.health <= 0) {
-							myPlayer.spawn();
-							var PDU = Array(5);
-							PDU[0] = KILL_PDU;
-							PDU[1] = myPlayer.ID;
-							PDU[2] = data[1];
-							if(data[3] == 100)
-								PDU[3] = true;
-							else PDU[3] = false;
-							PDU[4] = killPktNum;
-							networkSend(PDU);
-							networkSend(PDU);
-							networkSend(PDU);
-							networkSend(PDU);
-							killPktNum++;
+						if(data[4] > hRecvPktNum) {
+							myPlayer.health -= data[3];
+							myPlayer.hitPlayer();
+							if(myPlayer.health <= 0) {
+								myPlayer.spawn();
+								var PDU = Array(5);
+								PDU[0] = KILL_PDU;
+								PDU[1] = myPlayer.ID;
+								PDU[2] = data[1];
+								if(data[3] == 100)
+									PDU[3] = true;
+								else PDU[3] = false;
+								PDU[4] = killPktNum;
+								for(var i = 0; i < 4; i++)
+									networkSend(PDU);
+								killPktNum++;
+							}
+							hRecvPktNum = data[4];
 						}					
 					}
 				}
@@ -427,9 +428,7 @@ function scenario :: update(){
 	checkPlayerCollision();
 	updateAmmos();
 	updateHealthPickUps();
-	
 
-	
 	if(getTime() - scoreTimer > SCORE_TIMER) {
 		sendScores();
 		scoreTimer = getTime();
@@ -495,7 +494,8 @@ function scenario :: checkPlayerCollision() {
 				else
 					PDU[3] = myPlayer.weapons[e.currWeapon].damage;
 				PDU[4] = hitPktNum;
-				networkSend(PDU);
+				for(var i = 0; i < 4; i++)
+					networkSend(PDU);
 				hitPktNum++;
 			}
 		}
