@@ -22,6 +22,7 @@ function CameraMoveMouse();
 function DrawGrid(col, size);
 function showCrosshair();
 function showStats();
+function prova();
 function showScores();
 function drawMenu();
 
@@ -206,6 +207,7 @@ function OnFrame() {
 		SceneBegin();
 		// TODO: put your drawing code here
 		level.draw();
+		prova();
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
 		}
@@ -275,6 +277,24 @@ function DrawGrid(col, size)
 	/* polite restoration of previous OpenGL status */
 	glPopAttrib();
 }
+
+function prova() {
+	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+	glDisable(GL_LIGHTING);
+	glColor([0.9, 0.9, 0.9]);
+	glEnable(GL_BLEND);
+	//glEnable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
+	glVertex(1, 2, 0.0);
+	glVertex(1, 3, 0.0);
+	glVertex(4, 3, 0.0);
+	glVertex(5, 3, 0.0);
+
+	glEnd();
+	glEnable(GL_LIGHTING);
+	glPopAttrib();
+}
+
 
 
 

@@ -52,6 +52,8 @@ class scenario
 	var headshot;
 	var scoreTimer;
 	var headshotTimer;
+	var killPktNum;
+	var hitPktNum;
 	
 	//functions
 	init(textfile);	
@@ -84,6 +86,8 @@ function scenario :: init(textfile){
 	healthNum = 0;
 	headshot = false;
 	headshotTimer = 0;
+	hitPktNum = 0;
+	killPktNum = 0;
 	
 	//load scenario
 	if (!FileExist(textfile)) {
@@ -222,9 +226,9 @@ function scenario :: draw()
 	skyObj.Draw();
 	
 	if(headshot) {
-		ConsoleFont("Tahoma", 40);
+		ConsoleFont("Tahoma", 30);
 		ConsoleColor([1, 1, 1]);
-		ConsoleText(0.35, 0.8 , "HEADSHOT" );
+		ConsoleText(0.28, 0.8 , "HEADSHOT +20" );
 	}
 }
 
@@ -332,14 +336,16 @@ function scenario :: update(){
 						myPlayer.hitPlayer();
 						if(myPlayer.health <= 0) {
 							myPlayer.spawn();
-							var PDU = Array(4);
+							var PDU = Array(5);
 							PDU[0] = KILL_PDU;
 							PDU[1] = myPlayer.ID;
 							PDU[2] = data[1];
 							if(data[3] == 100)
 								PDU[3] = true;
 							else PDU[3] = false;
+							PDU[4] = killPktNum;
 							networkSend(PDU);
+							killPktNum++;
 						}					
 					}
 				}
@@ -469,7 +475,7 @@ function scenario :: checkPlayerCollision() {
 			if(b.life!= 0 && h > 0) {
 				e.hitPlayer();
 				b.life = 0;
-				var PDU = Array(4);
+				var PDU = Array(5);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
@@ -480,8 +486,10 @@ function scenario :: checkPlayerCollision() {
 				}
 				else
 					PDU[3] = myPlayer.weapons[e.currWeapon].damage;
-				
+				PDU[4] = hitPktNum;
 				networkSend(PDU);
+				hitPktNum++;
+				trace(PDU);
 			}
 		}
 	}
