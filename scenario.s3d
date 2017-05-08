@@ -5,6 +5,7 @@ SET CAMERA_HEIGHT = 1.5;
 SET AMMOS_INTERVAL = 30000;
 SET HEALTH_INTERVAL = 15000;
 SET SCORE_TIMER = 1000;
+SET HEADSHOT_TIMER = 1000;
 
 #include "weapon.s3d"
 #include "healthPickups.s3d"
@@ -48,7 +49,9 @@ class scenario
 	var healthPickups;
 	var healthTimer;
 	var healthNum;
+	var headshot;
 	var scoreTimer;
+	var headshotTimer;
 	
 	//functions
 	init(textfile);	
@@ -79,6 +82,8 @@ class scenario
 function scenario :: init(textfile){
 	ammosNum = 0;
 	healthNum = 0;
+	headshot = false;
+	headshotTimer = 0;
 	
 	//load scenario
 	if (!FileExist(textfile)) {
@@ -215,6 +220,12 @@ function scenario :: draw()
 	}
 		
 	skyObj.Draw();
+	
+	if(headshot) {
+		ConsoleFont("Tahoma", 60);
+		ConsoleColor([0.8, 0, 0]);
+		ConsoleText(0.25, 0.8 , "HEADSHOT" );
+	}
 }
 
 //********************************************************************
@@ -315,7 +326,6 @@ function scenario :: update(){
 				
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
-					trace(data);
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
 						myPlayer.health -= data[3];
@@ -326,7 +336,6 @@ function scenario :: update(){
 							PDU[0] = KILL_PDU;
 							PDU[1] = myPlayer.ID;
 							PDU[2] = data[1];
-							trace(PDU);
 							networkSend(PDU);
 						}					
 					}
@@ -347,7 +356,7 @@ function scenario :: update(){
 				}
 				
 				else if (data[0] == SCORE_PDU) {
-					trace(data);
+
 					for(var i = 1; i < len(data) - 1; i += 2) {
 						Outputln("len data: " + str(len(data)));
 						Outputln(str(i));
@@ -385,7 +394,16 @@ function scenario :: update(){
 		h[0].update();
 	}
 	
-	updateEnemies();
+	foreach (var e in enemies) {
+		e.update();
+	}
+	
+	if(getTime() - headshotTimer > HEADSHOT_TIMER) {
+		headshot = false;
+	}
+	
+	
+	//updateEnemies();
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
@@ -410,12 +428,8 @@ function scenario :: updateEnemies() {
 		var e = enemies[i];
 		if(getTime() - e.heartbeatTimer > PLAYER_TIMEOUT) {
 			adel(enemies,i);
-			i--;
 		}
 		
-		else {
-			e.update();
-		}
 	}
 }
 
@@ -435,7 +449,7 @@ function scenario :: sendScores() {
 		PDU[i + 1] = e.score;
 		i += 2;
 	}
-	trace(PDU);
+
 	networkSend(PDU);
 }
 
@@ -446,14 +460,21 @@ function scenario :: sendScores() {
 function scenario :: checkPlayerCollision() {
 	foreach (var b in myPlayer.bullets) {
 		foreach (var e in enemies) {
-			if(b.life!= 0 && isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius)) {
+			var h = isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius);
+			if(b.life!= 0 && h > 0) {
 				e.hitPlayer();
 				b.life = 0;
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
-				PDU[3] = myPlayer.weapons[e.currWeapon].damage;
+				if(h > 1.1) {
+					PDU[3] = 100;
+					headshot = true;
+					headshotTimer = getTime();
+				}
+				else
+					PDU[3] = myPlayer.weapons[e.currWeapon].damage;
 				
 				networkSend(PDU);
 			}
@@ -467,13 +488,16 @@ function scenario :: checkPlayerCollision() {
 
 function scenario :: isBulletColliding(b, e, radius) {
 	if (b.position.x >= e.position.x - radius &&
-	    b.position.x <= e.position.x + radius &&
+	    b.position.x < e.position.x + radius &&
 	    b.position.z >= e.position.z - radius &&
-	    b.position.z <= e.position.z + radius 
+	    b.position.z < e.position.z + radius &&
+	    b.position.y >= e.position.y + 1 - radius &&
+	    b.position.y < e.position.y + 1 + radius
 		) {
-			return true;
+			Outputln(b.position.y);
+			return  b.position.y;
 		}
-	else return false;
+	else return -1;
 }
 
 //********************************************************************

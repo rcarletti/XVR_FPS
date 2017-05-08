@@ -31,11 +31,23 @@ var playerID = 0;
 var enemyNumber = 0;
 var loginTimer = 0;
 var showMenu = true;
+var enemyLastId;
 
 function OnDownload() {
 	// TODO: download your resources here
 	// E.g.: FileDownload("resource.ext");
 	FileDownload("XVRResources.zip");
+}
+
+function maxID() {
+	var ID = -1;
+	foreach(var e in level.enemies) {
+		if(e.ID > ID){
+			ID = e.ID;
+			Outputln(ID);
+		}
+	}
+	return ID;
 }
 
 function OnInit(params) {
@@ -74,14 +86,15 @@ function OnInit(params) {
 					Outputln("adding enemy");
 					var e = level.addPlayer(data[1], [data[2],data[3], data[4]], level);
 					level.addEnemy(e);
-					enemyNumber++;	
 				}
 			}
 		}
 	}
 
 	Outputln("login terminato");
-	playerID = enemyNumber + 1;
+	enemyNumber = len(level.enemies);
+	enemyLastId = maxID();
+	playerID = enemyLastId + 1;
 	trace(playerID);
 	myPlayer = level.addPlayer(playerID, [11,5,0], level);
 	myPlayer.local = true;
