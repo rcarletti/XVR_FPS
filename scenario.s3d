@@ -206,6 +206,7 @@ function scenario :: init(textfile){
 function scenario :: draw()
 {
 	floorObj.Draw();
+	skyObj.Draw();
 	
 	var i;
 	for (i = 0;i < len(wallObjArray); i++)
@@ -226,8 +227,7 @@ function scenario :: draw()
 			h[0].draw();
 		}
 	}
-		
-	skyObj.Draw();
+
 	
 	if(headshot) {
 		ConsoleFont("Tahoma", 30);

@@ -142,7 +142,7 @@ function player :: init(ID, col, pos){
 	
 	rootObj.ModulateMaterials(color);
 	
-	billboardFire = CVmBillboard("flame43.avi", 0.5, 0.5);
+	billboardFire = CVmBillboard("Xplosion.avi", 1, 1);
 	fireObj = CVmObj();
 	fireObj.LinkToBillboard(billboardFire);
 	
@@ -185,14 +185,16 @@ function player::draw()
 	{
 		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
+		glPushAttrib(GL_COLOR_BUFFER_BIT  | GL_ENABLE_BIT  | GL_CURRENT_BIT);
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
-		glColor(1, 1, 1);
 		glDisable(GL_DEPTH_TEST);
 		FireObj.Draw();
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		glPopAttrib();
 		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		hitLenght--;
+
 	}
 	
 
