@@ -292,6 +292,7 @@ function scenario :: update(){
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
+					if(e!= null){
 					e.position = [data[2], data[3], data[4]];
 					e.walkDirection = [data[5], data[6], data[7]];
 					e.angleX = data[8];
@@ -313,6 +314,7 @@ function scenario :: update(){
 						e.isWalking = false;
 						e.isRunning = false;
 					}
+				}
 
 				}
 				
@@ -414,6 +416,7 @@ function scenario :: update(){
 		h[0].update();
 	}
 	
+	updateEnemies();
 	foreach (var e in enemies) {
 		e.update();
 	}
@@ -423,7 +426,7 @@ function scenario :: update(){
 	}
 	
 	
-	updateEnemies();
+	
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
@@ -446,8 +449,11 @@ function scenario :: updateEnemies() {
 		Outputln(str(len(enemies)));
 		var e = enemies[i];
 		Outputln(str(e.ID));
+		trace(startTime);
+		Outputln(str(getTime() - e.heartbeatTimer - startTime));
 		if((getTime() - e.heartbeatTimer - startTime) > PLAYER_TIMEOUT) {
 			adel(enemies,i);
+			i--;
 		}
 		
 	}
