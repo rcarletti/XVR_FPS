@@ -56,6 +56,7 @@ class scenario
 	var hitPktNum;
 	var kRecvPktNum;
 	var hRecvPktNum;
+	var startTime;
 	
 	//functions
 	init(textfile);	
@@ -422,7 +423,7 @@ function scenario :: update(){
 	}
 	
 	
-	//updateEnemies();
+	updateEnemies();
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
@@ -445,7 +446,7 @@ function scenario :: updateEnemies() {
 		Outputln(str(len(enemies)));
 		var e = enemies[i];
 		Outputln(str(e.ID));
-		if(getTime() - e.heartbeatTimer > PLAYER_TIMEOUT) {
+		if((getTime() - e.heartbeatTimer - startTime) > PLAYER_TIMEOUT) {
 			adel(enemies,i);
 		}
 		

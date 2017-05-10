@@ -222,6 +222,7 @@ function showScores() {
 }
 
 function OnFrame() {
+	static var started = false;
 	/* manage camera */
 	//CameraMoveMouse();
 	
@@ -237,6 +238,12 @@ function OnFrame() {
 	}
 	
 	else {
+		
+		if(!started) {
+			started = true;
+			level.startTime = getTime();
+		}
+		started = true;
 		static var esc_pressed = false;
 		if (KeyPressed(VK_ESCAPE) && !esc_pressed)
 		{
