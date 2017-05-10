@@ -237,13 +237,14 @@ function OnFrame() {
 		SceneEnd();
 	}
 	
-	else {
-		
+	else {	
 		if(!started) {
 			started = true;
 			level.startTime = getTime();
 		}
 		started = true;
+		
+		/*release/grab mouse */
 		static var esc_pressed = false;
 		if (KeyPressed(VK_ESCAPE) && !esc_pressed)
 		{
@@ -256,20 +257,23 @@ function OnFrame() {
 			
 		level.update();
 		showCrosshair();
-		showStats();
-	
-		SceneBegin();
-		// TODO: put your drawing code here
-		level.draw();
-		showBar();
+		
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
-		}		
-		Light0.SetPosition(Level.myPlayer.Position);
-		//keep cursor centered
-		if(grabMouse)
-			SetCursorPos(0.5, 0.5);
+		}
 		
+		/*weapon light update */
+		Light0.SetPosition(Level.myPlayer.Position);
+		
+		/*keep cursor centered */
+		if(grabMouse)
+			SetCursorPos(0.5, 0.5);	
+		
+	
+		SceneBegin();
+		level.draw();
+		showBar();
+		showStats();	
 		SceneEnd();
 	}
 		
@@ -302,8 +306,6 @@ function OnExit() {
 	PDU[1] = myPlayer.ID;
 	
 	networkSend(PDU);
-	
-	Outputln("exit");
 }
 
 
