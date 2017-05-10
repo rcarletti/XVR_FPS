@@ -228,7 +228,6 @@ function scenario :: draw()
 		}
 	}
 
-	
 	if(headshot) {
 		ConsoleFont("Tahoma", 30);
 		ConsoleColor([1, 1, 1]);
@@ -443,7 +442,9 @@ function scenario :: update(){
 
 function scenario :: updateEnemies() {
 	for (var i = 0; i < len(enemies); i++) {
+		Outputln(str(len(enemies)));
 		var e = enemies[i];
+		Outputln(str(e.ID));
 		if(getTime() - e.heartbeatTimer > PLAYER_TIMEOUT) {
 			adel(enemies,i);
 		}
