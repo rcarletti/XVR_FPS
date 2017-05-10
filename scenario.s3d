@@ -287,6 +287,7 @@ function scenario :: update(){
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
 						addEnemy(tmpEnemy);	
 					}
+					e.heartBeatTimer = getTime();
 				}
 				
 				/*data PDU */
@@ -448,14 +449,12 @@ function scenario :: update(){
 
 function scenario :: updateEnemies() {
 	for (var i = 0; i < len(enemies); i++) {
-		Outputln(str(len(enemies)));
 		var e = enemies[i];
-		Outputln(str(e.ID));
-		trace(startTime);
-		Outputln(str(getTime() - e.heartbeatTimer - startTime));
+		Outputln(str(e.heartbeatTimer));
 		if((getTime() - e.heartbeatTimer - startTime) > PLAYER_TIMEOUT) {
 			adel(enemies,i);
 			i--;
+			Outputln("OUT");
 		}
 		
 	}
