@@ -10,6 +10,7 @@
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
 SET LOGIN_TIMEOUT = 2000;
+SET SPAWN_TIME = 5000;
 
 /* Light globals */
 var Light0;
@@ -26,6 +27,8 @@ function showBar();
 function showScores();
 function drawMenu();
 function drawRect(minx, miny, maxx, maxy);
+function updateScreen();
+function updateBlood();
 
 var level;
 var myPlayer;
@@ -38,7 +41,10 @@ var hText;
 var bText;
 var cText;
 var mText;
+var dText;
+VAR h90;
 var grabMouse = false;
+var deathTimer;
 
 function OnDownload() {
 	// TODO: download your resources here
@@ -62,6 +68,8 @@ function OnInit(params) {
 	bText = CVmTexture("bullets.png");
 	cText = CVmTexture("cup.png");
 	mText = CVmTexture("menu.jpg");
+	dText = CVmTexture("death.png");
+	h90 = CVmTexture("prova3.png");
 
 	/* initialize light */
 	Light0 = CVmLight();
@@ -74,6 +82,8 @@ function OnInit(params) {
 	ambientLight = CVmLight();
 	ambientLight.SetPosition(AmbientPos);
 	ambientLight.Enable();
+	
+	deathTimer = 0;
 	
 	setFrameRate(60);
 	
@@ -107,12 +117,6 @@ function OnInit(params) {
 	myPlayer.local = true;
 	level.myPlayer = myPlayer;
 
-	/* 
-	enemy1 = level.addPlayer();
-	level.addEnemy(enemy1);
-	enemy2 = level.addPlayer();
-	level.addEnemy(enemy2);
-	*/
 	grabMouse = true;
 	ShowCursor(FALSE);
 	ShowCursor(FALSE);
@@ -237,6 +241,21 @@ function OnFrame() {
 		SceneEnd();
 	}
 	
+	else if(myPlayer.isDead) {
+		ConsoleColor([1,0,0]);
+		ConsoleFont("Arial", 40);
+		ConsoleText(0.25,0.8, "YOU ARE DEAD");
+		var time = Int((SPAWN_TIME - (getTime() - myPlayer.deathTimer))/1000);
+		ConsoleText(0.3,0.7, "Respawn in " + str(time) + "s");
+		if(getTime() - myPlayer.deathTimer > SPAWN_TIME) {
+			myPlayer.isDead = false;
+			myPlayer.spawn();
+		}
+		SceneBegin();
+		updateScreen();
+		SceneEnd();
+	}
+	
 	else {	
 		if(!started) {
 			started = true;
@@ -272,6 +291,7 @@ function OnFrame() {
 	
 		SceneBegin();
 		level.draw();
+		updateBlood();
 		showBar();
 		showStats();	
 		SceneEnd();
@@ -359,6 +379,62 @@ function drawRect(minx, miny, maxx, maxy){
 	glTexCoord(0.0, 0.0);
 	glVertex(minx, maxy, 0.0);
 	glEnd();
+}
+
+function updateScreen() {
+	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+	glDisable(GL_LIGHTING);
+	glColor([0, 0, 0]);
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0, 40, 0, 30, -1.0, 1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			glLoadIdentity();
+			glBegin(GL_QUADS);
+			glVertex(0, 0, 0.0);
+			glVertex(40,0, 0.0);
+			glVertex(40, 40, 0.0);
+			glVertex(0,40, 0.0);
+			glEnd();
+			glEnable(GL_TEXTURE_2D);
+				glColor([1.0, 1.0, 1.0, 1.0]);
+				SetActiveTexture(dText);
+				drawRect(10, 5, 30, 20);
+			glPopMatrix();
+
+		glMatrixMode(GL_PROJECTION);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+	glPopAttrib();
+}
+
+function updateBlood() {
+		glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+		glDisable(GL_LIGHTING);
+		glColor([0, 0, 0]);
+		glEnable(GL_BLEND);
+	
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+			glLoadIdentity();
+			glOrtho(0, 40, 0, 30, -1.0, 1.0);
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+				glLoadIdentity();
+				var transparency = 1- (myPlayer.health / 100);
+				glColor([1, 0, 0, transparency]);
+				SetActiveTexture(h90);
+				drawRect(0, 0, 40, 30);
+			glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+		glDisable(GL_BLEND);
+		glPopAttrib();
+	
 }
 
 

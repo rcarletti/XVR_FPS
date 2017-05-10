@@ -31,6 +31,7 @@ class player
 	var currentFrame;	
 	var sfxRailShoot;
 	var sfxShotgun;
+	var sfxHeadshot;
 	var hitLenght;
 	
 	/*movement*/
@@ -69,6 +70,8 @@ class player
 	var heartbeatTimer;
 	var positionTimer;
 	var bulletsTimer;
+	var isdead;
+	var deathTimer;
 
 
 	/*functions */
@@ -123,6 +126,8 @@ function player :: init(ID, col, pos){
 	isRunning = false;
 	positionTimer = 0;
 	bulletsTimer = 0;
+	isDead = false;
+	deathTimer = 0;
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -157,8 +162,7 @@ function player :: init(ID, col, pos){
 	sfxReload = CVmVrAWav("shotgun_reload.wav",true);
 	sfxRailShoot = CVmVrAWav("railg.wav",true);
 	sfxShotgun = CVmVrAWav("shotgun.wav",true);
-	
-	
+
 	weapons[0] = weapon("railgun.aam");
 	weapons[1] = weapon("rocketl.aam");
 	magazines[0] = 2;

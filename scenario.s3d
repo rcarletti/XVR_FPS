@@ -57,6 +57,7 @@ class scenario
 	var kRecvPktNum;
 	var hRecvPktNum;
 	var startTime;
+	var sfxHeadshot;
 	
 	//functions
 	init(textfile);	
@@ -113,6 +114,8 @@ function scenario :: init(textfile){
 			levelMatrix[i][j] = 0;
 			
 	//set textures and stuff
+	
+	sfXHeadshot = CVmVrAWav("headshot.wav",true);
 	
 	/*floors */
 	
@@ -346,7 +349,7 @@ function scenario :: update(){
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
-								myPlayer.spawn();
+								//myPlayer.spawn();
 								var PDU = Array(5);
 								PDU[0] = KILL_PDU;
 								PDU[1] = myPlayer.ID;
@@ -357,7 +360,10 @@ function scenario :: update(){
 								PDU[4] = killPktNum;
 								for(var i = 0; i < 4; i++)
 									networkSend(PDU);
+									Outputln("send");
 								killPktNum++;
+								myPlayer.isDead = true;
+								myPlayer.deathTimer = getTime();
 							}
 							hRecvPktNum = data[4];
 						}					
@@ -367,8 +373,10 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					if(data[2] == myPlayer.ID) {
 						if(data[4] > kRecvPktNum){
-							if(data[3])
+							if(data[3]){
 								myPlayer.score += 20;
+								sfxHeadshot.Play();
+							}
 							else myPlayer.score += 10;
 						kRecvPktNum = data[4];
 						}
@@ -408,6 +416,8 @@ function scenario :: update(){
 	if(keyPressed("P")) {
 		//ShowCursor(TRUE);
 	}
+	
+	sfxHeadshot.SetPosition(myPlayer.position);
 	
 	/*update players */
 
