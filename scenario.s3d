@@ -284,10 +284,11 @@ function scenario :: update(){
 				if (data[0] == HEARTBEAT_PDU) {
 					var e = getEnemyById(data[1]);
 					if (e == void) {		/*new enemy */
-						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);
-						addEnemy(tmpEnemy);	
+						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);	
+						addEnemy(tmpEnemy);
+						e = getEnemyById(data[1]);		
 					}
-					e.heartBeatTimer = getTime();
+					e.heartbeatTimer = getTime();
 				}
 				
 				/*data PDU */
@@ -420,15 +421,13 @@ function scenario :: update(){
 	}
 	
 	updateEnemies();
-	foreach (var e in enemies) {
-		e.update();
-	}
+	//foreach (var e in enemies) {
+	//	e.update();
+	//}
 	
 	if(getTime() - headshotTimer > HEADSHOT_TIMER) {
 		headshot = false;
 	}
-	
-	
 	
 	updateCamera();
 	checkPlayerCollision();
@@ -444,17 +443,20 @@ function scenario :: update(){
 
 
 //********************************************************************
-//UPDATE ENEMIES
+//UPDATE ENEMIES (DETECTS CRASH)
 //********************************************************************
 
 function scenario :: updateEnemies() {
 	for (var i = 0; i < len(enemies); i++) {
 		var e = enemies[i];
-		Outputln(str(e.heartbeatTimer));
 		if((getTime() - e.heartbeatTimer - startTime) > PLAYER_TIMEOUT) {
 			adel(enemies,i);
 			i--;
-			Outputln("OUT");
+			Outputln("PLAYER CRASHED");
+		}
+		
+		else {
+			e.update();
 		}
 		
 	}
