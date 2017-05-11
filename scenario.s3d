@@ -1,3 +1,8 @@
+
+#include "weapon.s3d"
+#include "healthPickups.s3d"
+#include "enemyElem.s3d"
+
 SET CAMERA_FOV  = 60;
 SET CAMERA_NEAR = 0.3;
 SET CAMERA_FAR  = 300;
@@ -7,8 +12,6 @@ SET HEALTH_INTERVAL = 15000;
 SET SCORE_TIMER = 1000;
 SET HEADSHOT_TIMER = 1000;
 
-#include "weapon.s3d"
-#include "healthPickups.s3d"
 
 function distance(x1, x2, y1, y2){
 	var dx = x1 - x2;
@@ -58,6 +61,7 @@ class scenario
 	var hRecvPktNum;
 	var startTime;
 	var sfxHeadshot;
+	var enemyPacketsList;
 	
 	//functions
 	init(textfile);	
@@ -149,6 +153,7 @@ function scenario :: init(textfile){
 	ammos = Array(0);
 	enemies = Array(0);
 	healthPickups = Array(0);
+	enemyPacketsList = Array(0);
 	
 	var i,j;
 	/*parse level */
@@ -277,7 +282,6 @@ function scenario :: addEnemy(e) {
 //********************************************************************
 
 function scenario :: update(){
-	
 	var loop = true;
 	while (loop) {
 		var data = networkReceive();
@@ -285,13 +289,24 @@ function scenario :: update(){
 			if (data[1] != myPlayer.ID) {
 				/*heartbeat PDU */
 				if (data[0] == HEARTBEAT_PDU) {
+					trace(data);
 					var e = getEnemyById(data[1]);
 					if (e == void) {		/*new enemy */
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);	
 						addEnemy(tmpEnemy);
+						var tmpElem = enemyElem(data[1]);
+						aadd(enemyPacketsList,tmpElem);
 						e = getEnemyById(data[1]);		
 					}
 					e.heartbeatTimer = getTime();
+					/*update packets number */
+					for(var i = 0; i < len(enemyPacketsList); i++) {
+						var elem = enemyPacketsList[i];
+						if(elem.enemyID == data[1]) {
+							elem.expectedHitPkt = data[5];
+							elem.expectedKillPkt = data[6];
+							trace(elem);						}
+					}
 				}
 				
 				/*data PDU */
@@ -343,6 +358,7 @@ function scenario :: update(){
 				
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
+					Outputln("received hit");
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
 						if(data[4] > hRecvPktNum) {
@@ -354,13 +370,11 @@ function scenario :: update(){
 								PDU[0] = KILL_PDU;
 								PDU[1] = myPlayer.ID;
 								PDU[2] = data[1];
-								if(data[3] == 100)
-									PDU[3] = true;
-								else PDU[3] = false;
+								PDU[3] = data[3] == 100;
 								PDU[4] = killPktNum;
 								for(var i = 0; i < 4; i++)
 									networkSend(PDU);
-									Outputln("send");
+								Outputln("send");
 								killPktNum++;
 								myPlayer.isDead = true;
 								myPlayer.deathTimer = getTime();
@@ -371,6 +385,7 @@ function scenario :: update(){
 				}
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
+					Outputln("received kill");
 					if(data[2] == myPlayer.ID) {
 						if(data[4] > kRecvPktNum){
 							if(data[3]){
