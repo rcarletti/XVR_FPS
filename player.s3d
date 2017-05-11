@@ -322,7 +322,7 @@ function player :: sendData() {
 //********************************************************************
 
 function player :: sendHeartbeats() {
-			var PDU = array(5);
+			var PDU = array(7);
 			PDU[0] = HEARTBEAT_PDU;
 			PDU[1] = ID;
 			PDU[2] = color.r;

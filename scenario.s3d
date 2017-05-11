@@ -348,7 +348,7 @@ function scenario :: update(){
 						Outputln("expected: " + str(e.expectedHitPkt));
 						Outputln("received: " + str(data[4]));
 						if(data[4] >= e.expectedHitPkt) {
-							e.expectedHitPkt = data[4];
+							e.expectedHitPkt = data[4] + 1;
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
@@ -373,14 +373,15 @@ function scenario :: update(){
 				}
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
+					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
-						if(data[4] > 0){
+						if(data[4] > e.expectedKillPkt){
+							e.expectedKillPkt = data[4] + 1;
 							if(data[3]){
 								myPlayer.score += 20;
 								sfxHeadshot.Play();
 							}
 							else myPlayer.score += 10;
-						//kRecvPktNum = data[4];
 						}
 					}
 				}
