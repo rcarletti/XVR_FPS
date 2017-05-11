@@ -345,6 +345,7 @@ function scenario :: update(){
 						e.isWalking = false;
 						e.isRunning = false;
 					}
+					e.isDead = data[14];
 				}
 
 				}
@@ -379,6 +380,7 @@ function scenario :: update(){
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
+								myPlayer.isDead = true;
 								killer = data[1];
 								//myPlayer.spawn();
 								var PDU = Array(5);
@@ -393,7 +395,6 @@ function scenario :: update(){
 									networkSend(PDU);
 									Outputln("send");
 								killPktNum++;
-								myPlayer.isDead = true;
 								myPlayer.deathTimer = getTime();
 							}
 						}					

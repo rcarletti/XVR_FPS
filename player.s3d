@@ -290,7 +290,7 @@ function player :: sendBulletsData() {
 //********************************************************************
 
 function player :: sendData() {
-		var PDU = array(14);
+		var PDU = array(15);
 		PDU[0] = DATA_PDU;
 		PDU[1] = ID;
 		PDU[2] = position.x;
@@ -313,6 +313,7 @@ function player :: sendData() {
 		else {
 			PDU[13] = 0;
 		}
+		PDU[14] = isDead;
 		
 		networkSend(PDU);
 }
@@ -564,6 +565,7 @@ function player :: readKeyboard(){
 	if(GetTime() - reloadTimer  > weapons[currWeapon].reloadTime) {
 		isReloading = false;
 	}
+
 }
 
 //********************************************************************
