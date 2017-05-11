@@ -57,8 +57,6 @@ class scenario
 	var headshotTimer;
 	var killPktNum;
 	var hitPktNum;
-	var kRecvPktNum;
-	var hRecvPktNum;
 	var startTime;
 	var sfxHeadshot;
 	var enemyPacketsList;
@@ -378,10 +376,10 @@ function scenario :: update(){
 								PDU[1] = myPlayer.ID;
 								PDU[2] = data[1];
 								PDU[3] = data[3] == 100;
-								PDU[4] = killPktNum;
+								PDU[4] = e.sendKillPktNum;
 								for(var i = 0; i < 4; i++)
 									networkSend(PDU);
-								killPktNum++;
+								sendKillPktNum++;
 								myPlayer.isDead = true;
 								myPlayer.deathTimer = getTime();
 							}
@@ -542,10 +540,10 @@ function scenario :: checkPlayerCollision() {
 				}
 				else
 					PDU[3] = myPlayer.weapons[e.currWeapon].damage;
-				PDU[4] = hitPktNum;
+				PDU[4] = sendHitPktNum;
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
-				hitPktNum++;
+				sendHitPktNum++;
 			}
 		}
 	}

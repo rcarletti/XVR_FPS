@@ -12,6 +12,8 @@ function enemyElem :: enemyElem(ID) {
 		enemyID = ID;
 		expectedHitPkt = 0;
 		expectedKillPkt = 0;
+		sendHitPktNum = 0;
+		sendKillPktNum = 0;
 	}
 	
 #endif  

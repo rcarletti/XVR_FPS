@@ -594,6 +594,7 @@ function player :: spawn() {
 	position = pos;
 	hitLenght = 0;
 	
+	
 	Outputln("respawn");
 }
 
