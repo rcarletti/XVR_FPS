@@ -375,7 +375,7 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
-						if(data[4] > e.expectedKillPkt){
+						if(data[4] >= e.expectedKillPkt){
 							e.expectedKillPkt = data[4] + 1;
 							if(data[3]){
 								myPlayer.score += 20;
