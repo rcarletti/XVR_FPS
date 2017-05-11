@@ -54,8 +54,6 @@ class scenario
 	var headshotTimer;
 	var killPktNum;
 	var hitPktNum;
-	var kRecvPktNum;
-	var hRecvPktNum;
 	var startTime;
 	var sfxHeadshot;
 	
@@ -92,8 +90,7 @@ function scenario :: init(textfile){
 	headshotTimer = 0;
 	hitPktNum = 0;
 	killPktNum = 0;
-	kRecvPktNum = -1;
-	hRecvPktNum = -1;
+
 	
 	//load scenario
 	if (!FileExist(textfile)) {
@@ -292,6 +289,8 @@ function scenario :: update(){
 						e = getEnemyById(data[1]);		
 					}
 					e.heartbeatTimer = getTime();
+					e.expectedHitPkt = data[5];
+					e.expectedKillPkt = data[6];
 				}
 				
 				/*data PDU */
@@ -345,7 +344,11 @@ function scenario :: update(){
 				else if (data[0] == HIT_PDU) {
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
-						if(data[4] > hRecvPktNum) {
+						var e = getEnemyById(data[1]);
+						Outputln("expected: " + str(e.expectedHitPkt));
+						Outputln("received: " + str(data[4]));
+						if(data[4] >= e.expectedHitPkt) {
+							e.expectedHitPkt = data[4];
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
@@ -365,20 +368,19 @@ function scenario :: update(){
 								myPlayer.isDead = true;
 								myPlayer.deathTimer = getTime();
 							}
-							hRecvPktNum = data[4];
 						}					
 					}
 				}
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
 					if(data[2] == myPlayer.ID) {
-						if(data[4] > kRecvPktNum){
+						if(data[4] > 0){
 							if(data[3]){
 								myPlayer.score += 20;
 								sfxHeadshot.Play();
 							}
 							else myPlayer.score += 10;
-						kRecvPktNum = data[4];
+						//kRecvPktNum = data[4];
 						}
 					}
 				}

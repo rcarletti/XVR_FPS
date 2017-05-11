@@ -72,6 +72,8 @@ class player
 	var bulletsTimer;
 	var isdead;
 	var deathTimer;
+	var expectedKillPkt;
+	var expectedHitPkt;
 
 
 	/*functions */
@@ -128,6 +130,8 @@ function player :: init(ID, col, pos){
 	bulletsTimer = 0;
 	isDead = false;
 	deathTimer = 0;
+	expectedKillPkt = 0;
+	expectedHitPkt = 0;
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -324,6 +328,8 @@ function player :: sendHeartbeats() {
 			PDU[2] = color.r;
 			PDU[3] = color.g;
 			PDU[4] = color.b;
+			PDU[5] = expectedHitPkt;
+			PDU[6] = expectedKillPkt;
 			
 			networkSend(PDU);
 		
