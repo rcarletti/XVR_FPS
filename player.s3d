@@ -72,9 +72,6 @@ class player
 	var bulletsTimer;
 	var isdead;
 	var deathTimer;
-	var nextHitPktNum;
-	var nextKillPktNum;
-
 
 
 	/*functions */
@@ -131,9 +128,6 @@ function player :: init(ID, col, pos){
 	bulletsTimer = 0;
 	isDead = false;
 	deathTimer = 0;
-	nextHitPktNum = 0;
-	nextKillPktNum = 0;
-	
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -324,16 +318,15 @@ function player :: sendData() {
 //********************************************************************
 
 function player :: sendHeartbeats() {
-			var PDU = array(7);
+			var PDU = array(5);
 			PDU[0] = HEARTBEAT_PDU;
 			PDU[1] = ID;
 			PDU[2] = color.r;
 			PDU[3] = color.g;
 			PDU[4] = color.b;
-			PDU[5] = nextHitPktNum;
-			PDU[6] = nextKillPktNum;
 			
 			networkSend(PDU);
+		
 }
 
 //********************************************************************

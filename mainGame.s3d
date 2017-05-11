@@ -108,11 +108,6 @@ function OnInit(params) {
 			}
 		}
 	}
-	
-	foreach (var e in level.enemies) {
-		var tmpElem = enemyElem(e.ID);
-		aadd(level.enemyPacketsList, tmpElem);
-	}
 
 	Outputln("login terminato");
 	enemyNumber = len(level.enemies);
