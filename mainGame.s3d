@@ -133,7 +133,7 @@ function drawMenu() {
 	
 	
 	
-	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT  | GL_ENABLE_BIT );
 	glDisable(GL_LIGHTING);
 	
 	glEnable(GL_BLEND);
@@ -198,13 +198,14 @@ function drawMenu() {
 
 function showStats() {
 	ConsoleColor([1,1,1]);
+	ConsoleFont("Arial", 18);
 	if (!myPlayer.isReloading){
 		ConsoleText(0.45, 0.06, str(myPlayer.weapons[myPlayer.currWeapon].bullets) + " / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
 	}
 	else {
 		ConsoleText(0.45,0.06, "-- / "+ str(myPlayer.magazines[myPlayer.currWeapon]) );
 	}
-	ConsoleFont("Arial", 18);
+	
 	ConsoleText(0.17, 0.06,str(myPlayer.health));
 	ConsoleText(0.71, 0.06,str(myPlayer.score));
 }
@@ -241,20 +242,6 @@ function OnFrame() {
 		SceneEnd();
 	}
 	
-	else if(myPlayer.isDead) {
-		ConsoleColor([1,0,0]);
-		ConsoleFont("Arial", 40);
-		ConsoleText(0.25,0.8, "YOU ARE DEAD");
-		var time = Int((SPAWN_TIME - (getTime() - myPlayer.deathTimer))/1000);
-		ConsoleText(0.3,0.7, "Respawn in " + str(time) + "s");
-		if(getTime() - myPlayer.deathTimer > SPAWN_TIME) {
-			myPlayer.isDead = false;
-			myPlayer.spawn();
-		}
-		SceneBegin();
-		updateScreen();
-		SceneEnd();
-	}
 	
 	else {	
 		if(!started) {
@@ -277,6 +264,7 @@ function OnFrame() {
 		level.update();
 		showCrosshair();
 		
+		
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
 		}
@@ -291,7 +279,7 @@ function OnFrame() {
 	
 		SceneBegin();
 		level.draw();
-		updateBlood();
+		//updateBlood();
 		showBar();
 		showStats();	
 		SceneEnd();
@@ -331,11 +319,9 @@ function OnExit() {
 
 function showBar() {
 	
-	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
+	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT );
 	glDisable(GL_LIGHTING);
-	glColor([0.75, 0.94, 1, 0.11]);
 	glEnable(GL_BLEND);
-	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 		glLoadIdentity();
@@ -343,6 +329,7 @@ function showBar() {
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 			glLoadIdentity();
+			glColor([0.89, 0.47, 0.2, 0.15]);
 			glBegin(GL_QUADS);
 			glVertex(0, 0, 0.0);
 			glVertex(40,0, 0.0);
@@ -350,7 +337,7 @@ function showBar() {
 			glVertex(0,4, 0.0);
 			glEnd();
 				glEnable(GL_TEXTURE_2D);
-				glColor([1.0, 1.0, 1.0, 1.0]);
+				glColor([1.0, 1.0, 1.0, 1]);
 				SetActiveTexture(hText);
 				drawRect(3.5, 1.0, 6.5, 3.4);
 				SetActiveTexture(bText);
@@ -358,7 +345,6 @@ function showBar() {
 				SetActiveTexture(cText);
 				drawRect(25, 1.0, 27.5, 3.5);
 		glPopMatrix();
-
 	
 	glMatrixMode(GL_PROJECTION);
 	glEnable(GL_LIGHTING);
@@ -403,6 +389,7 @@ function updateScreen() {
 				glColor([1.0, 1.0, 1.0, 1.0]);
 				SetActiveTexture(dText);
 				drawRect(10, 5, 30, 20);
+				glColor([0.75, 0.94, 1, 0.2]);
 			glPopMatrix();
 
 		glMatrixMode(GL_PROJECTION);
@@ -414,7 +401,6 @@ function updateScreen() {
 function updateBlood() {
 		glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
 		glDisable(GL_LIGHTING);
-		glColor([0, 0, 0]);
 		glEnable(GL_BLEND);
 	
 		glMatrixMode(GL_PROJECTION);

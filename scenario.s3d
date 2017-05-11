@@ -6,6 +6,7 @@ SET AMMOS_INTERVAL = 30000;
 SET HEALTH_INTERVAL = 15000;
 SET SCORE_TIMER = 1000;
 SET HEADSHOT_TIMER = 1000;
+SET SPAWN_TIME = 5000;
 
 #include "weapon.s3d"
 #include "healthPickups.s3d"
@@ -56,6 +57,10 @@ class scenario
 	var hitPktNum;
 	var startTime;
 	var sfxHeadshot;
+	var hasKilled;
+	var fragTimer;
+	var killer;
+	var fraggedID;
 	
 	//functions
 	init(textfile);	
@@ -77,6 +82,7 @@ class scenario
 	updateHealthPickUps();
 	sendScores();
 	updateEnemies();
+	showScores();
 };
 
 //********************************************************************
@@ -90,6 +96,10 @@ function scenario :: init(textfile){
 	headshotTimer = 0;
 	hitPktNum = 0;
 	killPktNum = 0;
+	fraggedID = -1;
+	hasKilled = false;
+	fragTimer = 0;
+	killer = -1;
 
 	
 	//load scenario
@@ -234,6 +244,24 @@ function scenario :: draw()
 		ConsoleColor([1, 1, 1]);
 		ConsoleText(0.28, 0.8 , "HEADSHOT +20" );
 	}
+	
+	if(hasKilled) {
+		ConsoleFont("Tahoma", 20);
+		ConsoleColor([1, 1, 1]);
+		ConsoleText(0.28, 0.7 , "YOU FRAGGED PLAYER " + str(fraggedID));
+	}
+	
+	if(myPlayer.isDead) {
+	 	ConsoleColor([1,1,1]);
+		ConsoleFont("Arial", 25);
+		ConsoleText(0.22,0.8, "FRAGGED BY PLAYER " + str(killer));
+		showScores();
+		if(getTime() - myPlayer.deathTimer > SPAWN_TIME) {
+			myPlayer.isDead = false;
+			myPlayer.spawn();
+		}
+	 }
+	
 }
 
 //********************************************************************
@@ -274,7 +302,6 @@ function scenario :: addEnemy(e) {
 //********************************************************************
 
 function scenario :: update(){
-	
 	var loop = true;
 	while (loop) {
 		var data = networkReceive();
@@ -352,6 +379,7 @@ function scenario :: update(){
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
+								killer = data[1];
 								//myPlayer.spawn();
 								var PDU = Array(5);
 								PDU[0] = KILL_PDU;
@@ -376,6 +404,9 @@ function scenario :: update(){
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
 						if(data[4] >= e.expectedKillPkt){
+							hasKilled = true;
+							fragTimer = getTime();
+							fraggedID = data[1];
 							e.expectedKillPkt = data[4] + 1;
 							if(data[3]){
 								myPlayer.score += 20;
@@ -442,6 +473,10 @@ function scenario :: update(){
 		headshot = false;
 	}
 	
+	if(getTime() - fragTimer > HEADSHOT_TIMER) {
+		hasKilled = false;
+	}
+		
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
@@ -684,4 +719,22 @@ function scenario :: getEnemyById(ID) {
 	}
 	
 	return null;
+}
+
+function scenario :: showScores() {
+	var x = 0.22;
+	var y = 0.67;
+	ConsoleFont("Arial", 25);
+	ConsoleColor([1,0,0]);
+
+	ConsoleText(x, y , "PLAYER: " + str(myPlayer.ID) + "   "+ "Score: " + str(myPlayer.score));
+	ConsoleColor([1,1,1]);
+	ConsoleWidth(3); 
+	ConsoleLines([x, y - 0.01, x + 0.42, y - 0.01]);
+	y-= 0.07;
+	foreach (var e in enemies) {
+		ConsoleText(x, y , "PLAYER: " + str(e.ID) + "   "+ "Score: " + str(e.score));
+		ConsoleLines([x, y - 0.01, x + 0.42, y - 0.01]);
+		y-= 0.07;
+	}
 }
