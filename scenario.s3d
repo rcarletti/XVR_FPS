@@ -289,7 +289,6 @@ function scenario :: update(){
 			if (data[1] != myPlayer.ID) {
 				/*heartbeat PDU */
 				if (data[0] == HEARTBEAT_PDU) {
-					trace(data);
 					var e = getEnemyById(data[1]);
 					if (e == void) {		/*new enemy */
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);	
@@ -304,8 +303,7 @@ function scenario :: update(){
 						var elem = enemyPacketsList[i];
 						if(elem.enemyID == data[1]) {
 							elem.expectedHitPkt = data[5];
-							elem.expectedKillPkt = data[6];
-							trace(elem);						}
+							elem.expectedKillPkt = data[6];				}
 					}
 				}
 				
@@ -358,10 +356,19 @@ function scenario :: update(){
 				
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
-					Outputln("received hit");
 					if (data[2] == myPlayer.ID) {
+						var e;
+						for(var i = 0; i < len(enemyPacketsList); i++) {
+							e = enemyPacketsList[i];
+							if(e.enemyID == data[1])
+								break;
+						}
+							
 						/*damage*/
-						if(data[4] > hRecvPktNum) {
+						if(data[4] >= e.expectedHitPkt) {
+							e.expectedHitPkt++;
+							Outputln("expected packet: " + str(e.expectedHitPkt));
+							Outputln("received packet: " + str(data[4])); 
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
@@ -374,12 +381,10 @@ function scenario :: update(){
 								PDU[4] = killPktNum;
 								for(var i = 0; i < 4; i++)
 									networkSend(PDU);
-								Outputln("send");
 								killPktNum++;
 								myPlayer.isDead = true;
 								myPlayer.deathTimer = getTime();
 							}
-							hRecvPktNum = data[4];
 						}					
 					}
 				}
@@ -404,6 +409,14 @@ function scenario :: update(){
 							adel(enemies, i);
 						}
 					}
+					for(var i = 0; i < len(enemyPacketsList); i++) {
+						var e = enemyPacketsList[i];
+						if (e.enemyID == data[1]) {
+							adel(enemyPacketsList, i);
+						}
+					}
+					
+					trace(enemyPacketsList);
 				}
 				
 				else if (data[0] == SCORE_PDU) {
