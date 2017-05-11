@@ -70,7 +70,7 @@ class player
 	var heartbeatTimer;
 	var positionTimer;
 	var bulletsTimer;
-	var isdead;
+	var isDead;
 	var deathTimer;
 	var expectedKillPkt;
 	var expectedHitPkt;

@@ -571,9 +571,10 @@ function scenario :: isBulletColliding(b, e, radius) {
 	    b.position.z >= e.position.z - radius &&
 	    b.position.z < e.position.z + radius &&
 	    b.position.y >= e.position.y + 1 - radius &&
-	    b.position.y < e.position.y + 1 + radius
+	    b.position.y < e.position.y + 1 + radius &&
+	    !e.isDead
 		) {
-
+			Outputln(e.isDead);
 			return  b.position.y;
 		}
 	else return -1;
