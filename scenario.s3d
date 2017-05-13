@@ -381,6 +381,7 @@ function scenario :: update(){
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
 							if(myPlayer.health <= 0) {
+								myPlayer.health = 0;
 								myPlayer.isDead = true;
 								killer = data[1];
 								//myPlayer.spawn();
@@ -410,6 +411,7 @@ function scenario :: update(){
 							fragTimer = getTime();
 							fraggedID = data[1];
 							e.expectedKillPkt = data[4] + 1;
+							e.hitLenght = 0;
 							if(data[3]){
 								myPlayer.score += 20;
 								sfxHeadshot.Play();
@@ -541,7 +543,6 @@ function scenario :: checkPlayerCollision() {
 		foreach (var e in enemies) {
 			var h = isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius);
 			if(b.life!= 0 && h > 0) {
-				e.hitPlayer();
 				b.life = 0;
 				var PDU = Array(5);
 				PDU[0] = HIT_PDU;
@@ -558,6 +559,8 @@ function scenario :: checkPlayerCollision() {
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 				hitPktNum++;
+				
+				e.hitPlayer();
 			}
 		}
 	}

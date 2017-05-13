@@ -202,7 +202,6 @@ function player::draw()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		hitLenght--;
-
 	}
 	
 
@@ -595,7 +594,7 @@ function player :: spawn() {
 	while(level.isColliding(pos, 0.8));
 	health = MAX_HEALTH;
 	position = pos;
-	hitLenght = 0;
+	hitLenght = HIT_ANIM_END;
 	
 	Outputln("respawn");
 }
@@ -606,5 +605,6 @@ function player :: spawn() {
 
 function player :: hitPlayer() {
 	sfxHit.play();
-	hitLenght = HIT_ANIM_START;
+	if(health > 1)
+		hitLenght = HIT_ANIM_START;
 }
