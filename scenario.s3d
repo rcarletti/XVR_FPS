@@ -224,7 +224,8 @@ function scenario :: draw()
 		wallObjArray[i].Draw();
 		
 	foreach (var e in enemies) {
-		e.draw();
+		if(!e.isDead)
+			e.draw();
 	}
 	myPlayer.Draw();	
 		

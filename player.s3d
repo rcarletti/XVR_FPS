@@ -215,7 +215,9 @@ function player::draw()
 function player :: update(){
 	
 	if(local) {
+		if(!isDead){
 		readKeyboard();
+	}
 		
 		/*send heartbeats */
 		if(getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
