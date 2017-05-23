@@ -91,11 +91,11 @@ function OnInit(params) {
 
 	// TODO: put your initialization code here
 	level = scenario();
-	level.init("level_debug.txt");
+	level.init("level.txt");
 	
 	while(getTime() - loginTimer < LOGIN_TIMEOUT){ 
 		var data = networkReceive();
-		if(data!= void) {
+		if (data!= void) {
 			/*someone's online */
 			if (data[0] == HEARTBEAT_PDU){
 				var tmpEnemy = level.getEnemyByID(data[1]);
@@ -131,13 +131,9 @@ function showCrosshair()
 
 function drawMenu() {
 	
-	
-	
 	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT  | GL_ENABLE_BIT );
 	glDisable(GL_LIGHTING);
-	
 	glEnable(GL_BLEND);
-	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 		glLoadIdentity();
@@ -156,8 +152,6 @@ function drawMenu() {
 			glVertex(0, 23, 0.0);
 			glEnd();
 	glPopMatrix();
-
-	
 	glMatrixMode(GL_PROJECTION);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
@@ -215,7 +209,6 @@ function showScores() {
 	var y = 0.95;
 	ConsoleFont("Arial", 20);
 	ConsoleColor([0.86,0.85,0.86]);
-
 	ConsoleText(x, y , "Player ID: " + str(level.myPlayer.ID) + "   "+ "Score: " + str(level.myPlayer.score));
 	ConsoleLines([x, y - 0.01, x + 0.32, y - 0.01]);
 	y-= 0.05;
@@ -228,9 +221,6 @@ function showScores() {
 
 function OnFrame() {
 	static var started = false;
-	/* manage camera */
-	//CameraMoveMouse();
-	
 	if(showMenu) {
 		SceneBegin();
 		drawMenu();
@@ -241,7 +231,6 @@ function OnFrame() {
 		
 		SceneEnd();
 	}
-	
 	
 	else {	
 		if(!started) {
@@ -276,7 +265,6 @@ function OnFrame() {
 		if(grabMouse)
 			SetCursorPos(0.5, 0.5);	
 		
-	
 		SceneBegin();
 		level.draw();
 		updateBlood();
@@ -422,7 +410,4 @@ function updateBlood() {
 		glPopAttrib();
 	
 }
-
-
-
 

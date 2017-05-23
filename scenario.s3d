@@ -20,49 +20,60 @@ function distance(x1, x2, y1, y2){
 
 class scenario 
 {	
-	//variables
+	/* graphic stuff */
 	var floorMesh;
 	var floorObj;
 	var floorMat;
 	var floorTexture;
-	
 	var wallMesh;
 	var wallObjArray;
 	var wallMaterial;
 	var wallTexture;
-	
 	var skyMesh;
 	var skyObj;
 	var skyMaterial;
 	var skyTexture;
 	
+	/* level */	
 	var levelMatrix;
 	var rows;
 	var columns;
-	
-	var ammos;
-	var ammosNum;
-	var ammosTimer;
-	var camera;
-	var isFirstPersonCamera;
-	var myPlayer;
-	var enemies;
-	var healthPickups;
+
+	/* timers */
 	var healthTimer;
-	var healthNum;
-	var headshot;
 	var scoreTimer;
 	var headshotTimer;
+	var fragTimer;
+	var ammosTimer;
+	
+	/* pickups */
+	var healthPickups;	
+	var healthNum;
+	var ammos;
+	var ammosNum;
+
+	/*camera */
+	var camera;
+	var isFirstPersonCamera;
+	
+	/* players */
+	var myPlayer;
+	var enemies;
+	
+	/* PDU stuff */
 	var killPktNum;
 	var hitPktNum;
+	
+	/* other attributes */
+	var headshot;
 	var startTime;
 	var sfxHeadshot;
 	var hasKilled;
-	var fragTimer;
 	var killer;
 	var fraggedID;
 	
-	//functions
+	
+	/* functions */
 	init(textfile);	
 	addplayer(col, id, level);
 	update();
@@ -89,43 +100,39 @@ class scenario
 //INIT SCENARIO
 //********************************************************************
 
-function scenario :: init(textfile){
+function scenario :: init(textfile){	
+	var i,j;
+	wallObjArray = Array(0);
+	ammos = Array(0);
+	enemies = Array(0);
+	healthPickups = Array(0);
+	
 	ammosNum = 0;
 	healthNum = 0;
-	headshot = false;
-	headshotTimer = 0;
 	hitPktNum = 0;
 	killPktNum = 0;
 	fraggedID = -1;
-	hasKilled = false;
-	fragTimer = 0;
 	killer = -1;
-
 	
-	//load scenario
-	if (!FileExist(textfile)) {
-		trace(textfile);
-	}
-	var lines = LoadFile(textfile);
-	rows = len(lines) ;
-	columns = len(lines[0]);
+	headshot = false;
+	hasKilled = false;
 	
-	//create level matrix
-	levelMatrix = array(rows);
-	for (var i = 0; i < rows; i++){
-		levelMatrix[i] = array(columns);
+	/*init timers */
+	headshotTimer = 0;
+	fragTimer = 0;
+	ammosTimer = array(ammosNum);
+	for (var i = 0; i < ammosNum; i++) {
+		ammosTimer[i] = -1;
 	}
 	
-	for (var i=0; i<rows; i++)
-		for (var j=0; j<columns; j++)
-			levelMatrix[i][j] = 0;
-			
-	//set textures and stuff
+	healthTimer = array(healthNum);
+	for (i = 0; i < healthNum; i++) {
+		healthTimer[i] = -1;
+	}
 	
-	sfXHeadshot = CVmVrAWav("headshot.wav",true);
+	scoreTimer = 0;
 	
 	/*floors */
-	
 	floorMat = CVmMaterial();
 	floorTexture = CVmTexture("ground_texture.jpg");
 	floorMat.SetTexture(floorTexture);
@@ -152,12 +159,27 @@ function scenario :: init(textfile){
 	SkyMaterial.Diffuse = [1, 1, 1];
 	SkyMaterial.Emission = [1, 1, 1];
 	
-	wallObjArray = Array(0);
-	ammos = Array(0);
-	enemies = Array(0);
-	healthPickups = Array(0);
+	sfXHeadshot = CVmVrAWav("headshot.wav",true);
+
+	/* load scenario */
+	if (!FileExist(textfile)) {
+		trace(textfile);
+	}
 	
-	var i,j;
+	var lines = LoadFile(textfile);
+	rows = len(lines) ;
+	columns = len(lines[0]);
+	
+	/* create level matrix */
+	levelMatrix = array(rows);
+	for (var i = 0; i < rows; i++){
+		levelMatrix[i] = array(columns);
+	}
+	
+	for (var i=0; i<rows; i++)
+		for (var j=0; j<columns; j++)
+			levelMatrix[i][j] = 0;
+	
 	/*parse level */
 	for (i=0; i<rows; i++)
 		for (j=0; j<columns; j++)
@@ -190,18 +212,6 @@ function scenario :: init(textfile){
 			}
 		}
 		
-	ammosTimer = array(ammosNum);
-	for (var i = 0; i < ammosNum; i++) {
-		ammosTimer[i] = -1;
-	}
-	
-	healthTimer = array(healthNum);
-	for (i = 0; i < healthNum; i++) {
-		healthTimer[i] = -1;
-	}
-	
-	scoreTimer = 0;
-	
 	/*init camera */		
 	camera = CameraGetCurrent();		
 	isFirstPersonCamera = true;
@@ -227,6 +237,7 @@ function scenario :: draw()
 		if(!e.isDead)
 			e.draw();
 	}
+	
 	myPlayer.Draw();	
 		
 	foreach (var a in ammos){
@@ -234,6 +245,7 @@ function scenario :: draw()
 			a[0].draw();
 		}
 	} 
+	
 	foreach (var h in healthPickups) {
 		if(h[2]) {
 			h[0].draw();
@@ -324,30 +336,29 @@ function scenario :: update(){
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null){
-					e.position = [data[2], data[3], data[4]];
-					e.walkDirection = [data[5], data[6], data[7]];
-					e.angleX = data[8];
-					e.angleY = data[9];
-					if (data[10] != e.currWeapon) {
-						e.swapWeapon(data[10]);
+					if (e!= null) {
+						e.position = [data[2], data[3], data[4]];
+						e.walkDirection = [data[5], data[6], data[7]];
+						e.angleX = data[8];
+						e.angleY = data[9];
+						if (data[10] != e.currWeapon) {
+							e.swapWeapon(data[10]);
+						}
+						e.health = data[11];
+						e.currentFrame = data[12];
+						/*walking or running */
+						if (data[13] == 1 || data[13] == 2) {
+							e.isWalking = true;
+							e.speedMultiplier = data[13];
+						}
+						
+						else if(data[13] == 0) {
+							e.isWalking = false;
+							e.isRunning = false;
+						}
+						
+						e.isDead = data[14];
 					}
-					e.health = data[11];
-					e.currentFrame = data[12];
-					if (data[13] == 1) {
-						e.isWalking = true;
-						e.speedMultiplier = data[13];
-					}
-					else if(data[13] == 2) {
-						e.isWalking = true;
-						e.speedMultiplier = data[13];
-					}
-					else if(data[13] == 0) {
-						e.isWalking = false;
-						e.isRunning = false;
-					}
-					e.isDead = data[14];
-				}
 
 				}
 				
@@ -374,17 +385,15 @@ function scenario :: update(){
 					if (data[2] == myPlayer.ID) {
 						/*damage*/
 						var e = getEnemyById(data[1]);
-						Outputln("expected: " + str(e.expectedHitPkt));
-						Outputln("received: " + str(data[4]));
-						if(data[4] >= e.expectedHitPkt) {
+						if (data[4] >= e.expectedHitPkt) {	/*check for duplicate pkts */
 							e.expectedHitPkt = data[4] + 1;
 							myPlayer.health -= data[3];
 							myPlayer.hitPlayer();
-							if(myPlayer.health <= 0) {
+							if (myPlayer.health <= 0) {		/*if dead */
 								myPlayer.health = 0;
 								myPlayer.isDead = true;
 								killer = data[1];
-								//myPlayer.spawn();
+								/*create kill PDU */
 								var PDU = Array(5);
 								PDU[0] = KILL_PDU;
 								PDU[1] = myPlayer.ID;
@@ -393,9 +402,8 @@ function scenario :: update(){
 									PDU[3] = true;
 								else PDU[3] = false;
 								PDU[4] = killPktNum;
-								for(var i = 0; i < 4; i++)
+								for(var i = 0; i < 4; i++) /*send some pkts */
 									networkSend(PDU);
-									Outputln("send");
 								killPktNum++;
 								myPlayer.deathTimer = getTime();
 							}
@@ -406,7 +414,7 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
-						if(data[4] >= e.expectedKillPkt){
+						if(data[4] >= e.expectedKillPkt){	/*check for duplicate pkts */
 							hasKilled = true;
 							fragTimer = getTime();
 							fraggedID = data[1];
@@ -430,7 +438,6 @@ function scenario :: update(){
 				}
 				
 				else if (data[0] == SCORE_PDU) {
-
 					for(var i = 1; i < len(data) - 1; i += 2) {
 						var e = getEnemyById(data[i]);
 						if(e != null && data[i + 1] > e.score) {
@@ -445,33 +452,24 @@ function scenario :: update(){
 		}
 	}
 	
-	if (KeyPressed("C")) {
+	if (KeyPressed("T")) {
 		isFirstPersonCamera = false;
 	}
-	if (KeyPressed("X")) {
+	if (KeyPressed("F")) {
 		isFirstPersonCamera = true;
 	}
-	if(keyPressed("P")) {
-		//ShowCursor(TRUE);
-	}
-	
+
 	sfxHeadshot.SetPosition(myPlayer.position);
 	
-	/*update players */
-
 	myPlayer.update();
 	
 	foreach (var w in ammos) {
 		w[0].update();
 	}
+	
 	foreach (var h in healthPickups) {
 		h[0].update();
 	}
-	
-	updateEnemies();
-	//foreach (var e in enemies) {
-	//	e.update();
-	//}
 	
 	if(getTime() - headshotTimer > HEADSHOT_TIMER) {
 		headshot = false;
@@ -480,16 +478,17 @@ function scenario :: update(){
 	if(getTime() - fragTimer > HEADSHOT_TIMER) {
 		hasKilled = false;
 	}
-		
-	updateCamera();
-	checkPlayerCollision();
-	updateAmmos();
-	updateHealthPickUps();
-
+	
 	if(getTime() - scoreTimer > SCORE_TIMER) {
 		sendScores();
 		scoreTimer = getTime();
 	}
+	
+	updateEnemies();
+	updateCamera();
+	checkPlayerCollision();
+	updateAmmos();
+	updateHealthPickUps();
 
 }
 
@@ -510,10 +509,8 @@ function scenario :: updateEnemies() {
 		else {
 			e.update();
 		}
-		
 	}
 }
-
 
 //********************************************************************
 //SEND SCORES
@@ -542,13 +539,14 @@ function scenario :: checkPlayerCollision() {
 	foreach (var b in myPlayer.bullets) {
 		foreach (var e in enemies) {
 			var h = isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius);
-			if(b.life!= 0 && h > 0) {
+			if(b.life!= 0 && h > 0) {	/* collision detected */
 				b.life = 0;
+				/* create hit pdu */
 				var PDU = Array(5);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
-				if(h > 1.1) {
+				if(h > 1.1) {	/* headshot */
 					PDU[3] = 100;
 					headshot = true;
 					headshotTimer = getTime();
@@ -607,7 +605,7 @@ function scenario :: updateAmmos() {
 function scenario :: updateHealthPickUps() {
 	for (var i = 0; i < healthNum; i++) {
 		if(healthTimer[i] != -1){
-			if(getTime() - healthTimer[i] > HEALTH_INTERVAL){
+			if (getTime() - healthTimer[i] > HEALTH_INTERVAL) {
 				healthTimer[i] = -1;
 				healthPickups[i][2] = true;
 			}
@@ -620,7 +618,7 @@ function scenario :: updateHealthPickUps() {
 //********************************************************************
 
 function scenario :: updateCamera(){
-
+	/* first person camera */
 	var normal = VectorRotate(-90, [0, 1, 0], myPlayer.direction.x_z);
 	var camPos = myPlayer.position + [0, 1, 0] +
 			    VectorRotate(myPlayer.angleX, normal, [0, 0.5, 0]);
@@ -628,6 +626,7 @@ function scenario :: updateCamera(){
 	camera.SetPosition(camPos);
 	camera.SetDirection(myPlayer.direction);
 	
+	/* third person camera */
 	if(!isFirstPersonCamera){
 		var camPos = camera.GetPosition();
 		var camDir = camera.GetDirection();
@@ -638,7 +637,7 @@ function scenario :: updateCamera(){
 }
 
 //********************************************************************
-//CHECK COLLISION
+//CHECK FOR COLLISIONS WITH LEVEL
 //********************************************************************
 
 function scenario :: isColliding(pos, radius){
@@ -726,6 +725,10 @@ function scenario :: getEnemyById(ID) {
 	
 	return null;
 }
+
+//********************************************************************
+//SHOW SCORES
+//********************************************************************
 
 function scenario :: showScores() {
 	var x = 0.22;
