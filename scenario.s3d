@@ -25,6 +25,7 @@ class scenario
 	var floorObj;
 	var floorMat;
 	var floorTexture;
+	var trees;
 	
 	var wallMesh;
 	var wallObjArray;
@@ -100,6 +101,8 @@ function scenario :: init(textfile){
 	hasKilled = false;
 	fragTimer = 0;
 	killer = -1;
+	
+	trees = Array(0);
 
 	
 	//load scenario
@@ -188,6 +191,15 @@ function scenario :: init(textfile){
 				aadd(healthPickups, {tempH, [j, 0, i], true});
 				healthNum++;
 			}
+			
+			else if(lines[i][j] == "t") {
+				var treeMesh = CVmNewMesh("tree.aam");
+				var treeObj = CVmObj(treeMesh);
+				treeMesh.Scale(0.05);
+				treeObj.SetPosition(j,0,i);
+				treeObj.ModulateMaterials([0,1,0]);
+				aadd(trees, treeObj);
+			}
 		}
 		
 	ammosTimer = array(ammosNum);
@@ -226,6 +238,10 @@ function scenario :: draw()
 	foreach (var e in enemies) {
 		if(!e.isDead)
 			e.draw();
+	}
+	
+	foreach (var t in trees) {
+		t.Draw();
 	}
 	myPlayer.Draw();	
 		
@@ -642,14 +658,22 @@ function scenario :: updateCamera(){
 //********************************************************************
 
 function scenario :: isColliding(pos, radius){
-	var tempWalls = array(0);
+	var tempWalls = Array(0);
+	var tempTrees = Array(0);
 	foreach (var w in wallObjarray){
 		var wPos = w.GetPosition();
 		if(distance((wPos.x + 0.5),pos.x, (wPos.z + 0.5), pos.z) < radius && levelMatrix[wPos.z][wPos.x] > (pos.y + 0.5)){
 			aadd(tempWalls, w);
 		}
 	}
-	if (len(tempWalls) > 0)
+	
+	foreach (var t in trees) {
+		var tPos = t.GetPosition();
+		if(distance((tPos.x),pos.x, (tPos.z), pos.z) < radius) {
+			aadd(tempTrees, t);
+		}
+	}
+	if (len(tempWalls) > 0 || len(tempTrees) > 0)
 		return true;
 	else 
 		return false;

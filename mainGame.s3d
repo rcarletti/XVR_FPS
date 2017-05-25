@@ -91,7 +91,7 @@ function OnInit(params) {
 
 	// TODO: put your initialization code here
 	level = scenario();
-	level.init("level_debug.txt");
+	level.init("level.txt");
 	
 	while(getTime() - loginTimer < LOGIN_TIMEOUT){ 
 		var data = networkReceive();
