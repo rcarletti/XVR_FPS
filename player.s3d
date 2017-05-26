@@ -59,6 +59,7 @@ class player
 	var weapons;
 	var currWeapon;
 	var bullets;
+	var prevBullets;
 	var bulletNum;
 	var magazines;
 	var reloadTimer;
@@ -240,9 +241,10 @@ function player :: update(){
 	
 	else {
 		deadReckoning();
+		Outputln("strunz");
 	}
 		
-		
+	Outputln("strunz*2");
 	bulletsUpdate();
 	
 	/*set positions */
@@ -342,7 +344,9 @@ function player :: sendHeartbeats() {
 //********************************************************************
 
 function player ::  bulletsUpdate() {
+	Outputln("strunz/2");
 	for (var i = 0; i < bulletNum; i++) {
+		Outputln(str(i));
 		bullets[i].update(level);
 		if (bullets[i].life <= 0) {
 			adel(bullets, i);
@@ -367,7 +371,7 @@ function player :: deadReckoning(){
 		position += walkDirection * speed * speedMultiplier;
 	}
 	
-	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];	
+	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];
 	
 
 }

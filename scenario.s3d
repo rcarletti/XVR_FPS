@@ -373,13 +373,13 @@ function scenario :: update(){
 					if(e!= null){
 						var bLen = (len(data) - 2) / 8;
 						asize (e.bullets, bLen);
+						e.bulletNum = bLen;
 						for (var i = 2, j = 0; i < (bLen * 8); i+= 8, j++) {
 							var tmpB = bullet();
 							tmpB.init(e.color, data[i + 6]);
-							var position = [data[i + 0], data[i + 1], data[i + 2]];
+							tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 							tmpB.life = data[i + 7];
-							tmpB.bulletObj.SetPosition(position);
 							e.bullets[j] = tmpB;
 						}
 					}
@@ -540,6 +540,7 @@ function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
 			var h = isBulletColliding(b, myPlayer, e.weapons[e.currWeapon].damageRadius);
+			Outputln(str(h));
 			if (b.life!= 0 && h > 0) {
 				b.life = 0;
 				var PDU = Array(4);
@@ -550,7 +551,7 @@ function scenario :: checkPlayerCollision() {
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 				hitPktNum++;
-				myPlayer.health -= e.weapons[e.currWeapon];
+				myPlayer.health -= e.weapons[e.currWeapon].damage;
 				if(myPlayer.health <= 0) {
 					myPlayer.health = 0;
 					myPlayer.isDead = true;
@@ -560,7 +561,7 @@ function scenario :: checkPlayerCollision() {
 					PDU[0] = KILL_PDU;
 					PDU[1] = myPlayer.ID;
 					PDU[2] = e.ID;
-					if(data[3] == 100)
+					if(h > 1.1)
 						PDU[3] = true;
 					else PDU[3] = false;
 					PDU[4] = killPktNum;
