@@ -388,36 +388,15 @@ function scenario :: update(){
 				/*hit PDU */
 				else if (data[0] == HIT_PDU) {
 					if (data[2] == myPlayer.ID) {
-						/*damage*/
+						/*hit someone*/          
 						var e = getEnemyById(data[1]);
-						Outputln("expected: " + str(e.expectedHitPkt));
-						Outputln("received: " + str(data[4]));
-						if(data[4] >= e.expectedHitPkt) {
-							e.expectedHitPkt = data[4] + 1;
-							myPlayer.health -= data[3];
-							myPlayer.hitPlayer();
-							if(myPlayer.health <= 0) {
-								myPlayer.health = 0;
-								myPlayer.isDead = true;
-								killer = data[1];
-								//myPlayer.spawn();
-								var PDU = Array(5);
-								PDU[0] = KILL_PDU;
-								PDU[1] = myPlayer.ID;
-								PDU[2] = data[1];
-								if(data[3] == 100)
-									PDU[3] = true;
-								else PDU[3] = false;
-								PDU[4] = killPktNum;
-								for(var i = 0; i < 4; i++)
-									networkSend(PDU);
-									Outputln("send");
-								killPktNum++;
-								myPlayer.deathTimer = getTime();
-							}
-						}					
-					}
+						if(data[3] >= e.expectedHitPkt) {
+							e.expectedHitPkt = data[3] + 1;
+							e.hitPlayer();
+						}
+					}					
 				}
+				
 				/*kill PDU */
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
@@ -430,6 +409,8 @@ function scenario :: update(){
 							e.hitLenght = 0;
 							if(data[3]){
 								myPlayer.score += 20;
+								headshot = true;
+								headshotTimer = getTime();
 								sfxHeadshot.Play();
 							}
 							else myPlayer.score += 10;
@@ -555,31 +536,43 @@ function scenario :: sendScores() {
 //********************************************************************
 
 function scenario :: checkPlayerCollision() {
-	foreach (var b in myPlayer.bullets) {
-		foreach (var e in enemies) {
-			var h = isBulletColliding(b, e, myPlayer.weapons[myPlayer.currWeapon].damageRadius);
-			if(b.life!= 0 && h > 0) {
+	
+	foreach (var e in enemies) {
+		foreach (var b in e.bullets) {
+			var h = isBulletColliding(b, myPlayer, e.weapons[e.currWeapon].damageRadius);
+			if (b.life!= 0 && h > 0) {
 				b.life = 0;
-				var PDU = Array(5);
+				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
-				if(h > 1.1) {
-					PDU[3] = 100;
-					headshot = true;
-					headshotTimer = getTime();
-				}
-				else
-					PDU[3] = myPlayer.weapons[e.currWeapon].damage;
-				PDU[4] = hitPktNum;
+				PDU[3] = hitPktNum;
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 				hitPktNum++;
-				
-				e.hitPlayer();
+				myPlayer.health -= e.weapons[e.currWeapon];
+				if(myPlayer.health <= 0) {
+					myPlayer.health = 0;
+					myPlayer.isDead = true;
+					killer = e.ID;
+					myPlayer.deathTimer = getTime();
+					var PDU = Array(5);
+					PDU[0] = KILL_PDU;
+					PDU[1] = myPlayer.ID;
+					PDU[2] = e.ID;
+					if(data[3] == 100)
+						PDU[3] = true;
+					else PDU[3] = false;
+					PDU[4] = killPktNum;
+					for(var i = 0; i < 4; i++)
+						networkSend(PDU);
+						Outputln("send");
+					killPktNum++;
+				}
 			}
 		}
 	}
+	
 }
 
 //********************************************************************
