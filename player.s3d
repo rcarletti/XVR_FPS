@@ -241,10 +241,8 @@ function player :: update(){
 	
 	else {
 		deadReckoning();
-		Outputln("strunz");
 	}
 		
-	Outputln("strunz*2");
 	bulletsUpdate();
 	
 	/*set positions */
@@ -344,9 +342,7 @@ function player :: sendHeartbeats() {
 //********************************************************************
 
 function player ::  bulletsUpdate() {
-	Outputln("strunz/2");
 	for (var i = 0; i < bulletNum; i++) {
-		Outputln(str(i));
 		bullets[i].update(level);
 		if (bullets[i].life <= 0) {
 			adel(bullets, i);

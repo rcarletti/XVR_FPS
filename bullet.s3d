@@ -10,7 +10,6 @@ class bullet
 	var life;
 	var isFlying;
 	var color;
-	var prevPosition;
 	
 	init(col, vel);
 	shoot(pos,dir);

@@ -540,7 +540,6 @@ function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
 			var h = isBulletColliding(b, myPlayer, e.weapons[e.currWeapon].damageRadius);
-			Outputln(str(h));
 			if (b.life!= 0 && h > 0) {
 				b.life = 0;
 				var PDU = Array(4);
@@ -551,7 +550,11 @@ function scenario :: checkPlayerCollision() {
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 				hitPktNum++;
-				myPlayer.health -= e.weapons[e.currWeapon].damage;
+				if(h > 1.1) {
+					myPlayer.health = 0;
+				}
+				else 
+					myPlayer.health -= e.weapons[e.currWeapon].damage;
 				if(myPlayer.health <= 0) {
 					myPlayer.health = 0;
 					myPlayer.isDead = true;
@@ -567,7 +570,6 @@ function scenario :: checkPlayerCollision() {
 					PDU[4] = killPktNum;
 					for(var i = 0; i < 4; i++)
 						networkSend(PDU);
-						Outputln("send");
 					killPktNum++;
 				}
 			}
@@ -589,7 +591,6 @@ function scenario :: isBulletColliding(b, e, radius) {
 	    b.position.y < e.position.y + 1 + radius &&
 	    !e.isDead
 		) {
-			Outputln(e.isDead);
 			return  b.position.y;
 		}
 	else return -1;
