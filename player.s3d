@@ -50,6 +50,8 @@ class player
 	var upperRotation;
 	var isRunning;
 	var walkDirection;
+	var collisionSegment;
+	var jumpSegments;
 	
 	/*attributes */
 	var ID;
@@ -104,7 +106,7 @@ function player :: init(ID, col, pos){
 	position = pos;
 	angleY = 0;
 	angleX = 0;
-	speed = 0.05;
+	speed = 0.1;
 	angSpeedX = 0.1;
 	angSpeedY = 0.1;
 	verticalSpeed = 0.0;
@@ -133,6 +135,9 @@ function player :: init(ID, col, pos){
 	deathTimer = 0;
 	expectedKillPkt = 0;
 	expectedHitPkt = 0;
+	jumpSegments = Array(2);
+	jumpSegments[0] = Array(2);
+	jumpSegments[1] = Array(2);
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -185,7 +190,7 @@ function player::draw()
 {
 	//railgunObj.DrawBoundingBox(VR_WIREFRAME);
 	rootObj.Draw(VR_FRAMENUMBER, currentFrame);
-	
+
 	foreach (var b in bullets) {
 		b.draw();
 	}
@@ -490,29 +495,48 @@ function player :: readKeyboard(){
 	
 	walkDirection = strafeDirection + frontDirection;
 	
-	
 	/*update position */
 	var oldPosition = position;
 	position += (walkDirection * speed * speedMultiplier);
 
-	/*check collision */
-	var h = level.LevelMatrix[int(position.z)][int(position.x)];	
-	if(level.isColliding(position, 0.8)){
-		position = oldposition;
-	}
+	collisionSegment = position + walkDirection * 0.4 + [0, 0.1, 0];
+
+	/* vertical segment */
+	jumpSegments[0][0] = position + walkDirection * (-0.4) + [0,0.05,0];
+	jumpSegments[0][1] = position + walkDirection * 0.4 -  [0,0.05,0];
+
+	/* horizontal segment */
+	jumpSegments[1][0] = position + VectorRotate(90, [0,1,0], walkDirection) + [0,0.05,0];
+	jumpSegments[1][1] = position + VectorRotate(-90, [0,1,0], walkDirection) - [0,0.05,0];
+	
+	if (level.map.IsColliding(collisionSegment, collisionSegment + [0, 1.8, 0]))
+		position = oldPosition;
 
 	/* update falls and jumps */
 	verticalSpeed -= 0.006;
-	position.y += verticalSpeed;
-
-	if (position.y > h){
+	
+	if (verticalSpeed < 0) {
+		/* falling */	
+		if (position.y <= 0) {
+			/* do not fall beneath the ground */
+			position.y = 0;
+			verticalSpeed = 0;
+			isFalling = false;
+		} else if (level.map.IsColliding(jumpSegments[0][0], jumpSegments[0][1]) || level.map.IsColliding(jumpSegments[1][0], jumpSegments[1][1])) {
+			/* collision detected with a hard surface, stop falling */
+	     	verticalSpeed = 0;
+	     	isFalling = false;
+	     } else {
+	     	/* free fall */
+			position.y += verticalSpeed;
+			isFalling = true;
+	     }
+	} else {
+		/* keep jumping */
+		position.y += verticalSpeed;
 		isFalling = true;
-	} else if (position.y <= h) {
-		verticalSpeed = 0;
-		position.y = h;
-		isFalling = false;
 	}
-
+	
 	/*get ammos */
 	static var isPickingAmmos = false;
 	var name = level.isWeaponPresent(position.x, position.z);
@@ -584,16 +608,8 @@ function player :: swapWeapon(weaponID) {
 //********************************************************************
 
 function player :: spawn() {
-	var pos, posx, posz;
-	/*spawn outside walls */
-	do {		
-		posx = rand(level.columns);
-		posz = rand(level.rows);
-		pos = [posx, 0, posz];
-	}
-	while(level.isColliding(pos, 0.8));
 	health = MAX_HEALTH;
-	position = pos;
+	position = [0,0,0];
 	hitLenght = HIT_ANIM_END;
 	
 	Outputln("respawn");

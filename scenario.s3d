@@ -21,23 +21,13 @@ function distance(x1, x2, y1, y2){
 class scenario 
 {	
 	//variables
-	var floorMesh;
-	var floorObj;
-	var floorMat;
-	var floorTexture;
-	var trees;
-	
-	var wallMesh;
-	var wallObjArray;
-	var wallMaterial;
-	var wallTexture;
-	
+	var map;
+
 	var skyMesh;
 	var skyObj;
 	var skyMaterial;
 	var skyTexture;
-	
-	var levelMatrix;
+
 	var rows;
 	var columns;
 	
@@ -62,6 +52,7 @@ class scenario
 	var fragTimer;
 	var killer;
 	var fraggedID;
+	var weaponSpawns;
 	
 	//functions
 	init(textfile);	
@@ -101,118 +92,61 @@ function scenario :: init(textfile){
 	hasKilled = false;
 	fragTimer = 0;
 	killer = -1;
+	weaponSpawns = Array(4);
 	
-	trees = Array(0);
-
-	
-	//load scenario
-	if (!FileExist(textfile)) {
-		trace(textfile);
-	}
-	var lines = LoadFile(textfile);
-	rows = len(lines) ;
-	columns = len(lines[0]);
-	
-	//create level matrix
-	levelMatrix = array(rows);
-	for (var i = 0; i < rows; i++){
-		levelMatrix[i] = array(columns);
+	foreach (var w in weaponSpawns) {
+		w = Array(3);
 	}
 	
-	for (var i=0; i<rows; i++)
-		for (var j=0; j<columns; j++)
-			levelMatrix[i][j] = 0;
+	weaponSpawns[0] = [1,0.3,10];
+	weaponSpawns[1] = [20,1,40];
+	weaponSpawns[2] = [50,1,20];
+	weaponSpawns[3] = [35,1,4];
+	var mapMesh = CVmNewMesh("military.aam");
+	mapMesh.Scale(0.30);
+	map = CVmObj(mapMesh);
 			
 	//set textures and stuff
 	
 	sfXHeadshot = CVmVrAWav("headshot.wav",true);
-	
-	/*floors */
-	
-	floorMat = CVmMaterial();
-	floorTexture = CVmTexture("ground_texture.jpg");
-	floorMat.SetTexture(floorTexture);
-	floorMat.ChangeTextureParams(VR_U_TILING,10);
-	floorMat.ChangeTextureParams(VR_V_TILING,10);
-	floorMesh = CVmNewMesh(VRP_BOX);
-	floorMesh.Scale(columns,1,rows);
-	floorMesh.ForceMaterial(floorMat);	
-	floorObj = CVmObj(floorMesh);
-	floorObj.translate(0,-1,0);
-	
-	/*walls */
-	wallTexture = CVmTexture("brick.jpg");
-	
+
 	/*sky */
 	skyMaterial = CVmMaterial();
-	skyTexture   = CVmTexture("sky_texture.jpg");
+	skyTexture   = CVmTexture("sky_texture.png");
 	skyMaterial.SetTexture(skyTexture);
 	skyMesh = CVmNewMesh(VRP_SPHERE);
 	skyMesh.FlipNormals(true);
-	skyMesh.Scale(200);
+	skyMesh.Scale(400);
 	skyMesh.ForceMaterial(SkyMaterial);
 	skyObj = CVmObj(SkyMesh);
 	SkyMaterial.Diffuse = [1, 1, 1];
 	SkyMaterial.Emission = [1, 1, 1];
-	
-	wallObjArray = Array(0);
+
 	ammos = Array(0);
 	enemies = Array(0);
 	healthPickups = Array(0);
+
+	healthTimer = array(healthNum);
+	for (var i = 0; i < healthNum; i++) {
+		healthTimer[i] = -1;
+	}
 	
-	var i,j;
-	/*parse level */
-	for (i=0; i<rows; i++)
-		for (j=0; j<columns; j++)
-		{
-			var height = val(lines[i][j]);
-			if (height < 10 && height > 0) {
-				levelMatrix[i][j] = height / 3;
-				wallMesh = CVmNewMesh(VRP_BOX);
-				var tmpWall = CVmObj(wallMesh);
-				wallMaterial = CVmMaterial();
-				wallMaterial.Diffuse = [1, 1, 1];
-				wallMaterial.SetTexture(wallTexture);
-				wallMaterial.ChangeTextureParams(VR_V_TILING, height / 3);
-				wallMesh.Scale(1, height / 3, 1);
-				wallMesh.ForceMaterial(wallMaterial);
-				tmpWall.SetPosition(j,0,i);
-				aadd(wallObjArray,tmpWall);				
-			}
-			else if(lines[i][j] == "w") {
-				var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
-				tempW.setSpawnPoint([j, 0.2, i]);
-				aadd(ammos, {tempW, [j, 0, i], tempW.name, true} );
-				ammosNum++;
-			}
-			else if(lines[i][j] == "h") {
-				var tempH = healthPickup();
-				tempH.setSpawnPoint([j, 1, i]);
-				aadd(healthPickups, {tempH, [j, 0, i], true});
-				healthNum++;
-			}
-			
-			else if(lines[i][j] == "t") {
-				var treeMesh = CVmNewMesh("tree.aam");
-				var treeObj = CVmObj(treeMesh);
-				treeMesh.Scale(0.05);
-				treeObj.SetPosition(j,0,i);
-				treeObj.ModulateMaterials([0,1,0]);
-				aadd(trees, treeObj);
-			}
-		}
-		
+	scoreTimer = 0;
+	
+	/* spawn ammos */
+	for (var i = 0; i< 4; i++) {
+		var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
+		tempW.setSpawnPoint([weaponSpawns[i][0], weaponSpawns[i][1], weaponSpawns[i][2]]);
+		aadd(ammos, {tempW, [weaponSpawns[i][0], weaponSpawns[i][1], weaponSpawns[i][2]], tempW.name, true} );
+		ammosNum++;
+	}
+	
+	
 	ammosTimer = array(ammosNum);
 	for (var i = 0; i < ammosNum; i++) {
 		ammosTimer[i] = -1;
 	}
 	
-	healthTimer = array(healthNum);
-	for (i = 0; i < healthNum; i++) {
-		healthTimer[i] = -1;
-	}
-	
-	scoreTimer = 0;
 	
 	/*init camera */		
 	camera = CameraGetCurrent();		
@@ -228,21 +162,14 @@ function scenario :: init(textfile){
 
 function scenario :: draw()
 {
-	floorObj.Draw();
+	map.Draw();
 	skyObj.Draw();
-	
-	var i;
-	for (i = 0;i < len(wallObjArray); i++)
-		wallObjArray[i].Draw();
-		
+
 	foreach (var e in enemies) {
 		if(!e.isDead)
 			e.draw();
 	}
-	
-	foreach (var t in trees) {
-		t.Draw();
-	}
+
 	myPlayer.Draw();	
 		
 	foreach (var a in ammos){
@@ -290,19 +217,9 @@ function scenario :: addPlayer(id, col, level){
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
 	var tmpPlayer = player();
-	tmpPlayer.level = level;
-	var pos, posx, posz;
-	/*spawn outside walls */
-	do {		
-		posx = rand(columns - 1);
-		posz = rand(rows - 1);
-		pos = [posx, 0, posz];
-	}
-	while(isColliding(pos, 0.8));
-	
-	tmpPlayer.init(id,col,pos);
 
-	
+	tmpPlayer.init(id,col,[0,0,0]);
+
 	return tmpPlayer;
 }
 
@@ -653,25 +570,7 @@ function scenario :: updateCamera(){
 //********************************************************************
 
 function scenario :: isColliding(pos, radius){
-	var tempWalls = Array(0);
-	var tempTrees = Array(0);
-	foreach (var w in wallObjarray){
-		var wPos = w.GetPosition();
-		if(distance((wPos.x + 0.5),pos.x, (wPos.z + 0.5), pos.z) < radius && levelMatrix[wPos.z][wPos.x] > (pos.y + 0.5)){
-			aadd(tempWalls, w);
-		}
-	}
-	
-	foreach (var t in trees) {
-		var tPos = t.GetPosition();
-		if(distance((tPos.x),pos.x, (tPos.z), pos.z) < radius) {
-			aadd(tempTrees, t);
-		}
-	}
-	if (len(tempWalls) > 0 || len(tempTrees) > 0)
-		return true;
-	else 
-		return false;
+	return false;
 }
 
 //********************************************************************
