@@ -75,6 +75,7 @@ class player
 	var bulletsTimer;
 	var isDead;
 	var deathTimer;
+	var expectedPackets;
 	var expectedKillPkt;
 	var expectedHitPkt;
 
@@ -138,6 +139,9 @@ function player :: init(ID, col, pos){
 	jumpSegments = Array(2);
 	jumpSegments[0] = Array(2);
 	jumpSegments[1] = Array(2);
+	collisionSegment = Array(2);
+	expectedPackets = Array(7);
+
 
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
@@ -440,6 +444,10 @@ function player :: readKeyboard(){
 		verticalSpeed = 0.12;
 	}
 	
+	if(Keypressed("H")) {
+		Outputln(str(position));
+	}
+	
 	/*shoot */
 	static var hasShot = false;
 	if (Mouse.ButtonL && weapons[currWeapon].bullets > 0 && !hasShot && !isReloading) { 
@@ -499,7 +507,7 @@ function player :: readKeyboard(){
 	var oldPosition = position;
 	position += (walkDirection * speed * speedMultiplier);
 
-	collisionSegment = position + walkDirection * 0.4 + [0, 0.1, 0];
+	collisionSegment[0] = position + walkDirection * 0.4 + [0, 0.1, 0];
 
 	/* vertical segment */
 	jumpSegments[0][0] = position + walkDirection * (-0.4) + [0,0.05,0];
@@ -509,7 +517,7 @@ function player :: readKeyboard(){
 	jumpSegments[1][0] = position + VectorRotate(90, [0,1,0], walkDirection) + [0,0.05,0];
 	jumpSegments[1][1] = position + VectorRotate(-90, [0,1,0], walkDirection) - [0,0.05,0];
 	
-	if (level.map.IsColliding(collisionSegment, collisionSegment + [0, 1.8, 0]))
+	if (level.map.IsColliding(collisionSegment[0], collisionSegment[0] + [0, 1.8, 0]))
 		position = oldPosition;
 
 	/* update falls and jumps */
@@ -609,7 +617,8 @@ function player :: swapWeapon(weaponID) {
 
 function player :: spawn() {
 	health = MAX_HEALTH;
-	position = [0,0,0];
+	var r = rand(3);
+	position = level.playerSpawns[r];
 	hitLenght = HIT_ANIM_END;
 	
 	Outputln("respawn");

@@ -280,8 +280,8 @@ function OnFrame() {
 	
 		SceneBegin();
 		level.draw();
-		updateBlood();
 		showBar();
+		updateBlood();
 		showStats();	
 		SceneEnd();
 	}

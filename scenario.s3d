@@ -53,6 +53,8 @@ class scenario
 	var killer;
 	var fraggedID;
 	var weaponSpawns;
+	var healthSpawns;
+	var playerSpawns;
 	
 	//functions
 	init(textfile);	
@@ -92,16 +94,32 @@ function scenario :: init(textfile){
 	hasKilled = false;
 	fragTimer = 0;
 	killer = -1;
-	weaponSpawns = Array(4);
+	weaponSpawns = Array(5);
+	healthSpawns = Array(2);
+	playerSpawns = Array(4);
 	
 	foreach (var w in weaponSpawns) {
 		w = Array(3);
 	}
 	
-	weaponSpawns[0] = [1,0.3,10];
-	weaponSpawns[1] = [20,1,40];
-	weaponSpawns[2] = [50,1,20];
-	weaponSpawns[3] = [35,1,4];
+	foreach (var h in healthSpawns) {
+		h = Array(3);
+	}
+	
+	weaponSpawns[0] = [-13, 0.3, 32];
+	weaponSpawns[1] = [-52, 0.3, 32];
+	weaponSpawns[2] = [-14, 0.3, -24];
+	weaponSpawns[3] = [52, 0.3, -31];
+	weaponSpawns[4] = [42, 0.3, 7];
+	
+	healthSpawns[0] = [-40, 1, 13];
+	healthSpawns[1] = [9, 1, -17];
+	
+	playerSpawns[0] = [0, 0, 0];
+	playerSpawns[1] = [-47, 0, -33];
+	playerSpawns[2] = [41, 0, 32];
+	playerSpawns[3] = [31, 0, -25];
+	
 	var mapMesh = CVmNewMesh("military.aam");
 	mapMesh.Scale(0.30);
 	map = CVmObj(mapMesh);
@@ -125,26 +143,35 @@ function scenario :: init(textfile){
 	ammos = Array(0);
 	enemies = Array(0);
 	healthPickups = Array(0);
-
-	healthTimer = array(healthNum);
-	for (var i = 0; i < healthNum; i++) {
-		healthTimer[i] = -1;
-	}
 	
 	scoreTimer = 0;
 	
 	/* spawn ammos */
-	for (var i = 0; i< 4; i++) {
+	for (var i = 0; i< len(weaponSpawns); i++) {
 		var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
-		tempW.setSpawnPoint([weaponSpawns[i][0], weaponSpawns[i][1], weaponSpawns[i][2]]);
-		aadd(ammos, {tempW, [weaponSpawns[i][0], weaponSpawns[i][1], weaponSpawns[i][2]], tempW.name, true} );
+		tempW.setSpawnPoint(weaponSpawns[i]);
+		aadd(ammos, {tempW, weaponSpawns[i], tempW.name, true} );
 		ammosNum++;
 	}
+	
+	for (var i = 0; i < len(healthSpawns); i++ ) {
+		var tempH = healthPickup();
+		tempH.setSpawnPoint(healthSpawns[i]);
+		aadd(healthPickups, {tempH, healthSpawns[i], true});
+		healthNum++;
+	}
+			
 	
 	
 	ammosTimer = array(ammosNum);
 	for (var i = 0; i < ammosNum; i++) {
 		ammosTimer[i] = -1;
+	}
+	
+	
+	healthTimer = array(healthNum);
+	for (var i = 0; i < healthNum; i++) {
+		healthTimer[i] = -1;
 	}
 	
 	
@@ -177,6 +204,7 @@ function scenario :: draw()
 			a[0].draw();
 		}
 	} 
+	
 	foreach (var h in healthPickups) {
 		if(h[2]) {
 			h[0].draw();
@@ -217,8 +245,8 @@ function scenario :: addPlayer(id, col, level){
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
 	var tmpPlayer = player();
-
-	tmpPlayer.init(id,col,[0,0,0]);
+	var r = rand(3);
+	tmpPlayer.init(id,col,playerSpawns[r]);
 
 	return tmpPlayer;
 }
