@@ -44,6 +44,7 @@ class scenario
 	var headshot;
 	var scoreTimer;
 	var headshotTimer;
+	var packetNumbers;
 	var killPktNum;
 	var hitPktNum;
 	var startTime;
@@ -88,8 +89,8 @@ function scenario :: init(textfile){
 	healthNum = 0;
 	headshot = false;
 	headshotTimer = 0;
-	hitPktNum = 0;
-	killPktNum = 0;
+	//hitPktNum = 0;
+	//killPktNum = 0;
 	fraggedID = -1;
 	hasKilled = false;
 	fragTimer = 0;
@@ -97,6 +98,11 @@ function scenario :: init(textfile){
 	weaponSpawns = Array(5);
 	healthSpawns = Array(2);
 	playerSpawns = Array(4);
+	packetNumbers = Array(7);
+	
+	for (var i = 0; i < 7; i++) {
+		packetNumbers[i] = 0;
+	}
 	
 	foreach (var w in weaponSpawns) {
 		w = Array(3);
@@ -278,14 +284,13 @@ function scenario :: update(){
 						e = getEnemyById(data[1]);		
 					}
 					e.heartbeatTimer = getTime();
-					e.expectedHitPkt = data[5];
-					e.expectedKillPkt = data[6];
+					e.expectedPackets = data[5];
 				}
 				
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null){
+					if(e!= null && data[15] >= e.expectedPackets[DATA_PDU]){
 					e.position = [data[2], data[3], data[4]];
 					e.walkDirection = [data[5], data[6], data[7]];
 					e.angleX = data[8];
@@ -308,6 +313,7 @@ function scenario :: update(){
 						e.isRunning = false;
 					}
 					e.isDead = data[14];
+					e.expectedPackets[DATA_PDU] = data[15] + 1;
 				}
 
 				}
@@ -315,7 +321,7 @@ function scenario :: update(){
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null){
+					if(e!= null && data[len(data - 1)] >= e.expectedPackets[BULLETS_PDU]){
 						var bLen = (len(data) - 2) / 8;
 						asize (e.bullets, bLen);
 						e.bulletNum = bLen;
@@ -326,6 +332,7 @@ function scenario :: update(){
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 							tmpB.life = data[i + 7];
 							e.bullets[j] = tmpB;
+							e.expectedPackets[BULLETS_PDU] = data[len(data - 1)] + 1;
 						}
 					}
 				}
@@ -335,8 +342,8 @@ function scenario :: update(){
 					if (data[2] == myPlayer.ID) {
 						/*hit someone*/          
 						var e = getEnemyById(data[1]);
-						if(data[3] >= e.expectedHitPkt) {
-							e.expectedHitPkt = data[3] + 1;
+						if(data[3] >= e.expectedPackets[HIT_PDU]) {
+							e.expectedPackets[HIT_PDU] = data[3] + 1;
 							e.hitPlayer();
 						}
 					}					
@@ -346,11 +353,11 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
-						if(data[4] >= e.expectedKillPkt){
+						if(data[4] >= e.expectedPackets[KILL_PDU]){
 							hasKilled = true;
 							fragTimer = getTime();
 							fraggedID = data[1];
-							e.expectedKillPkt = data[4] + 1;
+							e.expectedPackets[KILL_PDU] = data[4] + 1;
 							e.hitLenght = 0;
 							if(data[3]){
 								myPlayer.score += 20;
@@ -364,20 +371,27 @@ function scenario :: update(){
 				}
 				
 				else if (data[0] == DISCONNECT_PDU) {
-					for(var i = 0; i < len(enemies); i++) {
-						if(enemies[i].ID == data[1]) {
-							adel(enemies, i);
+					var e = getEnemyById(data[1]);
+					if(data[2] >= e.expectedPackets[DISCONNECT_PDU]) {
+						for(var i = 0; i < len(enemies); i++) {
+							if(enemies[i].ID == data[1]) {
+								adel(enemies, i);
+							}
 						}
+					 e.expectedPackets[DISCONNECT_PDU] = data[2] + 1;
 					}
 				}
 				
 				else if (data[0] == SCORE_PDU) {
-
-					for(var i = 1; i < len(data) - 1; i += 2) {
-						var e = getEnemyById(data[i]);
-						if(e != null && data[i + 1] > e.score) {
-							e.score = data[i + 1];
+					var e = getEnemyById(data[1]);
+					if(data[3] >= e.expectedPackets[SCORE_PDU]) {
+						for(var i = 1; i < len(data) - 1; i += 2) {
+							var e = getEnemyById(data[i]);
+							if(e != null && data[i + 1] > e.score) {
+								e.score = data[i + 1];
+							}
 						}
+					e.expectedPackets[SCORE_PDU] = data[3] + 1;
 					}
 				}
 			}	
@@ -472,8 +486,9 @@ function scenario :: sendScores() {
 		PDU[i + 1] = e.score;
 		i += 2;
 	}
-
+	PDU[len(PDU) - 1] = packetNumbers[SCORE_PDU];
 	networkSend(PDU);
+	packetNumbers[SCORE_PDU]++;
 }
 
 //********************************************************************
@@ -491,10 +506,10 @@ function scenario :: checkPlayerCollision() {
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
-				PDU[3] = hitPktNum;
+				PDU[3] = packetNumbers[HIT_PDU];
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
-				hitPktNum++;
+				packetNumbers[HIT_PDU]++;
 				if(h > 1.1) {
 					myPlayer.health = 0;
 				}
@@ -512,10 +527,10 @@ function scenario :: checkPlayerCollision() {
 					if(h > 1.1)
 						PDU[3] = true;
 					else PDU[3] = false;
-					PDU[4] = killPktNum;
+					PDU[4] = packetNumbers[KILL_PDU];
 					for(var i = 0; i < 4; i++)
 						networkSend(PDU);
-					killPktNum++;
+					packetNumbers[KILL_PDU]++;
 				}
 			}
 		}
