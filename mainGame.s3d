@@ -9,7 +9,7 @@
 
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
-SET LOGIN_TIMEOUT = 0;
+SET LOGIN_TIMEOUT = 2000;
 SET SPAWN_TIME = 5000;
 
 /* Light globals */

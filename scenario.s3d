@@ -321,7 +321,7 @@ function scenario :: update(){
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null && data[len(data - 1)] >= e.expectedPackets[BULLETS_PDU]){
+					if(e!= null && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]){
 						var bLen = (len(data) - 2) / 8;
 						asize (e.bullets, bLen);
 						e.bulletNum = bLen;

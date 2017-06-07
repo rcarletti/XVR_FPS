@@ -340,14 +340,14 @@ function player :: sendData() {
 //********************************************************************
 
 function player :: sendHeartbeats() {
-			var PDU = array(7);
+			var PDU = array(6);
 			PDU[0] = HEARTBEAT_PDU;
 			PDU[1] = ID;
 			PDU[2] = color.r;
 			PDU[3] = color.g;
 			PDU[4] = color.b;
 			PDU[5] = expectedPackets;
-			
+			trace(PDU);
 			networkSend(PDU);
 		
 }
