@@ -34,8 +34,7 @@ class player
 	var sfxHeadshot;
 	var hitLenght;
 	
-	/*movement*/
-	
+	/*movement*/	
 	var position;
 	var direction;
 	var angleY;
@@ -77,10 +76,8 @@ class player
 	var expectedPackets;
 	var expectedKillPkt;
 	var expectedHitPkt;
-
-
-	/*functions */
 	
+	/*functions */
 	init(ID,col,pos);
 	update();
 	draw();
@@ -103,6 +100,12 @@ class player
 function player :: init(ID, col, pos){
 	this.ID = ID;
 	color = col;
+	score = 0;
+	health = 100.0;
+	isDead = false;
+	hit = false;
+	
+	/* movement */
 	position = pos;
 	angleY = 0;
 	angleX = 0;
@@ -110,43 +113,49 @@ function player :: init(ID, col, pos){
 	angSpeedX = 0.1;
 	angSpeedY = 0.1;
 	verticalSpeed = 0.0;
-	currentFrame = SWAT_START_WALK;
-	hit = false;
-	score = 0;
 	toward = 0;
 	speedMultiplier = 1;
 	isWalking = false;
-	weapons = Array(2);
-	currWeapon = 0;
-	bullets = array(0);
-	bulletNum = 0;
-	magazines = array(2);
-	reloadTimer = 0;
-	isReloading = false;
 	isFalling = false;
 	direction = [0,0,0];
-	health = 100.0;
-	hitLenght = HIT_ANIM_END;
-	heartbeatTimer = 0;
 	isRunning = false;
+	
+	/* weapons */
+	currWeapon = 0;
+	bulletNum = 0;
+	reloadTimer = 0;
+	isReloading = false;
+	magazines = array(2);
+	bullets = array(0);
+	weapons = Array(2);
+	weapons[0] = weapon("railgun.aam");
+	weapons[1] = weapon("rocketl.aam");
+	magazines[0] = 2;
+	magazines[1] = 2;
+
+	/* timers */
+	heartbeatTimer = 0;
+	deathTimer = 0;
 	positionTimer = 0;
 	bulletsTimer = 0;
-	isDead = false;
-	deathTimer = 0;
+		
+	/* networking */
 	expectedKillPkt = 0;
 	expectedHitPkt = 0;
-	collisionSegments = Array(4);
 	expectedPackets = Array(7);
+	
+	for(var i = 0; i < len(expectedPackets); i++) {
+		expectedPackets[i] = 0;
+	}
+	
+	/* collision */
+	collisionSegments = Array(4);
 	
 	for(var i = 0; i < len(collisionSegments); i++) {
 		collisionSegments[i] = Array(2);
 	}
 
-	for(var i = 0; i < len(expectedPackets); i++) {
-		expectedPackets[i] = 0;
-	}
-
-
+	/* graphics */
 	lowerMesh = CVmNewMesh("swat_lower.aam");	
 	upperMesh = CVmNewMesh("swat_upper.aam");
 	railgunMesh = CVmNewMesh("railgun.aam");
@@ -174,6 +183,7 @@ function player :: init(ID, col, pos){
 	upperObj.SetPivotPoint([0,1.0,0]); 
 	weaponObj.SetPivotPoint([0,1.0,0]);
 	
+	/* sounds */
 	sfxStep = CVmVRAWav("step.wav",true);
 	sfxHit = CVmVRAWav("hit.wav",true);
 	sfxJam = CVmVrAWav("jam.wav",true);
@@ -181,11 +191,9 @@ function player :: init(ID, col, pos){
 	sfxRailShoot = CVmVrAWav("railg.wav",true);
 	sfxShotgun = CVmVrAWav("shotgun.wav",true);
 
-	weapons[0] = weapon("railgun.aam");
-	weapons[1] = weapon("rocketl.aam");
-	magazines[0] = 2;
-	magazines[1] = 2;
-	hit = false;
+	currentFrame = SWAT_START_WALK;
+	hitLenght = HIT_ANIM_END;
+	
 	swapWeapon(0);
 
 }
@@ -194,9 +202,7 @@ function player :: init(ID, col, pos){
 //DRAW
 //********************************************************************
 
-function player::draw()
-{
-	//railgunObj.DrawBoundingBox(VR_WIREFRAME);
+function player::draw() {
 	rootObj.Draw(VR_FRAMENUMBER, currentFrame);
 
 	foreach (var b in bullets) {
@@ -218,7 +224,6 @@ function player::draw()
 		hitLenght--;
 	}
 	
-
 }
 
 //********************************************************************
@@ -230,7 +235,7 @@ function player :: update(){
 	if(local) {
 		if(!isDead){
 		readKeyboard();
-	}
+		}
 		
 		/*send heartbeats */
 		if(getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
@@ -249,7 +254,6 @@ function player :: update(){
 			bulletsTimer = getTime();
 			sendBulletsData();
 		}
-
 	}
 	
 	else {
@@ -295,8 +299,8 @@ function player :: sendBulletsData() {
 			PDU[i + 7] = b.life;
 			i += 8;
 		}
-		
 		PDU[len(PDU) - 1] = level.packetNumbers[BULLETS_PDU];
+		
 		networkSend(PDU);
 		level.packetNumbers[BULLETS_PDU]++;
 }
@@ -346,10 +350,9 @@ function player :: sendHeartbeats() {
 			PDU[2] = color.r;
 			PDU[3] = color.g;
 			PDU[4] = color.b;
-			PDU[5] = expectedPackets;
-			trace(PDU);
-			networkSend(PDU);
-		
+			PDU[5] = level.packetNumbers;
+
+			networkSend(PDU);		
 }
 
 //********************************************************************
@@ -444,14 +447,10 @@ function player :: readKeyboard(){
 		frontDirection = - direction.x_z;
 	}
 
-	
+	/* jump */
 	if (Keypressed(VK_SPACE) && !isFalling) {			
 		isFalling = true;
 		verticalSpeed = 0.12;
-	}
-	
-	if(Keypressed("H")) {
-		Outputln(str(position));
 	}
 	
 	/*shoot */
@@ -507,9 +506,8 @@ function player :: readKeyboard(){
 		}	
 	}
 	
-	walkDirection = strafeDirection + frontDirection;
-	
 	/*update position */
+	walkDirection = strafeDirection + frontDirection;
 	var oldPosition = position;
 	position += (walkDirection * speed * speedMultiplier);
 
@@ -525,12 +523,12 @@ function player :: readKeyboard(){
 	collisionSegments[3][0] = position + VectorRotate(90, [0,1,0], walkDirection) * 0.4 + [0,0.05,0];
 	collisionSegments[3][1] = position - VectorRotate(90, [0,1,0], walkDirection) * 0.4 - [0,0.05,0];
 
+	/* check collision */
 	if (level.map.IsColliding(collisionSegments[0][0], collisionSegments[0][1]) || level.map.IsColliding(collisionSegments[1][0], collisionSegments[1][1]))
 		position = oldPosition;
 
 	/* update falls and jumps */
 	verticalSpeed -= 0.006;
-	
 	if (verticalSpeed < 0) {
 		/* falling */	
 		if (position.y <= 0) {
@@ -570,12 +568,12 @@ function player :: readKeyboard(){
 		isPickingAmmos = false;
 	}
 	
-	 /*get health pickup */
+	 /*get health pickups */
 	static var isPickingHealth = false;
 	if (level.isHealthPackPresent(position.x, position.z) && !isPickingHealth) {
 		isPickingHealth = true;
 		level.pickUpHealth(position.x, position.z);
-		health += 10;
+		health += 20;
 		if(health > 100) {
 			health = 100;
 		}
@@ -586,23 +584,20 @@ function player :: readKeyboard(){
 	
 	
 	/*frame update */
-	
 	if (isWalking) {
 		var deltaFrame = 0.25 * speedMultiplier;
-		currentFrame += deltaFrame;
-		
+		currentFrame += deltaFrame;	
 		if (currentFrame >= SWAT_END_WALK) {
 			currentFrame = SWAT_START_WALK;
 			sfxStep.Play();
 		}
-		else if (currentFrame == ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK) {
+		if (currentFrame == ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK) {
 			sfxStep.Play();
 		}
 		
 	}
 	
 	/*reload update */
-	
 	if(GetTime() - reloadTimer  > weapons[currWeapon].reloadTime) {
 		isReloading = false;
 	}
@@ -628,7 +623,6 @@ function player :: spawn() {
 	var r = rand(3);
 	position = level.playerSpawns[r];
 	hitLenght = HIT_ANIM_END;
-	
 	Outputln("respawn");
 }
 
