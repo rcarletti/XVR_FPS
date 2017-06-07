@@ -20,42 +20,45 @@ function distance(x1, x2, y1, y2){
 
 class scenario 
 {	
-	//variables
+	/* graphics */
 	var map;
-
 	var skyMesh;
 	var skyObj;
 	var skyMaterial;
 	var skyTexture;
-
-	var rows;
-	var columns;
 	
+	/* pickups */
 	var ammos;
 	var ammosNum;
-	var ammosTimer;
-	var camera;
-	var isFirstPersonCamera;
-	var myPlayer;
-	var enemies;
 	var healthPickups;
-	var healthTimer;
 	var healthNum;
-	var headshot;
-	var scoreTimer;
-	var headshotTimer;
-	var packetNumbers;
-	var killPktNum;
-	var hitPktNum;
-	var startTime;
-	var sfxHeadshot;
-	var hasKilled;
-	var fragTimer;
-	var killer;
-	var fraggedID;
 	var weaponSpawns;
 	var healthSpawns;
+	
+	/* timers */	
+	var ammosTimer;
+	var healthTimer;
+	var scoreTimer;
+	var headshotTimer;
+	var fragTimer;
+	
+	/* networking */
+	var packetNumbers;
+	
+	/* player */
 	var playerSpawns;
+	var myPlayer;
+	var headshot;
+	var hasKilled;
+	
+	/* others */
+	var camera;
+	var isFirstPersonCamera;
+	var enemies;
+	var startTime;
+	var sfxHeadshot;
+	var killer;
+	var fraggedID;
 	
 	//functions
 	init(textfile);	
@@ -85,25 +88,13 @@ class scenario
 //********************************************************************
 
 function scenario :: init(textfile){
+	
+	/* pickups */
 	ammosNum = 0;
 	healthNum = 0;
-	headshot = false;
-	headshotTimer = 0;
-	//hitPktNum = 0;
-	//killPktNum = 0;
-	fraggedID = -1;
-	hasKilled = false;
-	fragTimer = 0;
-	killer = -1;
 	weaponSpawns = Array(5);
 	healthSpawns = Array(2);
-	playerSpawns = Array(4);
-	packetNumbers = Array(7);
-	
-	for (var i = 0; i < 7; i++) {
-		packetNumbers[i] = 0;
-	}
-	
+		
 	foreach (var w in weaponSpawns) {
 		w = Array(3);
 	}
@@ -112,6 +103,7 @@ function scenario :: init(textfile){
 		h = Array(3);
 	}
 	
+	/* pickups positions */
 	weaponSpawns[0] = [-13, 0.3, 32];
 	weaponSpawns[1] = [-52, 0.3, 32];
 	weaponSpawns[2] = [-14, 0.3, -24];
@@ -121,11 +113,33 @@ function scenario :: init(textfile){
 	healthSpawns[0] = [-40, 1, 13];
 	healthSpawns[1] = [9, 1, -17];
 	
+	/* player */	
+	headshot = false;
+	hasKilled = false;
+	playerSpawns = Array(4);
 	playerSpawns[0] = [0, 0, 0];
 	playerSpawns[1] = [-47, 0, -33];
 	playerSpawns[2] = [41, 0, 32];
 	playerSpawns[3] = [31, 0, -25];
 	
+	/* timers */
+	
+	headshotTimer = 0;
+	fraggedID = -1;
+
+	fragTimer = 0;
+	killer = -1;
+
+
+	packetNumbers = Array(7);
+	
+	for (var i = 0; i < 7; i++) {
+		packetNumbers[i] = 0;
+	}
+
+	
+
+
 	var mapMesh = CVmNewMesh("military.aam");
 	mapMesh.Scale(0.30);
 	map = CVmObj(mapMesh);
@@ -251,6 +265,7 @@ function scenario :: addPlayer(id, col, level){
 		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
 	}
 	var tmpPlayer = player();
+	tmpPlayer.level = level;
 	var r = rand(3);
 	tmpPlayer.init(id,col,playerSpawns[r]);
 
@@ -332,7 +347,7 @@ function scenario :: update(){
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 							tmpB.life = data[i + 7];
 							e.bullets[j] = tmpB;
-							e.expectedPackets[BULLETS_PDU] = data[len(data - 1)] + 1;
+							e.expectedPackets[BULLETS_PDU] = data[len(data) -1] + 1;
 						}
 					}
 				}
