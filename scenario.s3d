@@ -384,7 +384,8 @@ function scenario :: update(){
 				
 				else if (data[0] == SCORE_PDU) {
 					var e = getEnemyById(data[1]);
-					if(data[3] >= e.expectedPackets[SCORE_PDU]) {
+					Outputln(str(e.ID));
+					if(data[len(data) - 1] >= e.expectedPackets[SCORE_PDU]) {
 						for(var i = 1; i < len(data) - 1; i += 2) {
 							var e = getEnemyById(data[i]);
 							if(e != null && data[i + 1] > e.score) {
@@ -487,6 +488,7 @@ function scenario :: sendScores() {
 		i += 2;
 	}
 	PDU[len(PDU) - 1] = packetNumbers[SCORE_PDU];
+	trace(PDU);
 	networkSend(PDU);
 	packetNumbers[SCORE_PDU]++;
 }
