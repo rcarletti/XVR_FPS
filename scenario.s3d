@@ -191,15 +191,6 @@ function scenario :: init(textfile){
 				aadd(healthPickups, {tempH, [j, 0, i], true});
 				healthNum++;
 			}
-			
-			else if(lines[i][j] == "t") {
-				var treeMesh = CVmNewMesh("tree.aam");
-				var treeObj = CVmObj(treeMesh);
-				treeMesh.Scale(0.05);
-				treeObj.SetPosition(j,0,i);
-				treeObj.ModulateMaterials([0,1,0]);
-				aadd(trees, treeObj);
-			}
 		}
 		
 	ammosTimer = array(ammosNum);
