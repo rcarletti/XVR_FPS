@@ -87,13 +87,14 @@ class scenario
 //INIT SCENARIO
 //********************************************************************
 
-function scenario :: init(textfile){
-	
+function scenario :: init(textfile){	
 	/* pickups */
 	ammosNum = 0;
 	healthNum = 0;
 	weaponSpawns = Array(5);
 	healthSpawns = Array(2);
+	ammos = Array(0);
+	healthPickups = Array(0);
 		
 	foreach (var w in weaponSpawns) {
 		w = Array(3);
@@ -121,32 +122,17 @@ function scenario :: init(textfile){
 	playerSpawns[1] = [-47, 0, -33];
 	playerSpawns[2] = [41, 0, 32];
 	playerSpawns[3] = [31, 0, -25];
-	
-	/* timers */
-	
-	headshotTimer = 0;
-	fraggedID = -1;
 
-	fragTimer = 0;
-	killer = -1;
-
-
+	/* networking */
 	packetNumbers = Array(7);
-	
 	for (var i = 0; i < 7; i++) {
 		packetNumbers[i] = 0;
 	}
 
-	
-
-
+	/* map */
 	var mapMesh = CVmNewMesh("military.aam");
 	mapMesh.Scale(0.30);
 	map = CVmObj(mapMesh);
-			
-	//set textures and stuff
-	
-	sfXHeadshot = CVmVrAWav("headshot.wav",true);
 
 	/*sky */
 	skyMaterial = CVmMaterial();
@@ -160,12 +146,6 @@ function scenario :: init(textfile){
 	SkyMaterial.Diffuse = [1, 1, 1];
 	SkyMaterial.Emission = [1, 1, 1];
 
-	ammos = Array(0);
-	enemies = Array(0);
-	healthPickups = Array(0);
-	
-	scoreTimer = 0;
-	
 	/* spawn ammos */
 	for (var i = 0; i< len(weaponSpawns); i++) {
 		var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
@@ -174,6 +154,7 @@ function scenario :: init(textfile){
 		ammosNum++;
 	}
 	
+	/* spawn health pickups */	
 	for (var i = 0; i < len(healthSpawns); i++ ) {
 		var tempH = healthPickup();
 		tempH.setSpawnPoint(healthSpawns[i]);
@@ -181,19 +162,20 @@ function scenario :: init(textfile){
 		healthNum++;
 	}
 			
-	
+	/* timers */
+	headshotTimer = 0;
+	fragTimer = 0;
+	scoreTimer = 0;
 	
 	ammosTimer = array(ammosNum);
 	for (var i = 0; i < ammosNum; i++) {
 		ammosTimer[i] = -1;
 	}
 	
-	
 	healthTimer = array(healthNum);
 	for (var i = 0; i < healthNum; i++) {
 		healthTimer[i] = -1;
 	}
-	
 	
 	/*init camera */		
 	camera = CameraGetCurrent();		
@@ -201,6 +183,12 @@ function scenario :: init(textfile){
 	camera.SetFovY(CAMERA_FOV);
 	camera.SetZNear(CAMERA_NEAR);
 	camera.SetZFar(CAMERA_FAR);
+	
+	/* others */
+	fraggedID = -1;
+	killer = -1;
+	sfXHeadshot = CVmVrAWav("headshot.wav",true);
+	enemies = Array(0);
 }
 
 //********************************************************************
@@ -253,7 +241,6 @@ function scenario :: draw()
 			myPlayer.spawn();
 		}
 	 }
-	
 }
 
 //********************************************************************
@@ -384,7 +371,7 @@ function scenario :: update(){
 						}
 					}
 				}
-				
+				/* disconnect PDU */
 				else if (data[0] == DISCONNECT_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] >= e.expectedPackets[DISCONNECT_PDU]) {
@@ -396,7 +383,7 @@ function scenario :: update(){
 					 e.expectedPackets[DISCONNECT_PDU] = data[2] + 1;
 					}
 				}
-				
+				/* score PDU */
 				else if (data[0] == SCORE_PDU) {
 					var e = getEnemyById(data[1]);
 					Outputln(str(e.ID));
@@ -417,20 +404,16 @@ function scenario :: update(){
 		}
 	}
 	
-	if (KeyPressed("C")) {
+	if (KeyPressed("T")) {
 		isFirstPersonCamera = false;
 	}
-	if (KeyPressed("X")) {
+	if (KeyPressed("F")) {
 		isFirstPersonCamera = true;
-	}
-	if(keyPressed("P")) {
-		//ShowCursor(TRUE);
 	}
 	
 	sfxHeadshot.SetPosition(myPlayer.position);
 	
 	/*update players */
-
 	myPlayer.update();
 	
 	foreach (var w in ammos) {
@@ -440,11 +423,6 @@ function scenario :: update(){
 		h[0].update();
 	}
 	
-	updateEnemies();
-	//foreach (var e in enemies) {
-	//	e.update();
-	//}
-	
 	if(getTime() - headshotTimer > HEADSHOT_TIMER) {
 		headshot = false;
 	}
@@ -452,16 +430,16 @@ function scenario :: update(){
 	if(getTime() - fragTimer > HEADSHOT_TIMER) {
 		hasKilled = false;
 	}
-		
-	updateCamera();
-	checkPlayerCollision();
-	updateAmmos();
-	updateHealthPickUps();
-
+	
 	if(getTime() - scoreTimer > SCORE_TIMER) {
 		sendScores();
 		scoreTimer = getTime();
 	}
+	updateEnemies();	
+	updateCamera();
+	checkPlayerCollision();
+	updateAmmos();
+	updateHealthPickUps();
 
 }
 
@@ -482,7 +460,6 @@ function scenario :: updateEnemies() {
 		else {
 			e.update();
 		}
-		
 	}
 }
 
@@ -513,7 +490,6 @@ function scenario :: sendScores() {
 //********************************************************************
 
 function scenario :: checkPlayerCollision() {
-	
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
 			var h = isBulletColliding(b, myPlayer, e.weapons[e.currWeapon].damageRadius);
@@ -527,12 +503,14 @@ function scenario :: checkPlayerCollision() {
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 				packetNumbers[HIT_PDU]++;
-				if(h > 1.1) {
+				if(h > 1.5) {
+					/* headshot */
 					myPlayer.health = 0;
 				}
 				else 
 					myPlayer.health -= e.weapons[e.currWeapon].damage;
 				if(myPlayer.health <= 0) {
+					/* i'm dead */
 					myPlayer.health = 0;
 					myPlayer.isDead = true;
 					killer = e.ID;
@@ -552,7 +530,6 @@ function scenario :: checkPlayerCollision() {
 			}
 		}
 	}
-	
 }
 
 //********************************************************************
@@ -704,6 +681,10 @@ function scenario :: getEnemyById(ID) {
 	
 	return null;
 }
+
+//********************************************************************
+//SHOW SCORES
+//********************************************************************
 
 function scenario :: showScores() {
 	var x = 0.22;
