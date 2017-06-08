@@ -518,10 +518,10 @@ function player :: readKeyboard(){
 	collisionSegments[1][1] = position + walkDirection * 0.4 - VectorRotate(90, [0,1,0], walkDirection) * 0.3 + [0, 1.0, 0];
 
 	/* ground segments */
-	collisionSegments[2][0] = position - walkDirection * 0.4 + [0,0.05,0];
-	collisionSegments[2][1] = position + walkDirection * 0.4 -  [0,0.05,0];
-	collisionSegments[3][0] = position + VectorRotate(90, [0,1,0], walkDirection) * 0.4 + [0,0.05,0];
-	collisionSegments[3][1] = position - VectorRotate(90, [0,1,0], walkDirection) * 0.4 - [0,0.05,0];
+	collisionSegments[2][0] = position - walkDirection * 0.2 + [0,0.05,0];
+	collisionSegments[2][1] = position + walkDirection * 0.2 -  [0,0.05,0];
+	collisionSegments[3][0] = position + VectorRotate(90, [0,1,0], walkDirection) * 0.2 + [0,0.05,0];
+	collisionSegments[3][1] = position - VectorRotate(90, [0,1,0], walkDirection) * 0.2 - [0,0.05,0];
 
 	/* check collision */
 	if (level.map.IsColliding(collisionSegments[0][0], collisionSegments[0][1]) || level.map.IsColliding(collisionSegments[1][0], collisionSegments[1][1]))
