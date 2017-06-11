@@ -11,13 +11,13 @@ class healthPickup {
 
 function healthPickup :: healthPickup() {
 	position = [0,0,0];
-	healthMesh = CVmNewMesh("health.aam");
+	healthMesh = CVmNewMesh("medkit.aam");
 	healthObj = CVmObj(healthMesh);
-	healthMesh.Scale(0.08);
+	healthMesh.Scale(0.012);
 }
 
 function healthPickup :: update() {
-	healthObj.rotate(1, [0, 1, 0]);
+	//healthObj.rotate(1, [0, 1, 0]);
 }
 
 function healthPickup :: draw() {

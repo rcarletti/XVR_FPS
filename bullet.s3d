@@ -1,4 +1,4 @@
-#define MAX_LIFE   50
+#define MAX_LIFE   3
 
 class bullet
 {
@@ -14,7 +14,7 @@ class bullet
 	
 	init(col, vel);
 	shoot(pos,dir);
-	update(level);
+	update(level, deltaFrame);
 	draw();
 };
 
@@ -47,9 +47,9 @@ function bullet::draw()
 	bulletObj.Draw();
 }
 
-function bullet::update(level)
+function bullet::update(level, deltaFrame)
 {
-	position += direction*speed;
+	position += direction * speed * deltaFrame;
 	collisionSegment[0] = position + direction - [0, 0.1, 0];
 	collisionSegment[1] = position + direction + [0, 0.1, 0];
 	if(level.map.IsColliding(collisionSegment[0],collisionSegment[1])){
@@ -57,7 +57,8 @@ function bullet::update(level)
 	}
 	else{
 		bulletObj.SetPosition(position);
-		life--;	
+		life-= deltaFrame;	
+		trace(life);
 	}
 
 }

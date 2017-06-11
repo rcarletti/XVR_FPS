@@ -26,7 +26,7 @@ function weapon :: weapon(name) {
 	if (name == "railgun.aam") {
 		id = 0;
 		Damage = 10;
-		bulletSpeed = 1.5;
+		bulletSpeed = 110;
 		reloadTime = 1500; //ms
 		damageRadius = 1;
 		bullets = 10;
@@ -36,11 +36,11 @@ function weapon :: weapon(name) {
 	else if (name == "rocketl.aam") {
 		id = 1;
 		Damage = 5;
-		bulletSpeed = 1.2;
+		bulletSpeed = 90;
 		reloadTime = 3000; //ms
-		damageRadius = 2;
-		bullets = 3;
-		magazineSize = 3;
+		damageRadius = 3;
+		bullets = 5;
+		magazineSize = 4;
 	}
 	
 	weaponMesh = CVmNewMesh(name);

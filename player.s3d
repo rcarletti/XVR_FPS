@@ -50,6 +50,9 @@ class player
 	var isRunning;
 	var walkDirection;
 	var collisionSegments;
+	var oldFrameTime;
+	var actualFrameTime;
+	var deltaFrame;
 	
 	/*attributes */
 	var ID;
@@ -76,6 +79,7 @@ class player
 	var expectedPackets;
 	var expectedKillPkt;
 	var expectedHitPkt;
+
 	
 	/*functions */
 	init(ID,col,pos);
@@ -109,7 +113,7 @@ function player :: init(ID, col, pos){
 	position = pos;
 	angleY = 0;
 	angleX = 0;
-	speed = 0.1;
+	speed = 4;
 	angSpeedX = 0.1;
 	angSpeedY = 0.1;
 	verticalSpeed = 0.0;
@@ -119,6 +123,9 @@ function player :: init(ID, col, pos){
 	isFalling = false;
 	direction = [0,0,0];
 	isRunning = false;
+	oldFrameTime = 0;
+	actualFrameTime = 0;
+	deltaFrame = 0;
 	
 	/* weapons */
 	currWeapon = 0;
@@ -231,6 +238,9 @@ function player::draw() {
 //********************************************************************
 
 function player :: update(){
+	oldFrameTime = actualFrameTime;
+	actualFrameTime = getTime();
+	deltaFrame = (actualFrameTime - oldFrameTime) / 1000.0;
 	
 	if(local) {
 		if(!isDead){
@@ -361,7 +371,7 @@ function player :: sendHeartbeats() {
 
 function player ::  bulletsUpdate() {
 	for (var i = 0; i < bulletNum; i++) {
-		bullets[i].update(level);
+		bullets[i].update(level, deltaFrame);
 		if (bullets[i].life <= 0) {
 			adel(bullets, i);
 			bulletNum--;
@@ -382,7 +392,7 @@ function player :: deadReckoning(){
 	
 	if (isWalking) {
 		speedMultiplier = 1;
-		position += walkDirection * speed * speedMultiplier;
+		position += walkDirection * speed * speedMultiplier * deltaFrame;
 	}
 	
 	direction = [sin(angleY * GRAD_TO_RAD), sin(angleX * GRAD_TO_RAD), cos(angleY * GRAD_TO_RAD)];
@@ -509,12 +519,12 @@ function player :: readKeyboard(){
 	/*update position */
 	walkDirection = strafeDirection + frontDirection;
 	var oldPosition = position;
-	position += (walkDirection * speed * speedMultiplier);
+	position += (walkDirection * speed * speedMultiplier * deltaFrame);
 
 	/* vertical segments */
-	collisionSegments[0][0] = position + walkDirection * 0.4 + [0, 0.3, 0];
-	collisionSegments[0][1] = collisionSegments[0][0] + [0, 1.5, 0];
-	collisionSegments[1][0] = position + walkDirection * 0.4 + VectorRotate(90, [0,1,0], walkDirection) * 0.3 + [0, 1.0, 0];
+	collisionSegments[0][0] = position + walkDirection * 0.2 + [0, 0.3, 0];
+	collisionSegments[0][1] = position + walkDirection * 0.4 + [0, 1.5, 0];
+	collisionSegments[1][0] = position + walkDirection * 0.2 + VectorRotate(90, [0,1,0], walkDirection) * 0.3 + [0, 1.0, 0];
 	collisionSegments[1][1] = position + walkDirection * 0.4 - VectorRotate(90, [0,1,0], walkDirection) * 0.3 + [0, 1.0, 0];
 
 	/* ground segments */
@@ -582,19 +592,20 @@ function player :: readKeyboard(){
 		isPickingHealth = false;
 	}
 	
-	
 	/*frame update */
+	static var hasPlayed = false;
 	if (isWalking) {
-		var deltaFrame = 0.25 * speedMultiplier;
-		currentFrame += deltaFrame;	
+		var frameMultiplier = deltaFrame * 25;
+		currentFrame += (speedMultiplier * frameMultiplier);	
 		if (currentFrame >= SWAT_END_WALK) {
 			currentFrame = SWAT_START_WALK;
 			sfxStep.Play();
+			hasPlayed = false;
 		}
-		if (currentFrame == ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK) {
+		if (currentFrame >= ((SWAT_END_WALK - SWAT_START_WALK) / 2) + SWAT_START_WALK && !hasPlayed) {
 			sfxStep.Play();
+			hasPlayed = true;
 		}
-		
 	}
 	
 	/*reload update */
