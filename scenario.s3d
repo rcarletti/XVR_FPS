@@ -541,7 +541,7 @@ function scenario :: updateEnemies() {
 //********************************************************************
 
 function scenario :: sendScores() {
-	var PDU = Array((len(enemies) * 2) + 3);
+	var PDU = Array((len(enemies) * 2) + 4);
 	PDU[0] = SCORE_PDU;
 	PDU[1] = myPlayer.ID;
 	PDU[2] = myPlayer.score;
