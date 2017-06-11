@@ -2,7 +2,9 @@
 
 class bullet
 {
+	var id;
 	var position;
+	var prevPosition;
 	var direction;
 	var speed;
 	var bulletMesh;
@@ -11,28 +13,30 @@ class bullet
 	var isFlying;
 	var color;
 	
-	init(col, vel);
+	init(id, col, vel);
 	shoot(pos,dir);
 	update(level, deltaFrame);
 	draw();
 };
 
 
-
-function bullet::init(col, speed) {
+function bullet::init(id, col, speed)
+{
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
 	bulletMesh.Scale(0.1);
 	bulletObj = CVmObj(bulletMesh);
+	this.id = id;
 	this.speed = speed;
 	life = 0;
-	position = [0.0, 0.0, 0.0];
+	prevPosition = position = [0.0, 0.0, 0.0];
 	direction = [0.0, 0.0, 0.0];
 	color = col;
 	bulletMesh.ModulateMaterials(color);
 }
 
-function bullet::shoot(pos, dir) {
-	position = pos;
+function bullet::shoot(pos, dir)
+{
+	prevPosition = position = pos;
 	direction = dir;
 	life = MAX_LIFE;
 	return 1;
@@ -42,14 +46,20 @@ function bullet::draw() {
 	bulletObj.Draw();
 }
 
-function bullet::update(level, deltaFrame) {
+function bullet::update(level, deltaFrame)
+{
+	prevPosition = position;
 	position += direction * speed * deltaFrame;
-	if (level.isColliding(position, 0.8)) {
+
+	collisionSegment[0] = position + direction - [0, 0.1, 0];
+	collisionSegment[1] = position + direction + [0, 0.1, 0];
+
+	if(level.map.IsColliding(collisionSegment[0],collisionSegment[1])){
 		life = 0;
 	}
 	else {
 		bulletObj.SetPosition(position);
-		life--;	
+		life-= deltaFrame;	
 	}
 
 }

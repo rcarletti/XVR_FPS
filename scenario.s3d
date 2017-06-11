@@ -83,7 +83,7 @@ class scenario
 	updateAmmos();
 	addEnemy(e);
 	checkPlayerCollision();
-	isBulletColliding(b, e, radius);
+	isBulletColliding(b, e);
 	getEnemyById(ID);
 	isHealthPackPresent(posx, posz);
 	pickUpHealth(posx, posz);
@@ -371,19 +371,38 @@ function scenario :: update(){
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					if (e!= null  && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]) {
-						var bLen = (len(data) - 2) / 8;
-						asize (e.bullets, bLen);
-						e.bulletNum = bLen;
-						for (var i = 2, j = 0; i < (bLen * 8); i+= 8, j++) {
+					if(e != null && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]){
+						var bLen = (len(data) - 3) / 9;
+						var newBullets = Array(bLen);
+
+						/* for each bullet sent by the enemy */
+						for (var i = 2, j = 0; i < (bLen * 9); i+= 9, j++) {
+							var newBullet = true;
+							var lastPosition;
+
+							/* look for the bullet in our current state, and save its last position */
+							for (var k = 0; k < e.bulletNum; k++) {
+								if (e.bullets[k].id == data[i + 8]) {
+									lastPosition = e.bullets[k].position;
+									newBullet = false;
+									break;
+								}
+							}
+
+							/* create the new bullet using also information from the stored state */
 							var tmpB = bullet();
-							tmpB.init(e.color, data[i + 6]);
+							tmpB.init(data[i + 8], e.color, data[i + 6]);
 							tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
+							tmpB.prevPosition = (newBullet) ? tmpB.position : lastPosition;
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 							tmpB.life = data[i + 7];
-							e.bullets[j] = tmpB;
-							e.expectedPackets[BULLETS_PDU] = data[len(data) -1] + 1;
+							newBullets[j] = tmpB;								
 						}
+						
+						/* copy the updated array */
+						e.bullets = newBullets;
+						e.bulletNum = bLen;
+						e.expectedPackets[BULLETS_PDU] = data[len(data) -1] + 1;
 					}
 				}
 				
@@ -545,8 +564,8 @@ function scenario :: checkPlayerCollision() {
 	
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
-			var h = isBulletColliding(b, myPlayer, e.weapons[e.currWeapon].damageRadius);
-			if (b.life!= 0 && h > 0) {
+			var h = isBulletColliding(b, myPlayer);
+			if (b.life!= 0 && h) {
 				b.life = 0;
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
@@ -556,11 +575,11 @@ function scenario :: checkPlayerCollision() {
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 				packetNumbers[HIT_PDU]++;
-				if((myPlayer.position.y + h) > 1.5) {
+				//if((myPlayer.position.y + h) > 1.5) {
 					/* headshot */
-					myPlayer.health = 0;
-				}
-				else 
+				//	myPlayer.health = 0;
+				//}
+				//else 
 					myPlayer.health -= e.weapons[e.currWeapon].damage;
 				if(myPlayer.health <= 0) {
 					/* i'm dead */
@@ -572,10 +591,9 @@ function scenario :: checkPlayerCollision() {
 					PDU[0] = KILL_PDU;
 					PDU[1] = myPlayer.ID;
 					PDU[2] = e.ID;
-					if((myPlayer.position.y + h) > 1.5)
-						PDU[3] = true;
-					else 
-						PDU[3] = false;
+					//if(h > 1.5)
+					//	PDU[3] = true;
+					/*else*/ PDU[3] = false;
 					PDU[4] = packetNumbers[KILL_PDU];
 					for(var i = 0; i < 4; i++)
 						networkSend(PDU);
@@ -591,18 +609,8 @@ function scenario :: checkPlayerCollision() {
 //BULLET COLLISION
 //********************************************************************
 
-function scenario :: isBulletColliding(b, e, radius) {
-	if (b.position.x >= e.position.x - radius &&
-	    b.position.x < e.position.x + radius &&
-	    b.position.z >= e.position.z - radius &&
-	    b.position.z < e.position.z + radius &&
-	    b.position.y >= e.position.y + 1 - radius &&
-	    b.position.y < e.position.y + 1 + radius &&
-	    !e.isDead
-		) {
-			return  b.position.y;
-		}
-	else return -1;
+function scenario :: isBulletColliding(b, e) {
+	return e.rootObj.IsColliding(b.position, b.prevPosition);
 }
 
 //********************************************************************
