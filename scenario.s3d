@@ -560,6 +560,7 @@ function scenario :: checkPlayerCollision() {
 //********************************************************************
 
 function scenario :: isBulletColliding(b, e) {
+	Outputln(str(b.collisionPoints[0]));
 	if(e.rootObj.IsColliding(b.collisionPoints[0], b.collisionPoints[4]) ||
 		e.rootObj.IsColliding(b.collisionPoints[1], b.collisionPoints[5]) ||
 		e.rootObj.IsColliding(b.collisionPoints[2], b.collisionPoints[6]) ||

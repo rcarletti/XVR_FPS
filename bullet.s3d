@@ -30,6 +30,7 @@ function bullet::init(id, col, speed, radius)
 	bulletMesh.Scale(0.1);
 	bulletObj = CVmObj(bulletMesh);
 	this.id = id;
+	this.radius = radius;
 	this.speed = speed;
 	life = 0;
 	prevPosition = position = [0.0, 0.0, 0.0];
@@ -43,9 +44,9 @@ function bullet::init(id, col, speed, radius)
 }
 
 function bullet::shoot(pos, dir) {
-	setCollisionPoints();
 	prevPosition = position = pos;
 	direction = dir;
+	setCollisionPoints();
 	life = MAX_LIFE;
 	return 1;
 }
@@ -60,7 +61,7 @@ function bullet::update(level, deltaFrame) {
 
 	setCollisionPoints();
 
-	if(level.map.IsColliding(collisionPoints[0][0],collisionPoints[0][1])){
+	if(level.map.IsColliding(collisionPoints[0],collisionPoints[1])){
 		life = 0;
 	}
 	else{
@@ -71,6 +72,7 @@ function bullet::update(level, deltaFrame) {
 }
 
 function bullet::setCollisionPoints() {
+	trace(position);
 	collisionPoints[0] = position - [0, radius, 0];
 	collisionPoints[1] = position + [0, radius, 0];
 	collisionPoints[2] = position + VectorRotate(90, [0,1,0], direction.x_z) * radius;
