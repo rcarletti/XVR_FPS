@@ -509,40 +509,45 @@ function scenario :: sendScores() {
 function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
-			var h = isBulletColliding(b, myPlayer);
-			if (b.life!= 0 && h) {
+			if (b.life!= 0 && isBulletColliding(b, myPlayer)) {
 				b.life = 0;
+
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
 				PDU[3] = packetNumbers[HIT_PDU];
+				packetNumbers[HIT_PDU]++;
+
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
-				packetNumbers[HIT_PDU]++;
-				//if((myPlayer.position.y + h) > 1.5) {
+
+				var h = b.position.y - myPlayer.position.y;
+				if(h > 1.5) {
 					/* headshot */
-				//	myPlayer.health = 0;
-				//}
-				//else 
+					myPlayer.health = 0;
+				}
+				else { 
 					myPlayer.health -= e.weapons[e.currWeapon].damage;
+				}
+
 				if(myPlayer.health <= 0) {
-					/* i'm dead */
+					/* I'm dead */
 					myPlayer.health = 0;
 					myPlayer.isDead = true;
 					killer = e.ID;
 					myPlayer.deathTimer = getTime();
+
 					var PDU = Array(5);
 					PDU[0] = KILL_PDU;
 					PDU[1] = myPlayer.ID;
 					PDU[2] = e.ID;
-					//if(h > 1.5)
-					//	PDU[3] = true;
-					/*else*/ PDU[3] = false;
+					PDU[3] = h > 1.5;
 					PDU[4] = packetNumbers[KILL_PDU];
+					packetNumbers[KILL_PDU]++;
+
 					for(var i = 0; i < 4; i++)
 						networkSend(PDU);
-					packetNumbers[KILL_PDU]++;
 				}
 			}
 		}
