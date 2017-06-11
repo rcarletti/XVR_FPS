@@ -20,12 +20,11 @@ function distance(x1, x2, y1, y2){
 
 class scenario 
 {	
-	//variables
+	/* graphics */
 	var floorMesh;
 	var floorObj;
 	var floorMat;
 	var floorTexture;
-	var trees;
 	
 	var wallMesh;
 	var wallObjArray;
@@ -41,25 +40,33 @@ class scenario
 	var rows;
 	var columns;
 	
+	/* pickups */
 	var ammos;
 	var ammosNum;
-	var ammosTimer;
-	var camera;
-	var isFirstPersonCamera;
-	var myPlayer;
-	var enemies;
 	var healthPickups;
-	var healthTimer;
 	var healthNum;
-	var headshot;
+	
+	/* timers */
+	var ammosTimer;
+	var healthTimer;
 	var scoreTimer;
 	var headshotTimer;
-	var killPktNum;
-	var hitPktNum;
+	var fragTimer;
+	
+	/* networking */
+	var packetNumbers;
+	
+	/* player */
+	var myPlayer;
+	var hasKilled;
+	var headshot;
+	
+	/*others */
+	var camera;
+	var isFirstPersonCamera;
+	var enemies;
 	var startTime;
 	var sfxHeadshot;
-	var hasKilled;
-	var fragTimer;
 	var killer;
 	var fraggedID;
 	
@@ -91,21 +98,24 @@ class scenario
 //********************************************************************
 
 function scenario :: init(textfile){
+	/* pickups */
 	ammosNum = 0;
 	healthNum = 0;
+	healthPickups = Array(0);
+	ammos = Array(0);
+	
+	/* player */
 	headshot = false;
-	headshotTimer = 0;
-	hitPktNum = 0;
-	killPktNum = 0;
-	fraggedID = -1;
 	hasKilled = false;
-	fragTimer = 0;
-	killer = -1;
+	enemies = Array(0);
 	
-	trees = Array(0);
+	/* networking */
+	packetNumbers = Array(7);
+	for (var i = 0; i < 7; i++) {
+		packetNumbers[i] = 0;
+	}
 
-	
-	//load scenario
+	/* load level from file */
 	if (!FileExist(textfile)) {
 		trace(textfile);
 	}
@@ -113,22 +123,16 @@ function scenario :: init(textfile){
 	rows = len(lines) ;
 	columns = len(lines[0]);
 	
-	//create level matrix
+	/* create level matrix */
 	levelMatrix = array(rows);
 	for (var i = 0; i < rows; i++){
 		levelMatrix[i] = array(columns);
 	}
-	
 	for (var i=0; i<rows; i++)
 		for (var j=0; j<columns; j++)
 			levelMatrix[i][j] = 0;
 			
-	//set textures and stuff
-	
-	sfXHeadshot = CVmVrAWav("headshot.wav",true);
-	
-	/*floors */
-	
+	/*floors */	
 	floorMat = CVmMaterial();
 	floorTexture = CVmTexture("ground_texture.jpg");
 	floorMat.SetTexture(floorTexture);
@@ -142,6 +146,7 @@ function scenario :: init(textfile){
 	
 	/*walls */
 	wallTexture = CVmTexture("brick.jpg");
+	wallObjArray = Array(0);
 	
 	/*sky */
 	skyMaterial = CVmMaterial();
@@ -155,18 +160,13 @@ function scenario :: init(textfile){
 	SkyMaterial.Diffuse = [1, 1, 1];
 	SkyMaterial.Emission = [1, 1, 1];
 	
-	wallObjArray = Array(0);
-	ammos = Array(0);
-	enemies = Array(0);
-	healthPickups = Array(0);
-	
-	var i,j;
 	/*parse level */
-	for (i=0; i<rows; i++)
-		for (j=0; j<columns; j++)
-		{
+	var i,j;
+	for (i = 0; i < rows; i++)
+		for (j = 0; j < columns; j++) {
 			var height = val(lines[i][j]);
 			if (height < 10 && height > 0) {
+				/* add walls */
 				levelMatrix[i][j] = height / 3;
 				wallMesh = CVmNewMesh(VRP_BOX);
 				var tmpWall = CVmObj(wallMesh);
@@ -179,19 +179,29 @@ function scenario :: init(textfile){
 				tmpWall.SetPosition(j,0,i);
 				aadd(wallObjArray,tmpWall);				
 			}
-			else if(lines[i][j] == "w") {
+			else if (lines[i][j] == "w") {
+				/* add ammos */
 				var tempW = (Rand(1) == 0)? weapon("railgun.aam") : weapon("rocketl.aam");
 				tempW.setSpawnPoint([j, 0.2, i]);
 				aadd(ammos, {tempW, [j, 0, i], tempW.name, true} );
 				ammosNum++;
 			}
 			else if(lines[i][j] == "h") {
+				/* add health pickups */
 				var tempH = healthPickup();
 				tempH.setSpawnPoint([j, 1, i]);
 				aadd(healthPickups, {tempH, [j, 0, i], true});
 				healthNum++;
 			}
 		}
+		
+	/* sounds */
+	sfXHeadshot = CVmVrAWav("headshot.wav",true);
+		
+	/* timers */
+	fragTimer = 0;
+	headshotTimer = 0;
+	scoreTimer = 0;
 		
 	ammosTimer = array(ammosNum);
 	for (var i = 0; i < ammosNum; i++) {
@@ -203,14 +213,18 @@ function scenario :: init(textfile){
 		healthTimer[i] = -1;
 	}
 	
-	scoreTimer = 0;
-	
-	/*init camera */		
+	/* init camera */		
 	camera = CameraGetCurrent();		
 	isFirstPersonCamera = true;
 	camera.SetFovY(CAMERA_FOV);
 	camera.SetZNear(CAMERA_NEAR);
 	camera.SetZFar(CAMERA_FAR);
+	
+	/* others */
+	fraggedID = -1;
+	killer = -1;
+	
+	
 }
 
 //********************************************************************
@@ -221,31 +235,29 @@ function scenario :: draw()
 {
 	floorObj.Draw();
 	skyObj.Draw();
-	
-	var i;
-	for (i = 0;i < len(wallObjArray); i++)
-		wallObjArray[i].Draw();
-		
+
+	foreach (var w in wallObJArray) {
+		w.Draw();
+	}
+
 	foreach (var e in enemies) {
 		if(!e.isDead)
 			e.draw();
 	}
 	
-	foreach (var t in trees) {
-		t.Draw();
-	}
-	myPlayer.Draw();	
-		
 	foreach (var a in ammos){
 		if(a[3]) {
 			a[0].draw();
 		}
 	} 
+	
 	foreach (var h in healthPickups) {
 		if(h[2]) {
 			h[0].draw();
 		}
 	}
+
+	myPlayer.Draw();	
 
 	if(headshot) {
 		ConsoleFont("Tahoma", 30);
@@ -292,14 +304,13 @@ function scenario :: addPlayer(id, col, level){
 	while(isColliding(pos, 0.8));
 	
 	tmpPlayer.init(id,col,pos);
-
-	
 	return tmpPlayer;
 }
 
 //********************************************************************
 //ADD ONE ENEMY
 //********************************************************************
+
 function scenario :: addEnemy(e) {
 	aadd(enemies, e);
 	e.local = false;
@@ -324,44 +335,43 @@ function scenario :: update(){
 						e = getEnemyById(data[1]);		
 					}
 					e.heartbeatTimer = getTime();
-					e.expectedHitPkt = data[5];
-					e.expectedKillPkt = data[6];
+					e.expectedPackets = data[5];
 				}
 				
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null){
-					e.position = [data[2], data[3], data[4]];
-					e.walkDirection = [data[5], data[6], data[7]];
-					e.angleX = data[8];
-					e.angleY = data[9];
-					if (data[10] != e.currWeapon) {
-						e.swapWeapon(data[10]);
+					if(e!= null && data[15] >= e.expectedPackets[DATA_PDU]){
+						e.position = [data[2], data[3], data[4]];
+						e.walkDirection = [data[5], data[6], data[7]];
+						e.angleX = data[8];
+						e.angleY = data[9];
+						if (data[10] != e.currWeapon) {
+							e.swapWeapon(data[10]);
+						}
+						e.health = data[11];
+						e.currentFrame = data[12];
+						if (data[13] == 1) {
+							e.isWalking = true;
+							e.speedMultiplier = data[13];
+						}
+						else if(data[13] == 2) {
+							e.isWalking = true;
+							e.speedMultiplier = data[13];
+						}
+						else if(data[13] == 0) {
+							e.isWalking = false;
+							e.isRunning = false;
+						}
+						e.isDead = data[14];
+						e.expectedPackets[DATA_PDU] = data[15] + 1;
 					}
-					e.health = data[11];
-					e.currentFrame = data[12];
-					if (data[13] == 1) {
-						e.isWalking = true;
-						e.speedMultiplier = data[13];
-					}
-					else if(data[13] == 2) {
-						e.isWalking = true;
-						e.speedMultiplier = data[13];
-					}
-					else if(data[13] == 0) {
-						e.isWalking = false;
-						e.isRunning = false;
-					}
-					e.isDead = data[14];
-				}
-
 				}
 				
 				/*bullets PDU */
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null){
+					if (e!= null  && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]) {
 						var bLen = (len(data) - 2) / 8;
 						asize (e.bullets, bLen);
 						e.bulletNum = bLen;
@@ -372,6 +382,7 @@ function scenario :: update(){
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 							tmpB.life = data[i + 7];
 							e.bullets[j] = tmpB;
+							e.expectedPackets[BULLETS_PDU] = data[len(data) -1] + 1;
 						}
 					}
 				}
@@ -381,8 +392,8 @@ function scenario :: update(){
 					if (data[2] == myPlayer.ID) {
 						/*hit someone*/          
 						var e = getEnemyById(data[1]);
-						if(data[3] >= e.expectedHitPkt) {
-							e.expectedHitPkt = data[3] + 1;
+						if(data[3] >=  e.expectedPackets[HIT_PDU]) {
+							e.expectedPackets[HIT_PDU] = data[3] + 1;
 							e.hitPlayer();
 						}
 					}					
@@ -392,11 +403,11 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
-						if(data[4] >= e.expectedKillPkt){
+						if(data[4] >= e.expectedPackets[KILL_PDU]){
 							hasKilled = true;
 							fragTimer = getTime();
 							fraggedID = data[1];
-							e.expectedKillPkt = data[4] + 1;
+							e.expectedPackets[KILL_PDU] = data[4] + 1;
 							e.hitLenght = 0;
 							if(data[3]){
 								myPlayer.score += 20;
@@ -410,20 +421,28 @@ function scenario :: update(){
 				}
 				
 				else if (data[0] == DISCONNECT_PDU) {
-					for(var i = 0; i < len(enemies); i++) {
-						if(enemies[i].ID == data[1]) {
-							adel(enemies, i);
+						var e = getEnemyById(data[1]);
+						if(data[2] >= e.expectedPackets[DISCONNECT_PDU]) {
+							for(var i = 0; i < len(enemies); i++) {
+								if(enemies[i].ID == data[1]) {
+									adel(enemies, i);
+								}
+							}
+						 e.expectedPackets[DISCONNECT_PDU] = data[2] + 1;
 						}
 					}
-				}
-				
+					
+				/* score PDU */
 				else if (data[0] == SCORE_PDU) {
-
-					for(var i = 1; i < len(data) - 1; i += 2) {
-						var e = getEnemyById(data[i]);
-						if(e != null && data[i + 1] > e.score) {
-							e.score = data[i + 1];
+					var e = getEnemyById(data[1]);
+					if(data[len(data) - 1] >= e.expectedPackets[SCORE_PDU]) {
+						for(var i = 1; i < len(data) - 1; i += 2) {
+							var e = getEnemyById(data[i]);
+							if(e != null && data[i + 1] > e.score) {
+								e.score = data[i + 1];
+							}
 						}
+					e.expectedPackets[SCORE_PDU] = data[len(data) - 1] + 1;
 					}
 				}
 			}	
@@ -433,34 +452,30 @@ function scenario :: update(){
 		}
 	}
 	
-	if (KeyPressed("C")) {
-		isFirstPersonCamera = false;
+	static var hasSwitched = false;
+	if (KeyPressed("V") && !hasSwitched) {
+		isFirstPersonCamera = !isFirstPersonCamera;
+		hasSwitched = true;
 	}
-	if (KeyPressed("X")) {
-		isFirstPersonCamera = true;
-	}
-	if(keyPressed("P")) {
-		//ShowCursor(TRUE);
+	else if (!KeyPressed("V")) {
+		hasSwitched = false;
 	}
 	
 	sfxHeadshot.SetPosition(myPlayer.position);
 	
 	/*update players */
-
 	myPlayer.update();
+	updateEnemies();
 	
+	/* update pickups */
 	foreach (var w in ammos) {
 		w[0].update();
 	}
 	foreach (var h in healthPickups) {
 		h[0].update();
 	}
-	
-	updateEnemies();
-	//foreach (var e in enemies) {
-	//	e.update();
-	//}
-	
+
+	/* update times */
 	if(getTime() - headshotTimer > HEADSHOT_TIMER) {
 		headshot = false;
 	}
@@ -468,17 +483,16 @@ function scenario :: update(){
 	if(getTime() - fragTimer > HEADSHOT_TIMER) {
 		hasKilled = false;
 	}
+	
+	if(getTime() - scoreTimer > SCORE_TIMER) {
+		sendScores();
+		scoreTimer = getTime();
+	}
 		
 	updateCamera();
 	checkPlayerCollision();
 	updateAmmos();
 	updateHealthPickUps();
-
-	if(getTime() - scoreTimer > SCORE_TIMER) {
-		sendScores();
-		scoreTimer = getTime();
-	}
-
 }
 
 
@@ -518,8 +532,9 @@ function scenario :: sendScores() {
 		PDU[i + 1] = e.score;
 		i += 2;
 	}
-
+	PDU[len(PDU) - 1] = packetNumbers[SCORE_PDU];
 	networkSend(PDU);
+	packetNumbers[SCORE_PDU]++;
 }
 
 //********************************************************************
@@ -537,16 +552,18 @@ function scenario :: checkPlayerCollision() {
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
 				PDU[2] = e.ID;
-				PDU[3] = hitPktNum;
+				PDU[3] = packetNumbers[HIT_PDU];
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
-				hitPktNum++;
-				if(h > 1.1) {
+				packetNumbers[HIT_PDU]++;
+				if((myPlayer.position.y + h) > 1.5) {
+					/* headshot */
 					myPlayer.health = 0;
 				}
 				else 
 					myPlayer.health -= e.weapons[e.currWeapon].damage;
 				if(myPlayer.health <= 0) {
+					/* i'm dead */
 					myPlayer.health = 0;
 					myPlayer.isDead = true;
 					killer = e.ID;
@@ -555,13 +572,14 @@ function scenario :: checkPlayerCollision() {
 					PDU[0] = KILL_PDU;
 					PDU[1] = myPlayer.ID;
 					PDU[2] = e.ID;
-					if(h > 1.1)
+					if((myPlayer.position.y + h) > 1.5)
 						PDU[3] = true;
-					else PDU[3] = false;
-					PDU[4] = killPktNum;
+					else 
+						PDU[3] = false;
+					PDU[4] = packetNumbers[KILL_PDU];
 					for(var i = 0; i < 4; i++)
 						networkSend(PDU);
-					killPktNum++;
+					packetNumbers[KILL_PDU]++;
 				}
 			}
 		}
@@ -653,13 +671,7 @@ function scenario :: isColliding(pos, radius){
 		}
 	}
 	
-	foreach (var t in trees) {
-		var tPos = t.GetPosition();
-		if(distance((tPos.x),pos.x, (tPos.z), pos.z) < radius) {
-			aadd(tempTrees, t);
-		}
-	}
-	if (len(tempWalls) > 0 || len(tempTrees) > 0)
+	if (len(tempWalls) > 0)
 		return true;
 	else 
 		return false;
@@ -736,6 +748,11 @@ function scenario :: getEnemyById(ID) {
 	
 	return null;
 }
+
+
+//********************************************************************
+//SHOW SCORES
+//********************************************************************
 
 function scenario :: showScores() {
 	var x = 0.22;

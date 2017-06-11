@@ -13,14 +13,13 @@ class bullet
 	
 	init(col, vel);
 	shoot(pos,dir);
-	update(level);
+	update(level, deltaFrame);
 	draw();
 };
 
 
 
-function bullet::init(col, speed)
-{
+function bullet::init(col, speed) {
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
 	bulletMesh.Scale(0.1);
 	bulletObj = CVmObj(bulletMesh);
@@ -32,26 +31,23 @@ function bullet::init(col, speed)
 	bulletMesh.ModulateMaterials(color);
 }
 
-function bullet::shoot(pos, dir)
-{
+function bullet::shoot(pos, dir) {
 	position = pos;
 	direction = dir;
 	life = MAX_LIFE;
 	return 1;
 }
 
-function bullet::draw()
-{
+function bullet::draw() {
 	bulletObj.Draw();
 }
 
-function bullet::update(level)
-{
-	position += direction*speed;
-	if(level.isColliding(position, 0.8)){
+function bullet::update(level, deltaFrame) {
+	position += direction * speed * deltaFrame;
+	if (level.isColliding(position, 0.8)) {
 		life = 0;
 	}
-	else{
+	else {
 		bulletObj.SetPosition(position);
 		life--;	
 	}
