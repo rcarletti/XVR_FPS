@@ -13,16 +13,18 @@ class bullet
 	var isFlying;
 	var color;
 	var collisionPoints;
+	var radius;
 	
-	init(id, col, vel);
+	init(id, col, vel, radius);
 	shoot(pos,dir);
-	update(level, deltaFrame, radius);
+	update(level, deltaFrame);
 	draw();
+	setCollisionPoints();
 };
 
 
 
-function bullet::init(id, col, speed)
+function bullet::init(id, col, speed, radius)
 {
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
 	bulletMesh.Scale(0.1);
@@ -41,6 +43,7 @@ function bullet::init(id, col, speed)
 }
 
 function bullet::shoot(pos, dir) {
+	setCollisionPoints();
 	prevPosition = position = pos;
 	direction = dir;
 	life = MAX_LIFE;
@@ -51,18 +54,11 @@ function bullet::draw() {
 	bulletObj.Draw();
 }
 
-function bullet::update(level, deltaFrame, radius) {
+function bullet::update(level, deltaFrame) {
 	prevPosition = position;
 	position += direction * speed * deltaFrame;
 
-	collisionPoints[0] = position - [0, radius, 0];
-	collisionPoints[1] = position + [0, radius, 0];
-	collisionPoints[2] = position + VectorRotate(90, [0,1,0], direction.x_z) * radius;
-	collisionPoints[3] = position + VectorRotate(-90, [0,1,0], direction.x_z) * radius;
-	collisionPoints[4] = prevPosition - [0, radius, 0];
-	collisionPoints[5] = prevPosition + [0, radius, 0];
-	collisionPoints[6] = prevPosition + VectorRotate(90, [0,1,0], direction.x_z) * radius;
-	collisionPoints[7] = prevPosition + VectorRotate(-90, [0,1,0], direction.x_z) * radius;
+	setCollisionPoints();
 
 	if(level.map.IsColliding(collisionPoints[0][0],collisionPoints[0][1])){
 		life = 0;
@@ -72,5 +68,16 @@ function bullet::update(level, deltaFrame, radius) {
 		life-= deltaFrame;	
 	}
 
+}
+
+function bullet::setCollisionPoints() {
+	collisionPoints[0] = position - [0, radius, 0];
+	collisionPoints[1] = position + [0, radius, 0];
+	collisionPoints[2] = position + VectorRotate(90, [0,1,0], direction.x_z) * radius;
+	collisionPoints[3] = position + VectorRotate(-90, [0,1,0], direction.x_z) * radius;
+	collisionPoints[4] = prevPosition - [0, radius, 0];
+	collisionPoints[5] = prevPosition + [0, radius, 0];
+	collisionPoints[6] = prevPosition + VectorRotate(90, [0,1,0], direction.x_z) * radius;
+	collisionPoints[7] = prevPosition + VectorRotate(-90, [0,1,0], direction.x_z) * radius;
 }
 
