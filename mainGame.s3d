@@ -309,11 +309,12 @@ function OnError() {
 
 function OnExit() {
 	// TODO: put your cleanup code here
-	var PDU = Array(2);
+	var PDU = Array(3);
 	PDU[0] = DISCONNECT_PDU;
 	PDU[1] = myPlayer.ID;
-	
+	PDU[2] = level.packetNumbers[DISCONNECT_PDU];
 	networkSend(PDU);
+	level.packetNumbers[DISCONNECT_PDU]++;
 }
 
 
