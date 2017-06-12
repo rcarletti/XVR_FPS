@@ -51,10 +51,7 @@ function bullet::update(level, deltaFrame)
 	prevPosition = position;
 	position += direction * speed * deltaFrame;
 
-	collisionSegment[0] = position + direction - [0, 0.1, 0];
-	collisionSegment[1] = position + direction + [0, 0.1, 0];
-
-	if(level.map.IsColliding(collisionSegment[0],collisionSegment[1])){
+	if(level.isColliding(position, 0.8)){
 		life = 0;
 	}
 	else {
