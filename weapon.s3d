@@ -38,7 +38,7 @@ function weapon :: weapon(name) {
 		Damage = 5;
 		bulletSpeed = 90;
 		reloadTime = 3000; //ms
-		damageRadius = 3;
+		damageRadius = 2;
 		bullets = 5;
 		magazineSize = 4;
 	}
