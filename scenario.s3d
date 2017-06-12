@@ -343,7 +343,7 @@ function scenario :: update(){
 
 							/* create the new bullet using also information from the stored state */
 							var tmpB = bullet();
-							tmpB.init(data[i + 8], e.color, data[i + 6]);
+							tmpB.init(data[i + 8], e.color, data[i + 6], data[i + 9]);
 							tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
 							tmpB.prevPosition = (newBullet) ? tmpB.position : lastPosition;
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
