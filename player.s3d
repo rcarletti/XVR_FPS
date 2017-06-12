@@ -371,7 +371,7 @@ function player :: sendHeartbeats() {
 
 function player ::  bulletsUpdate() {
 	for (var i = 0; i < bulletNum; i++) {
-		bullets[i].update(level, deltaFrame, weapons[currWeapon].damageRadius);
+		bullets[i].update(level, deltaFrame);
 		if (bullets[i].life <= 0) {
 			adel(bullets, i);
 			bulletNum--;

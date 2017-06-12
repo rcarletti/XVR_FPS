@@ -12,11 +12,11 @@ class bullet
 	var life;
 	var isFlying;
 	var color;
-	var collisionPoints;
+	var collisionSegment;
 	
 	init(id, col, vel);
 	shoot(pos,dir);
-	update(level, deltaFrame, radius);
+	update(level, deltaFrame);
 	draw();
 };
 
@@ -34,37 +34,31 @@ function bullet::init(id, col, speed)
 	direction = [0.0, 0.0, 0.0];
 	color = col;
 	bulletMesh.ModulateMaterials(color);
-	collisionPoints = Array(8);
-	for(var i = 0; i < len(collisionPoints); i++) {
-		collisionPoints[i] = Array(3);
-	}
+	collisionSegment = Array(2);
 }
 
-function bullet::shoot(pos, dir) {
+function bullet::shoot(pos, dir)
+{
 	prevPosition = position = pos;
 	direction = dir;
 	life = MAX_LIFE;
 	return 1;
 }
 
-function bullet::draw() {
+function bullet::draw()
+{
 	bulletObj.Draw();
 }
 
-function bullet::update(level, deltaFrame, radius) {
+function bullet::update(level, deltaFrame)
+{
 	prevPosition = position;
 	position += direction * speed * deltaFrame;
 
-	collisionPoints[0] = position - [0, radius, 0];
-	collisionPoints[1] = position + [0, radius, 0];
-	collisionPoints[2] = position + VectorRotate(90, [0,1,0], direction.x_z) * radius;
-	collisionPoints[3] = position + VectorRotate(-90, [0,1,0], direction.x_z) * radius;
-	collisionPoints[4] = prevPosition - [0, radius, 0];
-	collisionPoints[5] = prevPosition + [0, radius, 0];
-	collisionPoints[6] = prevPosition + VectorRotate(90, [0,1,0], direction.x_z) * radius;
-	collisionPoints[7] = prevPosition + VectorRotate(-90, [0,1,0], direction.x_z) * radius;
+	collisionSegment[0] = position + direction - [0, 0.1, 0];
+	collisionSegment[1] = position + direction + [0, 0.1, 0];
 
-	if(level.map.IsColliding(collisionPoints[0][0],collisionPoints[0][1])){
+	if(level.map.IsColliding(collisionSegment[0],collisionSegment[1])){
 		life = 0;
 	}
 	else{
