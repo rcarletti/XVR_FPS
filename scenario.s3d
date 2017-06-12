@@ -323,11 +323,11 @@ function scenario :: update(){
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
 					if(e != null && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]){
-						var bLen = (len(data) - 3) / 10;
+						var bLen = (len(data) - 3) / 9;
 						var newBullets = Array(bLen);
 
 						/* for each bullet sent by the enemy */
-						for (var i = 2, j = 0; i < (bLen * 10); i+= 10, j++) {
+						for (var i = 2, j = 0; i < (bLen * 9); i+= 9, j++) {
 							var newBullet = true;
 							var lastPosition;
 
@@ -342,12 +342,11 @@ function scenario :: update(){
 
 							/* create the new bullet using also information from the stored state */
 							var tmpB = bullet();
-							tmpB.init(data[i + 8], e.color, data[i + 6], data[i + 9]);
+							tmpB.init(data[i + 8], e.color, data[i + 6]);
 							tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
 							tmpB.prevPosition = (newBullet) ? tmpB.position : lastPosition;
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
 							tmpB.life = data[i + 7];
-							tmpB.radius = data[i + 9];
 							newBullets[j] = tmpB;								
 						}
 						
