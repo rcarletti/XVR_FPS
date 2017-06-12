@@ -89,6 +89,8 @@ function OnInit(params) {
 	
 	networkInit();
 
+	
+
 	// TODO: put your initialization code here
 	level = scenario();
 	level.init("level.txt");
