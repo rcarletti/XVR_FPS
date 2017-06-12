@@ -511,7 +511,7 @@ function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
 			if (b.life!= 0 && distanceBetweenSegments(b.position, b.prevPosition,
-					myPlayer.position, (myPlayer.position + [0,2,0]) ) < 0.3 + myPlayer.weapons[myPlayer.currWeapon].damageRadius) {
+					myPlayer.position, (myPlayer.position + [0,2,0]) ) < 0.3 + b.radius) {
 				b.life = 0;
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;

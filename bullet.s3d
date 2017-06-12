@@ -13,8 +13,9 @@ class bullet
 	var isFlying;
 	var color;
 	var collisionSegment;
+	var radius;
 	
-	init(id, col, vel);
+	init(id, col, vel, radius);
 	shoot(pos,dir);
 	update(level, deltaFrame);
 	draw();
@@ -22,7 +23,7 @@ class bullet
 
 
 
-function bullet::init(id, col, speed)
+function bullet::init(id, col, speed, radius)
 {
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
 	bulletMesh.Scale(0.1);
@@ -30,6 +31,7 @@ function bullet::init(id, col, speed)
 	this.id = id;
 	this.speed = speed;
 	life = 0;
+	this.radius = radius;
 	prevPosition = position = [0.0, 0.0, 0.0];
 	direction = [0.0, 0.0, 0.0];
 	color = col;
