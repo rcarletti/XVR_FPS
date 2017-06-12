@@ -10,6 +10,7 @@ SET SPAWN_TIME = 5000;
 
 #include "weapon.s3d"
 #include "healthPickups.s3d"
+#include "utilities.s3d"
 
 function distance(x1, x2, y1, y2){
 	var dx = x1 - x2;
@@ -509,9 +510,8 @@ function scenario :: sendScores() {
 function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
-			if (b.life!= 0 && isBulletColliding(b, myPlayer)) {
+			if (b.life!= 0 && distanceBetweenSegments(b.position, b.prevPosition, myPlayer.position, (myPlayer.position + [0,2,0])) < 2) {
 				b.life = 0;
-
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
