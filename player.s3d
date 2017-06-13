@@ -290,7 +290,7 @@ function player :: update(){
 //********************************************************************
 
 function player :: sendBulletsData() {
-	var PDU = Array((bulletNum * 9) + 3);
+	var PDU = Array((bulletNum * 10) + 3);
 		PDU[0] = BULLETS_PDU;
 		PDU[1] = ID;
 		var i = 2;
@@ -304,7 +304,8 @@ function player :: sendBulletsData() {
 			PDU[i + 6] = b.speed;
 			PDU[i + 7] = b.life;
 			PDU[i + 8] = b.id;
-			i += 9;
+			PDU[i + 9] = b.radius;
+			i += 10;
 		}
 		PDU[len(PDU) - 1] = level.packetNumbers[BULLETS_PDU];
 
@@ -466,7 +467,7 @@ function player :: readKeyboard(){
 		bulletNum++;
 		weapons[currWeapon].bullets--;
 		var tmpBullet = bullet();
-		tmpBullet.init(lastBulletId++, [0, 0, 0], weapons[currWeapon].bulletSpeed);
+		tmpBullet.init(lastBulletId++, [0, 0, 0], weapons[currWeapon].bulletSpeed, weapons[currWeapon].damageRadius);
 		aadd(bullets, tmpBullet);
 		var bbox = railgunMesh.SubsetGetBoundingBox(0);
 		var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];

@@ -10,13 +10,9 @@ SET SPAWN_TIME = 5000;
 
 #include "weapon.s3d"
 #include "healthPickups.s3d"
+#include "utilities.s3d"
 
-function distance(x1, x2, y1, y2){
-	var dx = x1 - x2;
-	var dy = y1 - y2;
-	var dist = sqrt(dx * dx + dy * dy);
-	return dist;
-}
+
 
 class scenario 
 {	
@@ -224,7 +220,6 @@ function scenario :: init(textfile){
 	fraggedID = -1;
 	killer = -1;
 	
-	
 }
 
 //********************************************************************
@@ -391,7 +386,7 @@ function scenario :: update(){
 
 							/* create the new bullet using also information from the stored state */
 							var tmpB = bullet();
-							tmpB.init(data[i + 8], e.color, data[i + 6]);
+							tmpB.init(data[i + 8], e.color, data[i + 6], data[i + 9]);
 							tmpB.position = [data[i + 0], data[i + 1], data[i + 2]];
 							tmpB.prevPosition = (newBullet) ? tmpB.position : lastPosition;
 							tmpB.direction = [data[i + 3], data[i + 4], data[i + 5]];
@@ -561,10 +556,10 @@ function scenario :: sendScores() {
 //********************************************************************
 
 function scenario :: checkPlayerCollision() {
-	
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
-			if (b.life!= 0 && isBulletColliding(b, myPlayer)) {
+			if (b.life!= 0 && distanceBetweenSegments(b.position, b.prevPosition,
+					myPlayer.position, (myPlayer.position + [0,2,0]) ) < 0.3 + b.radius) {
 				b.life = 0;
 
 				var PDU = Array(4);

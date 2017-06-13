@@ -12,6 +12,7 @@ class bullet
 	var life;
 	var isFlying;
 	var color;
+	var radius;
 	
 	init(id, col, vel);
 	shoot(pos,dir);
