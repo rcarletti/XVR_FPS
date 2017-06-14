@@ -35,7 +35,6 @@ function weapon :: weapon(name) {
 	
 	else if (name == "rocketl.aam") {
 		id = 1;
-		Damage = 5;
 		bulletSpeed = 90;
 		reloadTime = 3000; //ms
 		damageRadius = 2;

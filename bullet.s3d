@@ -14,20 +14,21 @@ class bullet
 	var color;
 	var radius;
 	
-	init(id, col, vel);
+	init(id, col, vel, radius);
 	shoot(pos,dir);
 	update(level, deltaFrame);
 	draw();
 };
 
 
-function bullet::init(id, col, speed)
+function bullet::init(id, col, speed, radius)
 {
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
 	bulletMesh.Scale(0.1);
 	bulletObj = CVmObj(bulletMesh);
 	this.id = id;
 	this.speed = speed;
+	this.radius = radius;
 	life = 0;
 	prevPosition = position = [0.0, 0.0, 0.0];
 	direction = [0.0, 0.0, 0.0];
