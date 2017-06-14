@@ -556,7 +556,7 @@ function scenario :: sendScores() {
 function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
-			var hit = distanceBetweenSegments(b.position, b.prevPosition, myPlayer.position, (myPlayer.position + [0, 1.8, 0]));
+			var hit = distanceBetweenSegments(b.position, b.prevPosition, myPlayer.position, (myPlayer.position + [0, 1.5, 0]));
 
 			if (b.life > 0 && !myPlayer.isDead && hit < (0.3 + b.radius)) {
 				b.life = 0;

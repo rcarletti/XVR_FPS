@@ -25,7 +25,7 @@ function bullet::init(id, col, speed, radius)
 {
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
 	bulletObj = CVmObj(bulletMesh);
-	bulletMesh.Scale(0.1);
+	bulletMesh.Scale(radius / 2);
 
 	this.id = id;
 	this.speed = speed;
