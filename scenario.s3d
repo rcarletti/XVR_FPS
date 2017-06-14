@@ -374,6 +374,7 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
+						trace(data);
 						if(data[4] >= e.expectedPackets[KILL_PDU]){
 							hasKilled = true;
 							fragTimer = getTime();
@@ -405,7 +406,6 @@ function scenario :: update(){
 				/* score PDU */
 				else if (data[0] == SCORE_PDU) {
 					var e = getEnemyById(data[1]);
-					trace(data);
 					if(data[len(data) - 1] >= e.expectedPackets[SCORE_PDU]) {
 						for(var i = 1; i < len(data) - 1; i += 2) {
 							var e = getEnemyById(data[i]);
@@ -499,8 +499,9 @@ function scenario :: sendScores() {
 		i += 2;
 	}
 	PDU[len(PDU) - 1] = packetNumbers[SCORE_PDU];
-	networkSend(PDU);
 	packetNumbers[SCORE_PDU]++;
+	networkSend(PDU);
+	
 }
 
 //********************************************************************
@@ -511,7 +512,7 @@ function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
 			if (b.life!= 0 && distanceBetweenSegments(b.position, b.prevPosition,
-					myPlayer.position, (myPlayer.position + [0,2,0]) ) < 0.3 + b.radius) {
+					myPlayer.position, (myPlayer.position + [0,1.2,0]) ) < 0.3 + b.radius) {
 				b.life = 0;
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
