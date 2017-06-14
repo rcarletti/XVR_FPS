@@ -324,7 +324,7 @@ function scenario :: update(){
 				/*heartbeat PDU */
 				if (data[0] == HEARTBEAT_PDU) {
 					var e = getEnemyById(data[1]);
-					if (e == void) {		/*new enemy */
+					if (e == null) {		/*new enemy */
 						var tmpEnemy = addPlayer(data[1], [data[2],data[3], data[4]], this);	
 						addEnemy(tmpEnemy);
 						e = getEnemyById(data[1]);		
@@ -336,7 +336,7 @@ function scenario :: update(){
 				/*data PDU */
 				else if (data[0] == DATA_PDU) {
 					var e = getEnemyById(data[1]);
-					if(e!= null && data[15] >= e.expectedPackets[DATA_PDU]){
+					if(e != null && data[15] >= e.expectedPackets[DATA_PDU]){
 						e.position = [data[2], data[3], data[4]];
 						e.walkDirection = [data[5], data[6], data[7]];
 						e.angleX = data[8];
@@ -367,12 +367,11 @@ function scenario :: update(){
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
 					if(e != null && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]){
-						trace(data);
-						var bLen = (len(data) - 3) / 9;
+						var bLen = (len(data) - 3) / 10;
 						var newBullets = Array(bLen);
 
 						/* for each bullet sent by the enemy */
-						for (var i = 2, j = 0; i < (bLen * 9); i+= 9, j++) {
+						for (var i = 2, j = 0; i < (bLen * 10); i+= 10, j++) {
 							var newBullet = true;
 							var lastPosition;
 
@@ -407,7 +406,7 @@ function scenario :: update(){
 					if (data[2] == myPlayer.ID) {
 						/*hit someone*/          
 						var e = getEnemyById(data[1]);
-						if(data[3] >=  e.expectedPackets[HIT_PDU]) {
+						if (e != null && data[3] >=  e.expectedPackets[HIT_PDU]) {
 							e.expectedPackets[HIT_PDU] = data[3] + 1;
 							e.hitPlayer();
 						}
@@ -418,7 +417,7 @@ function scenario :: update(){
 				else if (data[0] == KILL_PDU) {
 					var e = getEnemyById(data[1]);
 					if(data[2] == myPlayer.ID) {
-						if(data[4] >= e.expectedPackets[KILL_PDU]){
+						if(e != null && data[4] >= e.expectedPackets[KILL_PDU]){
 							hasKilled = true;
 							fragTimer = getTime();
 							fraggedID = data[1];
@@ -437,27 +436,26 @@ function scenario :: update(){
 				
 				else if (data[0] == DISCONNECT_PDU) {
 						var e = getEnemyById(data[1]);
-						if(data[2] >= e.expectedPackets[DISCONNECT_PDU]) {
+						if(e != null && data[2] >= e.expectedPackets[DISCONNECT_PDU]) {
 							for(var i = 0; i < len(enemies); i++) {
 								if(enemies[i].ID == data[1]) {
 									adel(enemies, i);
 								}
 							}
-						 e.expectedPackets[DISCONNECT_PDU] = data[2] + 1;
 						}
 					}
 					
 				/* score PDU */
 				else if (data[0] == SCORE_PDU) {
-					var e = getEnemyById(data[1]);
-					if(data[len(data) - 1] >= e.expectedPackets[SCORE_PDU]) {
+					var e1 = getEnemyById(data[1]);
+					if(e1 != null && data[len(data) - 1] >= e1.expectedPackets[SCORE_PDU]) {
 						for(var i = 1; i < len(data) - 1; i += 2) {
-							var e = getEnemyById(data[i]);
-							if(e != null && data[i + 1] > e.score) {
-								e.score = data[i + 1];
+							var e2 = getEnemyById(data[i]);
+							if(e2 != null && data[i + 1] > e2.score) {
+								e2.score = data[i + 1];
 							}
 						}
-					e.expectedPackets[SCORE_PDU] = data[len(data) - 1] + 1;
+						e1.expectedPackets[SCORE_PDU] = data[len(data) - 1] + 1;
 					}
 				}
 			}	
@@ -521,7 +519,6 @@ function scenario :: updateEnemies() {
 		if((getTime() - e.heartbeatTimer - startTime) > PLAYER_TIMEOUT) {
 			adel(enemies,i);
 			i--;
-			Outputln("PLAYER CRASHED");
 		}
 		
 		else {
@@ -559,10 +556,11 @@ function scenario :: sendScores() {
 function scenario :: checkPlayerCollision() {
 	foreach (var e in enemies) {
 		foreach (var b in e.bullets) {
-			if (b.life!= 0 && distanceBetweenSegments(b.position, b.prevPosition,
-					myPlayer.position, (myPlayer.position + [0,2,0]) ) < 0.3 + b.radius) {
+			var hit = distanceBetweenSegments(b.position, b.prevPosition, myPlayer.position, (myPlayer.position + [0, 1.8, 0]));
+
+			if (b.life > 0 && !myPlayer.isDead && hit < (0.3 + b.radius)) {
 				b.life = 0;
-	     		Outputln("colpito");
+
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
@@ -573,8 +571,8 @@ function scenario :: checkPlayerCollision() {
 				for(var i = 0; i < 4; i++)
 					networkSend(PDU);
 
-				var h = b.position.y - myPlayer.position.y;
-				if(myPlayer.position.y + h > 1.5) {
+				var h = b.position.y - myPlayer.position.y; 
+				if (h > 1.5) {
 					/* headshot */
 					myPlayer.health = 0;
 				}
@@ -754,7 +752,6 @@ function scenario :: getEnemyById(ID) {
 		if (e.id == ID)
 			return e;
 	}
-	
 	return null;
 }
 

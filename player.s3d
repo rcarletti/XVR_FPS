@@ -620,8 +620,6 @@ function player :: spawn() {
 	health = MAX_HEALTH;
 	position = pos;
 	hitLenght = HIT_ANIM_END;
-	
-	Outputln("respawn");
 }
 
 //********************************************************************
