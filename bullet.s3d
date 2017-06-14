@@ -1,4 +1,4 @@
-#define MAX_LIFE   50
+#define MAX_LIFE   2
 
 class bullet
 {

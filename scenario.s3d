@@ -367,6 +367,7 @@ function scenario :: update(){
 				else if (data[0] == BULLETS_PDU) {
 					var e = getEnemyById(data[1]);
 					if(e != null && data[len(data) - 1] >= e.expectedPackets[BULLETS_PDU]){
+						trace(data);
 						var bLen = (len(data) - 3) / 9;
 						var newBullets = Array(bLen);
 
@@ -561,7 +562,7 @@ function scenario :: checkPlayerCollision() {
 			if (b.life!= 0 && distanceBetweenSegments(b.position, b.prevPosition,
 					myPlayer.position, (myPlayer.position + [0,2,0]) ) < 0.3 + b.radius) {
 				b.life = 0;
-
+	     		Outputln("colpito");
 				var PDU = Array(4);
 				PDU[0] = HIT_PDU;
 				PDU[1] = myPlayer.ID;
@@ -573,7 +574,7 @@ function scenario :: checkPlayerCollision() {
 					networkSend(PDU);
 
 				var h = b.position.y - myPlayer.position.y;
-				if(h > 1.5) {
+				if(myPlayer.position.y + h > 1.5) {
 					/* headshot */
 					myPlayer.health = 0;
 				}
@@ -596,7 +597,7 @@ function scenario :: checkPlayerCollision() {
 					PDU[4] = packetNumbers[KILL_PDU];
 					packetNumbers[KILL_PDU]++;
 
-					for(var i = 0; i < 4; i++)
+					for(var i = 0; i < 10; i++)
 						networkSend(PDU);
 				}
 			}
