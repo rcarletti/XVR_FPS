@@ -26,12 +26,14 @@ class bullet
 function bullet::init(id, col, speed, radius)
 {
 	bulletMesh = CVMNewMesh(VRP_SPHERE);
-	bulletMesh.Scale(0.1);
 	bulletObj = CVmObj(bulletMesh);
+	bulletMesh.Scale(0.1);
+
 	this.id = id;
 	this.speed = speed;
-	life = 0;
 	this.radius = radius;
+
+	life = 0;
 	prevPosition = position = [0.0, 0.0, 0.0];
 	direction = [0.0, 0.0, 0.0];
 	color = col;

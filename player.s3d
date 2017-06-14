@@ -635,7 +635,6 @@ function player :: spawn() {
 	var r = rand(3);
 	position = level.playerSpawns[r];
 	hitLenght = HIT_ANIM_END;
-	Outputln("respawn");
 }
 
 //********************************************************************
