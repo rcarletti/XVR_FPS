@@ -200,23 +200,23 @@ function scenario :: draw()
 	map.Draw();
 	skyObj.Draw();
 
-	foreach (var e in enemies) {
-		if(!e.isDead)
-			e.draw();
-	}
-
-	myPlayer.Draw();	
-		
 	foreach (var a in ammos){
 		if(a[3]) {
 			a[0].draw();
 		}
 	} 
-	
+
 	foreach (var h in healthPickups) {
 		if(h[2]) {
 			h[0].draw();
 		}
+	}
+
+	myPlayer.Draw();
+
+	foreach (var e in enemies) {
+		if(!e.isDead)
+			e.draw();
 	}
 
 	if(headshot) {
