@@ -235,11 +235,6 @@ function scenario :: draw()
 		w.Draw();
 	}
 
-	foreach (var e in enemies) {
-		if(!e.isDead)
-			e.draw();
-	}
-	
 	foreach (var a in ammos){
 		if(a[3]) {
 			a[0].draw();
@@ -253,6 +248,11 @@ function scenario :: draw()
 	}
 
 	myPlayer.Draw();	
+
+	foreach (var e in enemies) {
+		if(!e.isDead)
+			e.draw();
+	}
 
 	if(headshot) {
 		ConsoleFont("Tahoma", 30);
