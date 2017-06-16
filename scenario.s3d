@@ -285,7 +285,12 @@ function scenario :: draw()
 
 function scenario :: addPlayer(id, col, level){
 	if (col == VOID) {
-		col = [rand(255)/255.0,rand(255)/255.0,rand(255)/255.0];
+		var r,g,b;
+		r = (rand(127) + 150) / 255.0;
+		g = (rand(127) + 150) / 255.0;
+		b = (rand(127) + 150) / 255.0;
+		trace(r);
+		col = [r,g,b];
 	}
 	var tmpPlayer = player();
 	tmpPlayer.level = level;
