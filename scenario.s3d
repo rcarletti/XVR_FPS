@@ -221,18 +221,18 @@ function scenario :: draw()
 
 	if(headshot) {
 		ConsoleFont("Tahoma", 30);
-		ConsoleColor([1, 1, 1]);
+		ConsoleColor([0, 0, 0]);
 		ConsoleText(0.28, 0.8 , "HEADSHOT +20" );
 	}
 	
 	if(hasKilled) {
 		ConsoleFont("Tahoma", 20);
-		ConsoleColor([1, 1, 1]);
+		ConsoleColor([0, 0, 0]);
 		ConsoleText(0.28, 0.7 , "YOU FRAGGED PLAYER " + str(fraggedID));
 	}
 	
 	if(myPlayer.isDead) {
-	 	ConsoleColor([1,1,1]);
+	 	ConsoleColor([0,0,0]);
 		ConsoleFont("Arial", 25);
 		ConsoleText(0.22,0.8, "FRAGGED BY PLAYER " + str(killer));
 		showScores();
@@ -695,14 +695,13 @@ function scenario :: showScores() {
 	var x = 0.22;
 	var y = 0.67;
 	ConsoleFont("Arial", 25);
-	ConsoleColor([0,0,0]);
-
+	ConsoleColor(myPlayer.color);
 	ConsoleText(x, y , "PLAYER: " + str(myPlayer.ID) + "   "+ "Score: " + str(myPlayer.score));
-	ConsoleColor([0,0,0]);
 	ConsoleWidth(3); 
 	ConsoleLines([x, y - 0.01, x + 0.42, y - 0.01]);
 	y-= 0.07;
 	foreach (var e in enemies) {
+		ConsoleColor(e.color);
 		ConsoleText(x, y , "PLAYER: " + str(e.ID) + "   "+ "Score: " + str(e.score));
 		ConsoleLines([x, y - 0.01, x + 0.42, y - 0.01]);
 		y-= 0.07;
