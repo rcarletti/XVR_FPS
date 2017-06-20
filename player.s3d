@@ -3,6 +3,7 @@
 #define SWAT_END_WALK   48
 #define HIT_ANIM_START 40
 #define HIT_ANIM_END 0
+#define MAX_MAGAZINES 10
 
 #include "network.s3d"
 
@@ -142,8 +143,8 @@ function player :: init(ID, col, pos){
 	weapons = Array(2);
 	weapons[0] = weapon("railgun.aam");
 	weapons[1] = weapon("rocketl.aam");
-	magazines[0] = 2;
-	magazines[1] = 2;
+	magazines[0] = MAX_MAGAZINES;
+	magazines[1] = MAX_MAGAZINES;
 
 	/* timers */
 	heartbeatTimer = 0;
@@ -580,10 +581,10 @@ function player :: readKeyboard(){
 	if (name != "" && !isPickingAmmos) {
 		isPickingAmmos = true;
 		level.pickUpAmmos(position.x, position.z);
-		if(name == "railgun.aam" && magazines[0] < 5) {
+		if(name == "railgun.aam" && magazines[0] < MAX_MAGAZINES) {
 			magazines[0]++;
 		}
-		else if ( magazines[1] < 5 && name == "rocketl.aam"){
+		else if ( magazines[1] < MAX_MAGAZINES && name == "rocketl.aam"){
 			magazines[1]++;
 		}
 	}
@@ -647,6 +648,8 @@ function player :: spawn() {
 	var r = rand(3);
 	position = level.playerSpawns[r];
 	hitLenght = HIT_ANIM_END;
+	magazines[0] = MAX_MAGAZINES;
+	magazines[1] = MAX_MAGAZINES;
 }
 
 //********************************************************************
