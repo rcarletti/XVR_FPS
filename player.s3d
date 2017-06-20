@@ -11,6 +11,7 @@
 SET MAX_HEALTH = 100.0;
 SET POSITION_TIMER = 100;
 SET BULLETS_TIMER = 100;
+SET SCORE_TIMER = 1000;
 
 class player
 {
@@ -66,18 +67,21 @@ class player
 	var prevBullets;
 	var bulletNum;
 	var magazines;
-	var reloadTimer;
 	var isReloading;
 	var level;
 	var isFalling;
 	var health;
 	var local;
+	var isDead;
+	var expectedPackets;
+	
+	/* timers */
 	var heartbeatTimer;
 	var positionTimer;
+	var scoreTimer;
+	var reloadTimer;
 	var bulletsTimer;
-	var isDead;
 	var deathTimer;
-	var expectedPackets;
 
 	
 	/*functions */
@@ -93,6 +97,7 @@ class player
 	sendHeartbeats();
 	sendData();
 	sendBulletsData();
+	sendScores();
 	
 };
 
@@ -145,7 +150,8 @@ function player :: init(ID, col, pos){
 	deathTimer = 0;
 	positionTimer = 0;
 	bulletsTimer = 0;
-		
+	scoreTimer = 0;
+
 	/* networking */
 
 	expectedPackets = Array(7);
@@ -262,6 +268,12 @@ function player :: update(){
 		if((getTime() - bulletsTimer) > BULLETS_TIMER ) {
 			bulletsTimer = getTime();
 			sendBulletsData();
+		}
+
+		/* send score data */	
+		if(getTime() - scoreTimer > SCORE_TIMER) {
+			sendScores();
+			scoreTimer = getTime();
 		}
 	}
 	
@@ -645,4 +657,18 @@ function player :: hitPlayer() {
 	sfxHit.play();
 	if(health > 1)
 		hitLenght = HIT_ANIM_START;
+}
+
+//********************************************************************
+//SEND SCORES
+//********************************************************************
+
+function player :: sendScores() {
+	var PDU = Array(4);
+	PDU[0] = SCORE_PDU;
+	PDU[1] = ID;
+	PDU[2] = score;
+	PDU[3] = level.packetNumbers[SCORE_PDU];
+	networkSend(PDU);
+	level.packetNumbers[SCORE_PDU]++;
 }

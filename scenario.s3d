@@ -4,7 +4,6 @@ SET CAMERA_FAR  = 300;
 SET CAMERA_HEIGHT = 1.5;
 SET AMMOS_INTERVAL = 30000;
 SET HEALTH_INTERVAL = 15000;
-SET SCORE_TIMER = 1000;
 SET HEADSHOT_TIMER = 1000;
 SET SPAWN_TIME = 5000;
 
@@ -165,8 +164,7 @@ function scenario :: init(textfile){
 	/* timers */
 	headshotTimer = 0;
 	fragTimer = 0;
-	scoreTimer = 0;
-	
+
 	ammosTimer = array(ammosNum);
 	for (var i = 0; i < ammosNum; i++) {
 		ammosTimer[i] = -1;
@@ -401,21 +399,18 @@ function scenario :: update(){
 						 e.expectedPackets[DISCONNECT_PDU] = data[2] + 1;
 					}
 				}
+
 				/* score PDU */
 				else if (data[0] == SCORE_PDU) {
-					var e1 = getEnemyById(data[1]);
-					if(e1 != null && data[len(data) - 1] >= e1.expectedPackets[SCORE_PDU]) {
-						for(var i = 1; i < len(data) - 1; i += 2) {
-							var e2 = getEnemyById(data[i]);
-							if(e2 != null && data[i + 1] > e2.score) {
-								e2.score = data[i + 1];
-							}
-						}
-						e1.expectedPackets[SCORE_PDU] = data[len(data) - 1] + 1;
+					var e = getEnemyById(data[1]);
+					if(e != null && data[3] >= e.expectedPackets[SCORE_PDU]) {
+						e.score = data[2];
 					}
+					e.expectedPackets[SCORE_PDU] = data[len(data) - 1] + 1;
 				}
-			}	
-		}
+			}
+		}	
+		
 		else {
 			loop = false;
 		}
@@ -447,11 +442,7 @@ function scenario :: update(){
 	if(getTime() - fragTimer > HEADSHOT_TIMER) {
 		hasKilled = false;
 	}
-	
-	if(getTime() - scoreTimer > SCORE_TIMER) {
-		sendScores();
-		scoreTimer = getTime();
-	}
+
 	updateEnemies();	
 	updateCamera();
 	checkPlayerCollision();
