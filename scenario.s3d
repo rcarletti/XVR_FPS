@@ -78,12 +78,10 @@ class scenario
 	updateAmmos();
 	addEnemy(e);
 	checkPlayerCollision();
-	isBulletColliding(b, e);
 	getEnemyById(ID);
 	isHealthPackPresent(posx, posz);
 	pickUpHealth(posx, posz);
 	updateHealthPickUps();
-	sendScores();
 	updateEnemies();
 	showScores();
 };
@@ -184,7 +182,7 @@ function scenario :: init(textfile){
 			else if(lines[i][j] == "h") {
 				/* add health pickups */
 				var tempH = healthPickup();
-				tempH.setSpawnPoint([j, 1, i]);
+				tempH.setSpawnPoint([j, 0, i]);
 				aadd(healthPickups, {tempH, [j, 0, i], true});
 				healthNum++;
 			}
@@ -277,42 +275,6 @@ function scenario :: draw()
 	
 }
 
-//********************************************************************
-//ADD ONE PLAYER
-//********************************************************************
-
-function scenario :: addPlayer(id, col, level){
-	if (col == VOID) {
-		var r,g,b;
-		r = (rand(127) + 150) / 255.0;
-		g = (rand(127) + 150) / 255.0;
-		b = (rand(127) + 150) / 255.0;
-		trace(r);
-		col = [r,g,b];
-	}
-	var tmpPlayer = player();
-	tmpPlayer.level = level;
-	var pos, posx, posz;
-	/*spawn outside walls */
-	do {		
-		posx = rand(columns - 1);
-		posz = rand(rows - 1);
-		pos = [posx, 0, posz];
-	}
-	while(isColliding(pos, 0.8));
-	
-	tmpPlayer.init(id,col,pos);
-	return tmpPlayer;
-}
-
-//********************************************************************
-//ADD ONE ENEMY
-//********************************************************************
-
-function scenario :: addEnemy(e) {
-	aadd(enemies, e);
-	e.local = false;
-}
 
 //********************************************************************
 //UPDATE SCENARIO
@@ -320,6 +282,8 @@ function scenario :: addEnemy(e) {
 
 function scenario :: update(){
 	var loop = true;
+	
+	/* receive and handle data from network */
 	while (loop) {
 		var data = networkReceive();
 		if (data!= null) {
@@ -425,7 +389,7 @@ function scenario :: update(){
 							fragTimer = getTime();
 							fraggedID = data[1];
 							e.expectedPackets[KILL_PDU] = data[4] + 1;
-							e.hitLenght = 0;
+							e.hitlength = 0;
 							if(data[3]){
 								myPlayer.score += 20;
 								headshot = true;
@@ -464,13 +428,11 @@ function scenario :: update(){
 		}
 	}
 	
-	static var hasSwitched = false;
-	if (KeyPressed("V") && !hasSwitched) {
-		isFirstPersonCamera = !isFirstPersonCamera;
-		hasSwitched = true;
+	if (KeyPressed("T")) {
+		isFirstPersonCamera = false;
 	}
-	else if (!KeyPressed("V")) {
-		hasSwitched = false;
+	if (KeyPressed("F")) {
+		isFirstPersonCamera = true;
 	}
 	
 	sfxHeadshot.SetPosition(myPlayer.position);
@@ -524,25 +486,6 @@ function scenario :: updateEnemies() {
 }
 
 
-//********************************************************************
-//SEND SCORES
-//********************************************************************
-
-function scenario :: sendScores() {
-	var PDU = Array((len(enemies) * 2) + 4);
-	PDU[0] = SCORE_PDU;
-	PDU[1] = myPlayer.ID;
-	PDU[2] = myPlayer.score;
-	var i = 3;
-	foreach (var e in enemies) {
-		PDU[i] = e.ID;
-		PDU[i + 1] = e.score;
-		i += 2;
-	}
-	PDU[len(PDU) - 1] = packetNumbers[SCORE_PDU];
-	networkSend(PDU);
-	packetNumbers[SCORE_PDU]++;
-}
 
 //********************************************************************
 //CHECK FOR BULLET-ENEMIES COLLISION
@@ -597,14 +540,6 @@ function scenario :: checkPlayerCollision() {
 		}
 	}
 	
-}
-
-//********************************************************************
-//BULLET COLLISION
-//********************************************************************
-
-function scenario :: isBulletColliding(b, e) {
-	return e.rootObj.IsColliding(b.position, b.prevPosition);
 }
 
 //********************************************************************
@@ -771,4 +706,40 @@ function scenario :: showScores() {
 		ConsoleLines([x, y - 0.01, x + 0.42, y - 0.01]);
 		y-= 0.07;
 	}
+}
+
+//********************************************************************
+//ADD ONE PLAYER
+//********************************************************************
+
+function scenario :: addPlayer(id, col, level){
+	if (col == VOID) {
+		var r,g,b;
+		r = (rand(127) + 150) / 255.0;
+		g = (rand(127) + 150) / 255.0;
+		b = (rand(127) + 150) / 255.0;
+		col = [r,g,b];
+	}
+	var tmpPlayer = player();
+	tmpPlayer.level = level;
+	var pos, posx, posz;
+	/*spawn outside walls */
+	do {		
+		posx = rand(columns - 1);
+		posz = rand(rows - 1);
+		pos = [posx, 0, posz];
+	}
+	while(isColliding(pos, 0.8));
+	
+	tmpPlayer.init(id,col,pos);
+	return tmpPlayer;
+}
+
+//********************************************************************
+//ADD ONE ENEMY
+//********************************************************************
+
+function scenario :: addEnemy(e) {
+	aadd(enemies, e);
+	e.local = false;
 }

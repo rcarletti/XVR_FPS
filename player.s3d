@@ -34,7 +34,7 @@ class player
 	var sfxRailShoot;
 	var sfxShotgun;
 	var sfxHeadshot;
-	var hitLenght;
+	var hitlength;
 	
 	/*movement*/
 	var position;
@@ -194,7 +194,7 @@ function player :: init(ID, col, pos){
 	
 	/* animations */
 	currentFrame = SWAT_START_WALK;
-	hitLenght = HIT_ANIM_END;
+	hitlength = HIT_ANIM_END;
 	
 	/* sounds */
 	sfxStep = CVmVRAWav("step.wav",true);
@@ -220,7 +220,7 @@ function player::draw()
 		b.draw();
 	}
 	
-	if (hitLenght > 0) {
+	if (hitlength > 0) {
 		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glPushAttrib(GL_COLOR_BUFFER_BIT  | GL_ENABLE_BIT  | GL_CURRENT_BIT);
@@ -231,7 +231,7 @@ function player::draw()
 		glPopAttrib();
 		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
-		hitLenght--;
+		hitlength--;
 	}
 }
 
@@ -244,19 +244,19 @@ function player :: update(){
 	actualFrameTime = getTime();
 	deltaFrame = (actualFrameTime - oldFrameTime) / 1000.0;
 	
-	if(local) {
-		if(!isDead){
+	if (local) {
+		if (!isDead) {
 		readKeyboard();
 	}
 		
 		/*send heartbeats */
-		if(getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
+		if (getTime() - heartbeatTimer > HEARTBEAT_TIMEOUT) {
 			heartbeatTimer = getTime();
 			sendHeartbeats();
 		}
 		
 		/*send position data */
-		if((getTime() - positionTimer) > POSITION_TIMER) {
+		if ((getTime() - positionTimer) > POSITION_TIMER) {
 			positionTimer = getTime();
 			sendData();
 		}
@@ -272,7 +272,6 @@ function player :: update(){
 			sendScores();
 			scoreTimer = getTime();
 		}
-
 	}
 	
 	else {
@@ -473,6 +472,13 @@ function player :: readKeyboard(){
 		verticalSpeed = 0.12;
 	}
 	
+	walkDirection = strafeDirection + frontDirection;
+	
+	
+	/*update position */
+	var oldPosition = position;
+	position += (walkDirection * speed * speedMultiplier * deltaFrame);
+	
 	/*shoot */
 	static var hasShot = false;
 	if (Mouse.ButtonL && weapons[currWeapon].bullets > 0 && !hasShot && !isReloading) { 
@@ -482,7 +488,7 @@ function player :: readKeyboard(){
 		var tmpBullet = bullet();
 		tmpBullet.init(lastBulletId++, [0, 0, 0], weapons[currWeapon].bulletSpeed, weapons[currWeapon].damageRadius);
 		aadd(bullets, tmpBullet);
-		var bbox = railgunMesh.SubsetGetBoundingBox(0);
+		//var bbox = railgunMesh.SubsetGetBoundingBox(0);
 		var tmpPos = position + [0,1.3,0];
 		//var tmpPos = position + VectorRotate(angleY, [0, 1, 0], [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, bbox[5]]) - [0, 0.3, 0];
 		var shot = tmpBullet.shoot(tmpPos,direction);
@@ -527,12 +533,6 @@ function player :: readKeyboard(){
 		}	
 	}
 	
-	walkDirection = strafeDirection + frontDirection;
-	
-	
-	/*update position */
-	var oldPosition = position;
-	position += (walkDirection * speed * speedMultiplier * deltaFrame);
 
 	/*check collision */
 	var h = level.LevelMatrix[int(position.z)][int(position.x)];	
@@ -632,7 +632,7 @@ function player :: spawn() {
 	while(level.isColliding(pos, 0.8));
 	health = MAX_HEALTH;
 	position = pos;
-	hitLenght = HIT_ANIM_END;
+	hitlength = HIT_ANIM_END;
 	magazines[0] = MAX_MAGAZINES;
 	magazines[1] = MAX_MAGAZINES;
 }
@@ -644,7 +644,7 @@ function player :: spawn() {
 function player :: hitPlayer() {
 	sfxHit.play();
 	if(health > 1)
-		hitLenght = HIT_ANIM_START;
+		hitlength = HIT_ANIM_START;
 }
 
 //********************************************************************

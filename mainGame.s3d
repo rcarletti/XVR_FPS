@@ -9,7 +9,7 @@
 
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
-SET LOGIN_TIMEOUT = 2000;
+SET LOGIN_TIMEOUT = 7000;
 SET SPAWN_TIME = 5000;
 
 /* Light globals */
@@ -130,9 +130,7 @@ function showCrosshair()
 }
 
 function drawMenu() {
-	
-	
-	
+
 	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT  | GL_ENABLE_BIT );
 	glDisable(GL_LIGHTING);
 	
@@ -229,8 +227,6 @@ function showScores() {
 
 function OnFrame() {
 	static var started = false;
-	/* manage camera */
-	//CameraMoveMouse();
 	
 	if(showMenu) {
 		SceneBegin();
@@ -264,7 +260,6 @@ function OnFrame() {
 			
 		level.update();
 		showCrosshair();
-		
 		
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
