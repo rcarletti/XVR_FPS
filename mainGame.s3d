@@ -9,13 +9,11 @@
 
 /* Set global scene parameters */
 SET AUDIO_OPENAL = 1;
-SET LOGIN_TIMEOUT = 2000;
+SET LOGIN_TIMEOUT = 7000;
 SET SPAWN_TIME = 5000;
 
 /* Light globals */
-var Light0;
 var AmbientLight;
-var PosL = [16.0, 10.0, 16.0];
 var AmbientPos = [0, 20, 0];
 
 /* Function declarations */
@@ -70,14 +68,6 @@ function OnInit(params) {
 	mText = CVmTexture("menu.jpg");
 	dText = CVmTexture("death.png");
 	h90 = CVmTexture("prova3.png");
-
-	/* initialize light */
-	Light0 = CVmLight();
-	Light0.SetPosition(PosL);
-	Light0.SetDiffuse(1, 1, 1);
-	Light0.SetParameter(GL_SPOT_EXPONENT, 30);
-	Light0.SetParameter(GL_SPOT_CUTOFF, 90);
-	Light0.Enable();
 	
 	ambientLight = CVmLight();
 	ambientLight.SetPosition(AmbientPos);
@@ -115,6 +105,7 @@ function OnInit(params) {
 	enemyNumber = len(level.enemies);
 	enemyLastId = maxID();
 	playerID = enemyLastId + 1;
+	Outputln("player id:" + str(playerID));
 	myPlayer = level.addPlayer(playerID, void, level);
 	myPlayer.level = level;
 	myPlayer.local = true;
@@ -133,8 +124,6 @@ function showCrosshair()
 }
 
 function drawMenu() {
-	
-	
 	
 	glPushAttrib(GL_LIGHTING_BIT | GL_LINE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT  | GL_ENABLE_BIT );
 	glDisable(GL_LIGHTING);
@@ -270,9 +259,6 @@ function OnFrame() {
 		if(Keypressed(VK_CONTROL)) {
 			showScores();
 		}
-		
-		/*weapon light update */
-		Light0.SetPosition(Level.myPlayer.Position);
 		
 		/*keep cursor centered */
 		if(grabMouse)

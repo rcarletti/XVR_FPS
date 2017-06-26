@@ -34,7 +34,7 @@ class player
 	var sfxRailShoot;
 	var sfxShotgun;
 	var sfxHeadshot;
-	var hitLenght;
+	var hitlength;
 	
 	/*movement*/	
 	var position;
@@ -154,16 +154,13 @@ function player :: init(ID, col, pos){
 	scoreTimer = 0;
 
 	/* networking */
-
 	expectedPackets = Array(7);
-	
 	for(var i = 0; i < len(expectedPackets); i++) {
 		expectedPackets[i] = 0;
 	}
 	
 	/* collision */
 	collisionSegments = Array(4);
-	
 	for(var i = 0; i < len(collisionSegments); i++) {
 		collisionSegments[i] = Array(2);
 	}
@@ -205,7 +202,7 @@ function player :: init(ID, col, pos){
 	sfxShotgun = CVmVrAWav("shotgun.wav",true);
 
 	currentFrame = SWAT_START_WALK;
-	hitLenght = HIT_ANIM_END;
+	hitlength = HIT_ANIM_END;
 	
 	swapWeapon(0);
 
@@ -222,7 +219,7 @@ function player::draw() {
 		b.draw();
 	}
 	
-	if (hitLenght > 0)
+	if (hitlength > 0)
 	{
 		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
@@ -234,7 +231,7 @@ function player::draw() {
 		glPopAttrib();
 		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
-		hitLenght--;
+		hitlength--;
 	}
 	
 }
@@ -477,6 +474,11 @@ function player :: readKeyboard(){
 		verticalSpeed = 0.12;
 	}
 	
+	/*update position */
+	walkDirection = strafeDirection + frontDirection;
+	var oldPosition = position;
+	position += (walkDirection * speed * speedMultiplier * deltaFrame);
+	
 	/*shoot */
 	static var hasShot = false;
 	if (Mouse.ButtonL && weapons[currWeapon].bullets > 0 && !hasShot && !isReloading) { 
@@ -530,10 +532,6 @@ function player :: readKeyboard(){
 		}	
 	}
 	
-	/*update position */
-	walkDirection = strafeDirection + frontDirection;
-	var oldPosition = position;
-	position += (walkDirection * speed * speedMultiplier * deltaFrame);
 
 	/* vertical segments */
 	collisionSegments[0][0] = position + walkDirection * 0.2 + [0, 0.3, 0];
@@ -647,7 +645,7 @@ function player :: spawn() {
 	health = MAX_HEALTH;
 	var r = rand(3);
 	position = level.playerSpawns[r];
-	hitLenght = HIT_ANIM_END;
+	hitlength = HIT_ANIM_END;
 	magazines[0] = MAX_MAGAZINES;
 	magazines[1] = MAX_MAGAZINES;
 }
@@ -659,7 +657,7 @@ function player :: spawn() {
 function player :: hitPlayer() {
 	sfxHit.play();
 	if(health > 1)
-		hitLenght = HIT_ANIM_START;
+		hitlength = HIT_ANIM_START;
 }
 
 //********************************************************************

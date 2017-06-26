@@ -72,7 +72,6 @@ class scenario
 	updateAmmos();
 	addEnemy(e);
 	checkPlayerCollision();
-	isBulletColliding(b, e);
 	getEnemyById(ID);
 	isHealthPackPresent(posx, posz);
 	pickUpHealth(posx, posz);
@@ -376,7 +375,7 @@ function scenario :: update(){
 							fragTimer = getTime();
 							fraggedID = data[1];
 							e.expectedPackets[KILL_PDU] = data[4] + 1;
-							e.hitLenght = 0;
+							e.hitlength = 0;
 							if(data[3]){
 								myPlayer.score += 20;
 								headshot = true;
@@ -416,6 +415,7 @@ function scenario :: update(){
 		}
 	}
 	
+	/* camera */
 	if (KeyPressed("T")) {
 		isFirstPersonCamera = false;
 	}
@@ -428,6 +428,7 @@ function scenario :: update(){
 	/*update players */
 	myPlayer.update();
 	
+	/* update pickups */
 	foreach (var w in ammos) {
 		w[0].update();
 	}
