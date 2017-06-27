@@ -448,7 +448,7 @@ function player :: readKeyboard(){
 	}
 	
 	/*run */
-	if (Keypressed(VK_SHIFT) && !isFalling) {	
+	if (Keypressed(VK_SHIFT)) {	
 		isWalking = true;
 		speedMultiplier = 2;	
 		isRunning = true;	
@@ -469,7 +469,7 @@ function player :: readKeyboard(){
 	/* jump */
 	if (Keypressed(VK_SPACE) && !isFalling) {			
 		isFalling = true;
-		verticalSpeed = 0.12;
+		verticalSpeed = 6.5;
 	}
 	
 	walkDirection = strafeDirection + frontDirection;
@@ -541,8 +541,8 @@ function player :: readKeyboard(){
 	}
 
 	/* update falls and jumps */
-	verticalSpeed -= 0.006;
-	position.y += verticalSpeed;
+	verticalSpeed -= 15.0 * deltaFrame;
+	position.y += verticalSpeed * deltaFrame;
 
 	if (position.y > h){
 		isFalling = true;
